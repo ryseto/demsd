@@ -13,6 +13,8 @@ int main(int argc, const char * argv[])
 
     // insert code here...
     std::cout << "Hello, World!\n";
+    std::cout << "We'll create the codes to simulate restructuring \
+    of colloidal aggregate\n";
     return 0;
 }
 
