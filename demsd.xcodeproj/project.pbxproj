@@ -9,6 +9,60 @@
 /* Begin PBXBuildFile section */
 		D93EEBF91519CE3800CC77EF /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D93EEBF81519CE3800CC77EF /* main.cpp */; };
 		D93EEBFB1519CE3800CC77EF /* demsd.1 in CopyFiles */ = {isa = PBXBuildFile; fileRef = D93EEBFA1519CE3800CC77EF /* demsd.1 */; };
+		D9AFFAD71519DA35008A7178 /* ewald-3ft-matrix.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D9AFFA971519DA35008A7178 /* ewald-3ft-matrix.cpp */; };
+		D9AFFAD81519DA35008A7178 /* ewald-3ft.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D9AFFA991519DA35008A7178 /* ewald-3ft.cpp */; };
+		D9AFFAD91519DA35008A7178 /* XA-slip.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D9AFFA9B1519DA35008A7178 /* XA-slip.cpp */; };
+		D9AFFADA1519DA35008A7178 /* XA.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D9AFFA9C1519DA35008A7178 /* XA.cpp */; };
+		D9AFFADB1519DA35008A7178 /* XC-slip.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D9AFFA9D1519DA35008A7178 /* XC-slip.cpp */; };
+		D9AFFADC1519DA35008A7178 /* XC.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D9AFFA9E1519DA35008A7178 /* XC.cpp */; };
+		D9AFFADD1519DA35008A7178 /* XG-slip.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D9AFFA9F1519DA35008A7178 /* XG-slip.cpp */; };
+		D9AFFADE1519DA35008A7178 /* XG.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D9AFFAA01519DA35008A7178 /* XG.cpp */; };
+		D9AFFADF1519DA35008A7178 /* XM-slip.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D9AFFAA11519DA35008A7178 /* XM-slip.cpp */; };
+		D9AFFAE01519DA35008A7178 /* XM.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D9AFFAA21519DA35008A7178 /* XM.cpp */; };
+		D9AFFAE11519DA35008A7178 /* XP.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D9AFFAA31519DA35008A7178 /* XP.cpp */; };
+		D9AFFAE21519DA35008A7178 /* XQ.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D9AFFAA41519DA35008A7178 /* XQ.cpp */; };
+		D9AFFAE31519DA35008A7178 /* YA-slip.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D9AFFAA51519DA35008A7178 /* YA-slip.cpp */; };
+		D9AFFAE41519DA35008A7178 /* YA.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D9AFFAA61519DA35008A7178 /* YA.cpp */; };
+		D9AFFAE51519DA35008A7178 /* YB-slip.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D9AFFAA71519DA35008A7178 /* YB-slip.cpp */; };
+		D9AFFAE61519DA35008A7178 /* YB.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D9AFFAA81519DA35008A7178 /* YB.cpp */; };
+		D9AFFAE71519DA35008A7178 /* YC-slip.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D9AFFAA91519DA35008A7178 /* YC-slip.cpp */; };
+		D9AFFAE81519DA35008A7178 /* YC.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D9AFFAAA1519DA35008A7178 /* YC.cpp */; };
+		D9AFFAE91519DA35008A7178 /* YG-slip.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D9AFFAAB1519DA35008A7178 /* YG-slip.cpp */; };
+		D9AFFAEA1519DA35008A7178 /* YG.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D9AFFAAC1519DA35008A7178 /* YG.cpp */; };
+		D9AFFAEB1519DA35008A7178 /* YH-slip.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D9AFFAAD1519DA35008A7178 /* YH-slip.cpp */; };
+		D9AFFAEC1519DA35008A7178 /* YH.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D9AFFAAE1519DA35008A7178 /* YH.cpp */; };
+		D9AFFAED1519DA35008A7178 /* YM-slip.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D9AFFAAF1519DA35008A7178 /* YM-slip.cpp */; };
+		D9AFFAEE1519DA35008A7178 /* YM.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D9AFFAB01519DA35008A7178 /* YM.cpp */; };
+		D9AFFAEF1519DA35008A7178 /* ZM-slip.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D9AFFAB11519DA35008A7178 /* ZM-slip.cpp */; };
+		D9AFFAF01519DA35008A7178 /* ZM.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D9AFFAB21519DA35008A7178 /* ZM.cpp */; };
+		D9AFFAF11519DA35008A7178 /* bonds.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D9AFFAB31519DA35008A7178 /* bonds.cpp */; };
+		D9AFFAF21519DA35008A7178 /* lub-matrix.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D9AFFAB51519DA35008A7178 /* lub-matrix.cpp */; };
+		D9AFFAF31519DA35008A7178 /* dgetri_c.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D9AFFAB71519DA35008A7178 /* dgetri_c.cpp */; };
+		D9AFFAF41519DA35008A7178 /* minv-poly.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D9AFFAB91519DA35008A7178 /* minv-poly.cpp */; };
+		D9AFFAF51519DA35008A7178 /* matrix.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D9AFFABB1519DA35008A7178 /* matrix.cpp */; };
+		D9AFFAF61519DA35008A7178 /* non-ewald.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D9AFFABD1519DA35008A7178 /* non-ewald.cpp */; };
+		D9AFFAF71519DA35008A7178 /* two-body-res.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D9AFFABF1519DA35008A7178 /* two-body-res.cpp */; };
+		D9AFFAF81519DA35008A7178 /* lub.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D9AFFAC11519DA35008A7178 /* lub.cpp */; };
+		D9AFFAF91519DA35008A7178 /* ewald.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D9AFFAC31519DA35008A7178 /* ewald.cpp */; };
+		D9AFFAFA1519DA35008A7178 /* f.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D9AFFAC51519DA35008A7178 /* f.cpp */; };
+		D9AFFAFB1519DA35008A7178 /* ft.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D9AFFAC71519DA35008A7178 /* ft.cpp */; };
+		D9AFFAFC1519DA35008A7178 /* fts.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D9AFFAC91519DA35008A7178 /* fts.cpp */; };
+		D9AFFAFD1519DA35008A7178 /* bench.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D9AFFACB1519DA35008A7178 /* bench.cpp */; };
+		D9AFFAFE1519DA35008A7178 /* twobody-slip.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D9AFFACD1519DA35008A7178 /* twobody-slip.cpp */; };
+		D9AFFAFF1519DA35008A7178 /* ewald-3fts.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D9AFFACF1519DA35008A7178 /* ewald-3fts.cpp */; };
+		D9AFFB001519DA35008A7178 /* twobody.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D9AFFAD11519DA35008A7178 /* twobody.cpp */; };
+		D9AFFB011519DA35008A7178 /* stokes.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D9AFFAD31519DA35008A7178 /* stokes.cpp */; };
+		D9AFFB021519DA35008A7178 /* ewald-3fts-matrix.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D9AFFAD51519DA35008A7178 /* ewald-3fts-matrix.cpp */; };
+		D9AFFB181519DA70008A7178 /* myblas.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D9AFFB041519DA70008A7178 /* myblas.cpp */; };
+		D9AFFB191519DA70008A7178 /* orthomin.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D9AFFB061519DA70008A7178 /* orthomin.cpp */; };
+		D9AFFB1A1519DA70008A7178 /* bi-cgstab.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D9AFFB081519DA70008A7178 /* bi-cgstab.cpp */; };
+		D9AFFB1B1519DA70008A7178 /* gmres.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D9AFFB0A1519DA70008A7178 /* gmres.cpp */; };
+		D9AFFB1C1519DA70008A7178 /* cg_.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D9AFFB0C1519DA70008A7178 /* cg_.cpp */; };
+		D9AFFB1D1519DA70008A7178 /* bicgstab.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D9AFFB0E1519DA70008A7178 /* bicgstab.cpp */; };
+		D9AFFB1E1519DA70008A7178 /* cgs.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D9AFFB101519DA70008A7178 /* cgs.cpp */; };
+		D9AFFB1F1519DA70008A7178 /* cg.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D9AFFB121519DA70008A7178 /* cg.cpp */; };
+		D9AFFB201519DA70008A7178 /* steepest.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D9AFFB141519DA70008A7178 /* steepest.cpp */; };
+		D9AFFB211519DA70008A7178 /* libiter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D9AFFB161519DA70008A7178 /* libiter.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -28,6 +82,90 @@
 		D93EEBF41519CE3800CC77EF /* demsd */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = demsd; sourceTree = BUILT_PRODUCTS_DIR; };
 		D93EEBF81519CE3800CC77EF /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 		D93EEBFA1519CE3800CC77EF /* demsd.1 */ = {isa = PBXFileReference; lastKnownFileType = text.man; path = demsd.1; sourceTree = "<group>"; };
+		D9AFFA971519DA35008A7178 /* ewald-3ft-matrix.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = "ewald-3ft-matrix.cpp"; sourceTree = "<group>"; };
+		D9AFFA981519DA35008A7178 /* ewald-3ft-matrix.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "ewald-3ft-matrix.h"; sourceTree = "<group>"; };
+		D9AFFA991519DA35008A7178 /* ewald-3ft.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = "ewald-3ft.cpp"; sourceTree = "<group>"; };
+		D9AFFA9A1519DA35008A7178 /* ewald-3ft.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "ewald-3ft.h"; sourceTree = "<group>"; };
+		D9AFFA9B1519DA35008A7178 /* XA-slip.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = "XA-slip.cpp"; sourceTree = "<group>"; };
+		D9AFFA9C1519DA35008A7178 /* XA.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = XA.cpp; sourceTree = "<group>"; };
+		D9AFFA9D1519DA35008A7178 /* XC-slip.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = "XC-slip.cpp"; sourceTree = "<group>"; };
+		D9AFFA9E1519DA35008A7178 /* XC.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = XC.cpp; sourceTree = "<group>"; };
+		D9AFFA9F1519DA35008A7178 /* XG-slip.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = "XG-slip.cpp"; sourceTree = "<group>"; };
+		D9AFFAA01519DA35008A7178 /* XG.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = XG.cpp; sourceTree = "<group>"; };
+		D9AFFAA11519DA35008A7178 /* XM-slip.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = "XM-slip.cpp"; sourceTree = "<group>"; };
+		D9AFFAA21519DA35008A7178 /* XM.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = XM.cpp; sourceTree = "<group>"; };
+		D9AFFAA31519DA35008A7178 /* XP.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = XP.cpp; sourceTree = "<group>"; };
+		D9AFFAA41519DA35008A7178 /* XQ.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = XQ.cpp; sourceTree = "<group>"; };
+		D9AFFAA51519DA35008A7178 /* YA-slip.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = "YA-slip.cpp"; sourceTree = "<group>"; };
+		D9AFFAA61519DA35008A7178 /* YA.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = YA.cpp; sourceTree = "<group>"; };
+		D9AFFAA71519DA35008A7178 /* YB-slip.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = "YB-slip.cpp"; sourceTree = "<group>"; };
+		D9AFFAA81519DA35008A7178 /* YB.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = YB.cpp; sourceTree = "<group>"; };
+		D9AFFAA91519DA35008A7178 /* YC-slip.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = "YC-slip.cpp"; sourceTree = "<group>"; };
+		D9AFFAAA1519DA35008A7178 /* YC.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = YC.cpp; sourceTree = "<group>"; };
+		D9AFFAAB1519DA35008A7178 /* YG-slip.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = "YG-slip.cpp"; sourceTree = "<group>"; };
+		D9AFFAAC1519DA35008A7178 /* YG.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = YG.cpp; sourceTree = "<group>"; };
+		D9AFFAAD1519DA35008A7178 /* YH-slip.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = "YH-slip.cpp"; sourceTree = "<group>"; };
+		D9AFFAAE1519DA35008A7178 /* YH.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = YH.cpp; sourceTree = "<group>"; };
+		D9AFFAAF1519DA35008A7178 /* YM-slip.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = "YM-slip.cpp"; sourceTree = "<group>"; };
+		D9AFFAB01519DA35008A7178 /* YM.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = YM.cpp; sourceTree = "<group>"; };
+		D9AFFAB11519DA35008A7178 /* ZM-slip.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = "ZM-slip.cpp"; sourceTree = "<group>"; };
+		D9AFFAB21519DA35008A7178 /* ZM.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ZM.cpp; sourceTree = "<group>"; };
+		D9AFFAB31519DA35008A7178 /* bonds.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = bonds.cpp; sourceTree = "<group>"; };
+		D9AFFAB41519DA35008A7178 /* bonds.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = bonds.h; sourceTree = "<group>"; };
+		D9AFFAB51519DA35008A7178 /* lub-matrix.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = "lub-matrix.cpp"; sourceTree = "<group>"; };
+		D9AFFAB61519DA35008A7178 /* lub-matrix.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "lub-matrix.h"; sourceTree = "<group>"; };
+		D9AFFAB71519DA35008A7178 /* dgetri_c.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = dgetri_c.cpp; sourceTree = "<group>"; };
+		D9AFFAB81519DA35008A7178 /* dgetri_c.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = dgetri_c.h; sourceTree = "<group>"; };
+		D9AFFAB91519DA35008A7178 /* minv-poly.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = "minv-poly.cpp"; sourceTree = "<group>"; };
+		D9AFFABA1519DA35008A7178 /* minv-poly.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "minv-poly.h"; sourceTree = "<group>"; };
+		D9AFFABB1519DA35008A7178 /* matrix.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = matrix.cpp; sourceTree = "<group>"; };
+		D9AFFABC1519DA35008A7178 /* matrix.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = matrix.h; sourceTree = "<group>"; };
+		D9AFFABD1519DA35008A7178 /* non-ewald.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = "non-ewald.cpp"; sourceTree = "<group>"; };
+		D9AFFABE1519DA35008A7178 /* non-ewald.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "non-ewald.h"; sourceTree = "<group>"; };
+		D9AFFABF1519DA35008A7178 /* two-body-res.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = "two-body-res.cpp"; sourceTree = "<group>"; };
+		D9AFFAC01519DA35008A7178 /* two-body-res.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "two-body-res.h"; sourceTree = "<group>"; };
+		D9AFFAC11519DA35008A7178 /* lub.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = lub.cpp; sourceTree = "<group>"; };
+		D9AFFAC21519DA35008A7178 /* lub.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = lub.h; sourceTree = "<group>"; };
+		D9AFFAC31519DA35008A7178 /* ewald.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ewald.cpp; sourceTree = "<group>"; };
+		D9AFFAC41519DA35008A7178 /* ewald.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ewald.h; sourceTree = "<group>"; };
+		D9AFFAC51519DA35008A7178 /* f.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = f.cpp; sourceTree = "<group>"; };
+		D9AFFAC61519DA35008A7178 /* f.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = f.h; sourceTree = "<group>"; };
+		D9AFFAC71519DA35008A7178 /* ft.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ft.cpp; sourceTree = "<group>"; };
+		D9AFFAC81519DA35008A7178 /* ft.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ft.h; sourceTree = "<group>"; };
+		D9AFFAC91519DA35008A7178 /* fts.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = fts.cpp; sourceTree = "<group>"; };
+		D9AFFACA1519DA35008A7178 /* fts.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = fts.h; sourceTree = "<group>"; };
+		D9AFFACB1519DA35008A7178 /* bench.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = bench.cpp; sourceTree = "<group>"; };
+		D9AFFACC1519DA35008A7178 /* bench.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = bench.h; sourceTree = "<group>"; };
+		D9AFFACD1519DA35008A7178 /* twobody-slip.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = "twobody-slip.cpp"; sourceTree = "<group>"; };
+		D9AFFACE1519DA35008A7178 /* twobody-slip.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "twobody-slip.h"; sourceTree = "<group>"; };
+		D9AFFACF1519DA35008A7178 /* ewald-3fts.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = "ewald-3fts.cpp"; sourceTree = "<group>"; };
+		D9AFFAD01519DA35008A7178 /* ewald-3fts.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "ewald-3fts.h"; sourceTree = "<group>"; };
+		D9AFFAD11519DA35008A7178 /* twobody.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = twobody.cpp; sourceTree = "<group>"; };
+		D9AFFAD21519DA35008A7178 /* twobody.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = twobody.h; sourceTree = "<group>"; };
+		D9AFFAD31519DA35008A7178 /* stokes.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = stokes.cpp; sourceTree = "<group>"; };
+		D9AFFAD41519DA35008A7178 /* stokes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = stokes.h; sourceTree = "<group>"; };
+		D9AFFAD51519DA35008A7178 /* ewald-3fts-matrix.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = "ewald-3fts-matrix.cpp"; sourceTree = "<group>"; };
+		D9AFFAD61519DA35008A7178 /* ewald-3fts-matrix.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "ewald-3fts-matrix.h"; sourceTree = "<group>"; };
+		D9AFFB041519DA70008A7178 /* myblas.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = myblas.cpp; sourceTree = "<group>"; };
+		D9AFFB051519DA70008A7178 /* myblas.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = myblas.h; sourceTree = "<group>"; };
+		D9AFFB061519DA70008A7178 /* orthomin.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = orthomin.cpp; sourceTree = "<group>"; };
+		D9AFFB071519DA70008A7178 /* orthomin.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = orthomin.h; sourceTree = "<group>"; };
+		D9AFFB081519DA70008A7178 /* bi-cgstab.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = "bi-cgstab.cpp"; sourceTree = "<group>"; };
+		D9AFFB091519DA70008A7178 /* bi-cgstab.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "bi-cgstab.h"; sourceTree = "<group>"; };
+		D9AFFB0A1519DA70008A7178 /* gmres.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = gmres.cpp; sourceTree = "<group>"; };
+		D9AFFB0B1519DA70008A7178 /* gmres.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = gmres.h; sourceTree = "<group>"; };
+		D9AFFB0C1519DA70008A7178 /* cg_.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = cg_.cpp; sourceTree = "<group>"; };
+		D9AFFB0D1519DA70008A7178 /* cg_.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cg_.h; sourceTree = "<group>"; };
+		D9AFFB0E1519DA70008A7178 /* bicgstab.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = bicgstab.cpp; sourceTree = "<group>"; };
+		D9AFFB0F1519DA70008A7178 /* bicgstab.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = bicgstab.h; sourceTree = "<group>"; };
+		D9AFFB101519DA70008A7178 /* cgs.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = cgs.cpp; sourceTree = "<group>"; };
+		D9AFFB111519DA70008A7178 /* cgs.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cgs.h; sourceTree = "<group>"; };
+		D9AFFB121519DA70008A7178 /* cg.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = cg.cpp; sourceTree = "<group>"; };
+		D9AFFB131519DA70008A7178 /* cg.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cg.h; sourceTree = "<group>"; };
+		D9AFFB141519DA70008A7178 /* steepest.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = steepest.cpp; sourceTree = "<group>"; };
+		D9AFFB151519DA70008A7178 /* steepest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = steepest.h; sourceTree = "<group>"; };
+		D9AFFB161519DA70008A7178 /* libiter.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = libiter.cpp; sourceTree = "<group>"; };
+		D9AFFB171519DA70008A7178 /* libiter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = libiter.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -61,9 +199,109 @@
 			isa = PBXGroup;
 			children = (
 				D93EEBF81519CE3800CC77EF /* main.cpp */,
+				D9AFFB031519DA4C008A7178 /* libiter */,
+				D9AFFA8C1519D71D008A7178 /* libstokes */,
 				D93EEBFA1519CE3800CC77EF /* demsd.1 */,
 			);
 			path = demsd;
+			sourceTree = "<group>";
+		};
+		D9AFFA8C1519D71D008A7178 /* libstokes */ = {
+			isa = PBXGroup;
+			children = (
+				D9AFFA971519DA35008A7178 /* ewald-3ft-matrix.cpp */,
+				D9AFFA981519DA35008A7178 /* ewald-3ft-matrix.h */,
+				D9AFFA991519DA35008A7178 /* ewald-3ft.cpp */,
+				D9AFFA9A1519DA35008A7178 /* ewald-3ft.h */,
+				D9AFFA9B1519DA35008A7178 /* XA-slip.cpp */,
+				D9AFFA9C1519DA35008A7178 /* XA.cpp */,
+				D9AFFA9D1519DA35008A7178 /* XC-slip.cpp */,
+				D9AFFA9E1519DA35008A7178 /* XC.cpp */,
+				D9AFFA9F1519DA35008A7178 /* XG-slip.cpp */,
+				D9AFFAA01519DA35008A7178 /* XG.cpp */,
+				D9AFFAA11519DA35008A7178 /* XM-slip.cpp */,
+				D9AFFAA21519DA35008A7178 /* XM.cpp */,
+				D9AFFAA31519DA35008A7178 /* XP.cpp */,
+				D9AFFAA41519DA35008A7178 /* XQ.cpp */,
+				D9AFFAA51519DA35008A7178 /* YA-slip.cpp */,
+				D9AFFAA61519DA35008A7178 /* YA.cpp */,
+				D9AFFAA71519DA35008A7178 /* YB-slip.cpp */,
+				D9AFFAA81519DA35008A7178 /* YB.cpp */,
+				D9AFFAA91519DA35008A7178 /* YC-slip.cpp */,
+				D9AFFAAA1519DA35008A7178 /* YC.cpp */,
+				D9AFFAAB1519DA35008A7178 /* YG-slip.cpp */,
+				D9AFFAAC1519DA35008A7178 /* YG.cpp */,
+				D9AFFAAD1519DA35008A7178 /* YH-slip.cpp */,
+				D9AFFAAE1519DA35008A7178 /* YH.cpp */,
+				D9AFFAAF1519DA35008A7178 /* YM-slip.cpp */,
+				D9AFFAB01519DA35008A7178 /* YM.cpp */,
+				D9AFFAB11519DA35008A7178 /* ZM-slip.cpp */,
+				D9AFFAB21519DA35008A7178 /* ZM.cpp */,
+				D9AFFAB31519DA35008A7178 /* bonds.cpp */,
+				D9AFFAB41519DA35008A7178 /* bonds.h */,
+				D9AFFAB51519DA35008A7178 /* lub-matrix.cpp */,
+				D9AFFAB61519DA35008A7178 /* lub-matrix.h */,
+				D9AFFAB71519DA35008A7178 /* dgetri_c.cpp */,
+				D9AFFAB81519DA35008A7178 /* dgetri_c.h */,
+				D9AFFAB91519DA35008A7178 /* minv-poly.cpp */,
+				D9AFFABA1519DA35008A7178 /* minv-poly.h */,
+				D9AFFABB1519DA35008A7178 /* matrix.cpp */,
+				D9AFFABC1519DA35008A7178 /* matrix.h */,
+				D9AFFABD1519DA35008A7178 /* non-ewald.cpp */,
+				D9AFFABE1519DA35008A7178 /* non-ewald.h */,
+				D9AFFABF1519DA35008A7178 /* two-body-res.cpp */,
+				D9AFFAC01519DA35008A7178 /* two-body-res.h */,
+				D9AFFAC11519DA35008A7178 /* lub.cpp */,
+				D9AFFAC21519DA35008A7178 /* lub.h */,
+				D9AFFAC31519DA35008A7178 /* ewald.cpp */,
+				D9AFFAC41519DA35008A7178 /* ewald.h */,
+				D9AFFAC51519DA35008A7178 /* f.cpp */,
+				D9AFFAC61519DA35008A7178 /* f.h */,
+				D9AFFAC71519DA35008A7178 /* ft.cpp */,
+				D9AFFAC81519DA35008A7178 /* ft.h */,
+				D9AFFAC91519DA35008A7178 /* fts.cpp */,
+				D9AFFACA1519DA35008A7178 /* fts.h */,
+				D9AFFACB1519DA35008A7178 /* bench.cpp */,
+				D9AFFACC1519DA35008A7178 /* bench.h */,
+				D9AFFACD1519DA35008A7178 /* twobody-slip.cpp */,
+				D9AFFACE1519DA35008A7178 /* twobody-slip.h */,
+				D9AFFACF1519DA35008A7178 /* ewald-3fts.cpp */,
+				D9AFFAD01519DA35008A7178 /* ewald-3fts.h */,
+				D9AFFAD11519DA35008A7178 /* twobody.cpp */,
+				D9AFFAD21519DA35008A7178 /* twobody.h */,
+				D9AFFAD31519DA35008A7178 /* stokes.cpp */,
+				D9AFFAD41519DA35008A7178 /* stokes.h */,
+				D9AFFAD51519DA35008A7178 /* ewald-3fts-matrix.cpp */,
+				D9AFFAD61519DA35008A7178 /* ewald-3fts-matrix.h */,
+			);
+			name = libstokes;
+			sourceTree = "<group>";
+		};
+		D9AFFB031519DA4C008A7178 /* libiter */ = {
+			isa = PBXGroup;
+			children = (
+				D9AFFB041519DA70008A7178 /* myblas.cpp */,
+				D9AFFB051519DA70008A7178 /* myblas.h */,
+				D9AFFB061519DA70008A7178 /* orthomin.cpp */,
+				D9AFFB071519DA70008A7178 /* orthomin.h */,
+				D9AFFB081519DA70008A7178 /* bi-cgstab.cpp */,
+				D9AFFB091519DA70008A7178 /* bi-cgstab.h */,
+				D9AFFB0A1519DA70008A7178 /* gmres.cpp */,
+				D9AFFB0B1519DA70008A7178 /* gmres.h */,
+				D9AFFB0C1519DA70008A7178 /* cg_.cpp */,
+				D9AFFB0D1519DA70008A7178 /* cg_.h */,
+				D9AFFB0E1519DA70008A7178 /* bicgstab.cpp */,
+				D9AFFB0F1519DA70008A7178 /* bicgstab.h */,
+				D9AFFB101519DA70008A7178 /* cgs.cpp */,
+				D9AFFB111519DA70008A7178 /* cgs.h */,
+				D9AFFB121519DA70008A7178 /* cg.cpp */,
+				D9AFFB131519DA70008A7178 /* cg.h */,
+				D9AFFB141519DA70008A7178 /* steepest.cpp */,
+				D9AFFB151519DA70008A7178 /* steepest.h */,
+				D9AFFB161519DA70008A7178 /* libiter.cpp */,
+				D9AFFB171519DA70008A7178 /* libiter.h */,
+			);
+			name = libiter;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -117,6 +355,60 @@
 			buildActionMask = 2147483647;
 			files = (
 				D93EEBF91519CE3800CC77EF /* main.cpp in Sources */,
+				D9AFFAD71519DA35008A7178 /* ewald-3ft-matrix.cpp in Sources */,
+				D9AFFAD81519DA35008A7178 /* ewald-3ft.cpp in Sources */,
+				D9AFFAD91519DA35008A7178 /* XA-slip.cpp in Sources */,
+				D9AFFADA1519DA35008A7178 /* XA.cpp in Sources */,
+				D9AFFADB1519DA35008A7178 /* XC-slip.cpp in Sources */,
+				D9AFFADC1519DA35008A7178 /* XC.cpp in Sources */,
+				D9AFFADD1519DA35008A7178 /* XG-slip.cpp in Sources */,
+				D9AFFADE1519DA35008A7178 /* XG.cpp in Sources */,
+				D9AFFADF1519DA35008A7178 /* XM-slip.cpp in Sources */,
+				D9AFFAE01519DA35008A7178 /* XM.cpp in Sources */,
+				D9AFFAE11519DA35008A7178 /* XP.cpp in Sources */,
+				D9AFFAE21519DA35008A7178 /* XQ.cpp in Sources */,
+				D9AFFAE31519DA35008A7178 /* YA-slip.cpp in Sources */,
+				D9AFFAE41519DA35008A7178 /* YA.cpp in Sources */,
+				D9AFFAE51519DA35008A7178 /* YB-slip.cpp in Sources */,
+				D9AFFAE61519DA35008A7178 /* YB.cpp in Sources */,
+				D9AFFAE71519DA35008A7178 /* YC-slip.cpp in Sources */,
+				D9AFFAE81519DA35008A7178 /* YC.cpp in Sources */,
+				D9AFFAE91519DA35008A7178 /* YG-slip.cpp in Sources */,
+				D9AFFAEA1519DA35008A7178 /* YG.cpp in Sources */,
+				D9AFFAEB1519DA35008A7178 /* YH-slip.cpp in Sources */,
+				D9AFFAEC1519DA35008A7178 /* YH.cpp in Sources */,
+				D9AFFAED1519DA35008A7178 /* YM-slip.cpp in Sources */,
+				D9AFFAEE1519DA35008A7178 /* YM.cpp in Sources */,
+				D9AFFAEF1519DA35008A7178 /* ZM-slip.cpp in Sources */,
+				D9AFFAF01519DA35008A7178 /* ZM.cpp in Sources */,
+				D9AFFAF11519DA35008A7178 /* bonds.cpp in Sources */,
+				D9AFFAF21519DA35008A7178 /* lub-matrix.cpp in Sources */,
+				D9AFFAF31519DA35008A7178 /* dgetri_c.cpp in Sources */,
+				D9AFFAF41519DA35008A7178 /* minv-poly.cpp in Sources */,
+				D9AFFAF51519DA35008A7178 /* matrix.cpp in Sources */,
+				D9AFFAF61519DA35008A7178 /* non-ewald.cpp in Sources */,
+				D9AFFAF71519DA35008A7178 /* two-body-res.cpp in Sources */,
+				D9AFFAF81519DA35008A7178 /* lub.cpp in Sources */,
+				D9AFFAF91519DA35008A7178 /* ewald.cpp in Sources */,
+				D9AFFAFA1519DA35008A7178 /* f.cpp in Sources */,
+				D9AFFAFB1519DA35008A7178 /* ft.cpp in Sources */,
+				D9AFFAFC1519DA35008A7178 /* fts.cpp in Sources */,
+				D9AFFAFD1519DA35008A7178 /* bench.cpp in Sources */,
+				D9AFFAFE1519DA35008A7178 /* twobody-slip.cpp in Sources */,
+				D9AFFAFF1519DA35008A7178 /* ewald-3fts.cpp in Sources */,
+				D9AFFB001519DA35008A7178 /* twobody.cpp in Sources */,
+				D9AFFB011519DA35008A7178 /* stokes.cpp in Sources */,
+				D9AFFB021519DA35008A7178 /* ewald-3fts-matrix.cpp in Sources */,
+				D9AFFB181519DA70008A7178 /* myblas.cpp in Sources */,
+				D9AFFB191519DA70008A7178 /* orthomin.cpp in Sources */,
+				D9AFFB1A1519DA70008A7178 /* bi-cgstab.cpp in Sources */,
+				D9AFFB1B1519DA70008A7178 /* gmres.cpp in Sources */,
+				D9AFFB1C1519DA70008A7178 /* cg_.cpp in Sources */,
+				D9AFFB1D1519DA70008A7178 /* bicgstab.cpp in Sources */,
+				D9AFFB1E1519DA70008A7178 /* cgs.cpp in Sources */,
+				D9AFFB1F1519DA70008A7178 /* cg.cpp in Sources */,
+				D9AFFB201519DA70008A7178 /* steepest.cpp in Sources */,
+				D9AFFB211519DA70008A7178 /* libiter.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -203,6 +495,7 @@
 				D93EEC001519CE3800CC77EF /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

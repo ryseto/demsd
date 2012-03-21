@@ -3,7 +3,7 @@
 //  demsd
 //
 //  Created by Ryohei SETO on 12/03/21.
-//  Copyright (c) 2012年 __MyCompanyName__. All rights reserved.
+//  Copyright (c) 2012 __MyCompanyName__. All rights reserved.
 //
 
 #include <iostream>
