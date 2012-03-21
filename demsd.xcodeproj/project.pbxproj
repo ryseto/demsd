@@ -1,0 +1,210 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		D93EEBF91519CE3800CC77EF /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D93EEBF81519CE3800CC77EF /* main.cpp */; };
+		D93EEBFB1519CE3800CC77EF /* demsd.1 in CopyFiles */ = {isa = PBXBuildFile; fileRef = D93EEBFA1519CE3800CC77EF /* demsd.1 */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		D93EEBF21519CE3800CC77EF /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = /usr/share/man/man1/;
+			dstSubfolderSpec = 0;
+			files = (
+				D93EEBFB1519CE3800CC77EF /* demsd.1 in CopyFiles */,
+			);
+			runOnlyForDeploymentPostprocessing = 1;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		D93EEBF41519CE3800CC77EF /* demsd */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = demsd; sourceTree = BUILT_PRODUCTS_DIR; };
+		D93EEBF81519CE3800CC77EF /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
+		D93EEBFA1519CE3800CC77EF /* demsd.1 */ = {isa = PBXFileReference; lastKnownFileType = text.man; path = demsd.1; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		D93EEBF11519CE3800CC77EF /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		D93EEBE91519CE3700CC77EF = {
+			isa = PBXGroup;
+			children = (
+				D93EEBF71519CE3800CC77EF /* demsd */,
+				D93EEBF51519CE3800CC77EF /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		D93EEBF51519CE3800CC77EF /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				D93EEBF41519CE3800CC77EF /* demsd */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		D93EEBF71519CE3800CC77EF /* demsd */ = {
+			isa = PBXGroup;
+			children = (
+				D93EEBF81519CE3800CC77EF /* main.cpp */,
+				D93EEBFA1519CE3800CC77EF /* demsd.1 */,
+			);
+			path = demsd;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		D93EEBF31519CE3800CC77EF /* demsd */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = D93EEBFE1519CE3800CC77EF /* Build configuration list for PBXNativeTarget "demsd" */;
+			buildPhases = (
+				D93EEBF01519CE3800CC77EF /* Sources */,
+				D93EEBF11519CE3800CC77EF /* Frameworks */,
+				D93EEBF21519CE3800CC77EF /* CopyFiles */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = demsd;
+			productName = demsd;
+			productReference = D93EEBF41519CE3800CC77EF /* demsd */;
+			productType = "com.apple.product-type.tool";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		D93EEBEB1519CE3700CC77EF /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0430;
+			};
+			buildConfigurationList = D93EEBEE1519CE3700CC77EF /* Build configuration list for PBXProject "demsd" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = D93EEBE91519CE3700CC77EF;
+			productRefGroup = D93EEBF51519CE3800CC77EF /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				D93EEBF31519CE3800CC77EF /* demsd */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXSourcesBuildPhase section */
+		D93EEBF01519CE3800CC77EF /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				D93EEBF91519CE3800CC77EF /* main.cpp in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		D93EEBFC1519CE3800CC77EF /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				CLANG_ENABLE_OBJC_ARC = YES;
+				COPY_PHASE_STRIP = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.7;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = macosx;
+			};
+			name = Debug;
+		};
+		D93EEBFD1519CE3800CC77EF /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				CLANG_ENABLE_OBJC_ARC = YES;
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.7;
+				SDKROOT = macosx;
+			};
+			name = Release;
+		};
+		D93EEBFF1519CE3800CC77EF /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		D93EEC001519CE3800CC77EF /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		D93EEBEE1519CE3700CC77EF /* Build configuration list for PBXProject "demsd" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				D93EEBFC1519CE3800CC77EF /* Debug */,
+				D93EEBFD1519CE3800CC77EF /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		D93EEBFE1519CE3800CC77EF /* Build configuration list for PBXNativeTarget "demsd" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				D93EEBFF1519CE3800CC77EF /* Debug */,
+				D93EEC001519CE3800CC77EF /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = D93EEBEB1519CE3700CC77EF /* Project object */;
+}
