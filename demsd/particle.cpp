@@ -1,9 +1,9 @@
 /*
  *  particle.cpp
- *  CCN_3D
+ *  DEMsd
  *
- *  Created by seto on 09/08/11.
- *  Copyright 2009 __MyCompanyName__. All rights reserved.
+ *  Created by Ryohei Seto on 09/08/11.
+ *  Copyright 2009 Ryohei Seto. All rights reserved.
  *
  */
 
@@ -19,19 +19,6 @@ Particle::Particle(int particle_number_,
     orientation.set(1.,0.,0.,0.);
     resetForce();
 }
-
-//Particle::Particle(int particle_number_){
-//
-//    particle_number = particle_number_;
-//    setVelocityZero();
-//    orientation.set(1.,0.,0.,0.);
-//    resetForce();
-//    cn_size = 0;
-//}
-
-//Particle::Particle(int particle_number_){
-//    setInitial(particle_number_);
-//}
 
 void Particle::setInitial(int particle_number_){
 	particle_number = particle_number_;
@@ -98,13 +85,3 @@ void Particle::move_with_velocity(){
     }
 		
 }
-
-//void Particle::output(ofstream &fout){
-	//fout << "c " << p.x - dem->pos_center_of_mass.x ;
-	//fout << ' '  << p.y - dem->pos_center_of_mass.y ;
-	//fout << ' '  << p.z - dem->pos_center_of_mass.z << endl;
-    //fout << "c " << p.x - dem->pos_center_of_mass.x ;
-	//fout << ' '  << p.y - dem->pos_center_of_mass.y ;
-	//fout << ' '  << p.z - dem->pos_center_of_mass.z << endl;
-    
-//}

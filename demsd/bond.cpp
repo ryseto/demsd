@@ -1,9 +1,9 @@
 /*
  *  bond.cpp
- *  CCN_3D
+ *  DEMsd
  *
- *  Created by seto on 09/08/12.
- *  Copyright 2009 __MyCompanyName__. All rights reserved.
+ *  Created by Ryohei Seto on 09/08/12.
+ *  Copyright 2009 Ryohei Seto. All rights reserved.
  *
  */
 

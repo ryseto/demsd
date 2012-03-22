@@ -1,9 +1,9 @@
 //
 //  testSimulation.cpp
-//  stodyn
+//  DEMsd
 //
 //  Created by Ryohei SETO on 12/03/20.
-//  Copyright (c) 2012年 __MyCompanyName__. All rights reserved.
+//  Copyright (c) 2012 Ryohei Seto. All rights reserved.
 //
 
 #include <iostream>

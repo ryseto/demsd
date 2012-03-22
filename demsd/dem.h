@@ -1,9 +1,9 @@
 /*
  *  dem.h
- *  stodyn
+ *  DEMsd
  *
- *  Created by seto on 10/07/07.
- *  Copyright 2010 __MyCompanyName__. All rights reserved.
+ *  Created by Ryohei Seto on 10/07/07.
+ *  Copyright 2010 Ryohei Seto. All rights reserved.
  *
  */
 #include "demsystem.h"

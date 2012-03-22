@@ -1,9 +1,9 @@
 /*
  *  grid.cpp
- *  CCN_3D
+ *  DEMsd
  *
- *  Created by seto on 09/08/18.
- *  Copyright 2009 __MyCompanyName__. All rights reserved.
+ *  Created by Ryohei Seto on 09/08/18.
+ *  Copyright 2009 Ryohei Seto. All rights reserved.
  *
  */
 #include "grid.h"
@@ -17,17 +17,12 @@ Grid::~Grid(){
         for (int gx = 0; gx < gx_max; ++gx){
             for (int gy = 0; gy < gy_max ; ++gy){
                 delete [] vcell[gx][gy];
-                vcell[gx][gy] = NULL;
                 delete [] neighbor_cell[gx][gy];
-                neighbor_cell[gx][gy] = NULL;
             }
             delete [] vcell[gx];
-            vcell[gx] = NULL;
             delete [] neighbor_cell[gx];
-            neighbor_cell[gx] = NULL;
         }
         delete [] vcell;
-        vcell = NULL;
     }
 }
 

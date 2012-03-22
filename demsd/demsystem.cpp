@@ -1,9 +1,9 @@
 //
 //  demsystem.cpp
-//  stodyn
+//  DEMsd
 //
 //  Created by SETO Ryohei on 31/07/2011.
-//  Copyright 2011 __MyCompanyName__. All rights reserved.
+//  Copyright 2011 Ryohei Seto. All rights reserved.
 //
 #include "demsystem.h"
 #include <iostream>
@@ -35,11 +35,8 @@ DEMsystem::~DEMsystem(){
         fout_data.close();
     if (mov_allocated){
         delete [] mov;
-        mov = NULL;
         delete [] vos;
-        vos = NULL;
         delete [] fte;
-        fte = NULL;
     }
     delete grid;
     delete ct;

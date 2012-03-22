@@ -1,9 +1,9 @@
 //
 //  demsystem.h
-//  stodyn
+//  DEMsd
 //
 //  Created by SETO Ryohei on 31/07/2011.
-//  Copyright 2011 __MyCompanyName__. All rights reserved.
+//  Copyright 2011 Ryohei Seto. All rights reserved.
 //
 
 #ifndef stodyn_demsystem_h
@@ -12,7 +12,7 @@
 #include <iomanip>
 #include <iostream>
 #include <fstream>
-#include "SDsystem.h"
+#include "sdsystem.h"
 #include "vec3d.h"
 #include "bond.h"
 #include "particle.h"

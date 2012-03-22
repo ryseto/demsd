@@ -1,24 +1,34 @@
 //
 //  calcDragAndTorque.h
-//  stodyn
+//  DEMsd
 //
 //  Created by Ryohei SETO on 12/03/20.
-//  Copyright (c) 2012年 __MyCompanyName__. All rights reserved.
+//  Copyright (c) 2012 Ryohei Seto. All rights reserved.
 //
 
 #ifndef stodyn_calcDragAndTorque_h
 #define stodyn_calcDragAndTorque_h
-#include "system.h"
+#include <fstream>
+#include <iomanip>
+#include "SDsystem.h"
 
 
+void outputVector(ofstream &fout, vec3d &vec){
+    fout.setf( ios::scientific, ios::floatfield ); // set math types
+    int output_precision = 6;
+    int output_width = output_precision + 9;
+    fout.precision(output_precision); // set precision
+    fout << setw(output_width) << vec.x;
+    fout << setw(output_width) << vec.y;
+    fout << setw(output_width) << vec.z;
+
+}
 void calcDragAndTorque(int argc, char** argv){    
-    System sy;
-
-    sy.type_simu = argv[1][0];
+    SDsystem sd_sys;
 	/* Shear-rate or typical velocity is set one.
 	 *
 	 */
-	if (argc == 2){
+	if (argc != 5){
 		/* POSITIONS indicates the path to a file including (x,y,z) of particles
 		 *
 		 */
@@ -47,68 +57,59 @@ void calcDragAndTorque(int argc, char** argv){
         cerr << "-------------------" << endl;
 		return;
 	}
-    
-    sy.method_hydroint = atoi(argv[4]); 
-    switch( sy.method_hydroint ){
+    sd_sys.setFlowType(argv[1][0]);
+    sd_sys.method_hydroint = atoi(argv[4]); 
+    switch( sd_sys.method_hydroint ){
 		case 1:
-            sy.setLubrication(0);
+            // without lubrication corrections
+            sd_sys.setLubrication(0);
 			break;
 		case 2:
-			sy.setLubrication(1);
+            // with lubrication corrections
+			sd_sys.setLubrication(1);
 			break;
         default:
-            cerr << "!!!!!!! Warning !!!!!!!!!!!!" << endl;
-            cerr << "4th argument should be 1 or 2:" << endl;
-            cerr << "1: without lubrication" << endl;
-            cerr << "2: with lubrication" << endl;
-            cerr << "exit" << endl;
+            cerr << "4th argument\n";
+            cerr << "1: without lubrication\n";
+            cerr << "2: with lubrication\n";
             exit(1);
 	} 
+    /* init() is called in this function*/
+
+    sd_sys.setBox(100, 100, 100);
+	sd_sys.importCluster(argv[2], atoi(argv[3]));
+    sd_sys.initLibStokes();
+    sd_sys.setPositionLibStokes();
+    sd_sys.setMotionRigidCluster(0,0,0,0,0,0); // (vx,vy,vz,ox,oy,oz)
+	sd_sys.setSDIterationMethod();
+
+	sd_sys.solveStokesianDynamics();
+
+    ofstream fout;
+    char fout_name[128];
+    sprintf(fout_name, "DragTorque_%s.dat", sd_sys.infoString());
+    cerr << fout_name << endl;
+    fout.open( fout_name );
     
-    sy.set_output_precision(12);
-	sy.type_of_flow = sy.type_simu;
-	/* init() is called in this function*/
-    sy.setBox(100, 100, 100);
-	sy.importCluster(argv[2], atoi(argv[3]));
-    sy.initLibStokes();
-    //    sy.setSD_IterationMethod();
-	/*
-	 * Set imposed flow 
-	 */ 
-	if (sy.type_of_flow == 'u'){
-		vec3d U(1.0, 0.0, 0.0);	
-		sy.setImposedFlow_uniform(U);
-	} else {
-		sy.setSimpleShearFlow(1.0);
-	}
-	
-	/*
-	 * Set velocities of particles
-	 */ 
-    sy.cl_velocity.set(0.0, 0.0, 0.0);
-    sy.cl_omega.set(0.0, 0.0, 0.0);
-    sy.setRigidVelocities();
-    
-	sy.setSD_IterationMethod();
-    
-	// main calculation
-    //double t_start,t_end, calc_time;
-    //    t_start = gettimeofday_sec();
-	sy.StokesianDynamics();
-    //    t_end = gettimeofday_sec();
-	//calc_time = t_end - t_start;
-    //output data
-	sy.openOutputFileStream();
-    
-	//sy.calcFreeDrainingForce();
-    //sy.FreeDrainingApproximation();
-    
-	sy.calcTotalForceTorqueStress();
-    sy.outputForComparison();
-    
-    //sy.outputSampleData();    
+    cerr << fout_name << endl;
+
+    fout << "# N " << sd_sys.np << endl; 
+    fout << "# x y z vx vy vz ox oy oz fx fy fz tx ty tz"<< endl;
+
+	for (int i = 0; i < sd_sys.np; i ++){
+        vec3d position = sd_sys.getPosition(i);
+        vec3d velocity = sd_sys.getVelocity(i);
+        vec3d omega = sd_sys.getOmega(i);
+        vec3d force = -sd_sys.getForce(i);
+        vec3d torque = -sd_sys.getTorque(i);
+        outputVector(fout, position);
+        outputVector(fout, velocity);
+        outputVector(fout, omega);
+        outputVector(fout, force);
+        outputVector(fout, torque);
+		fout << endl;
+    }
+    fout.close();
 }
-
-
 
 #endif

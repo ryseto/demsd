@@ -1,9 +1,9 @@
 /*
  *  bond.h
- *  CCN_3D
+ *  DEMsd
  *
- *  Created by seto on 09/08/12.
- *  Copyright 2009 __MyCompanyName__. All rights reserved.
+ *  Created by Ryohei Seto on 09/08/12.
+ *  Copyright 2009 Ryohei Seto. All rights reserved.
  *
  */
 #ifndef bond_h
@@ -14,7 +14,7 @@
 #include "contable.h"
 #include "particle.h"
 //#include "system.h"
-#include "SDsystem.h"
+#include "sdsystem.h"
 #include "demsystem.h"
 #include "grid.h"
 class Particle;

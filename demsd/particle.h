@@ -1,9 +1,9 @@
 /*
  *  particle.h
- *  CCN_3D
+ *  DEMsd
  *
  *  Created by seto on 09/08/11.
- *  Copyright 2009 __MyCompanyName__. All rights reserved.
+ *  Copyright 2009 Ryohei Seto. All rights reserved.
  *
  */
 #ifndef particle_h

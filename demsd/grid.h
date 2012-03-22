@@ -1,9 +1,9 @@
 /*
  *  grid.h
- *  CCN_3D
+ *  DEMsd
  *
- *  Created by seto on 09/08/18.
- *  Copyright 2009 __MyCompanyName__. All rights reserved.
+ *  Created by Ryohei Seto on 09/08/18.
+ *  Copyright 2009 Ryohei Seto. All rights reserved.
  *
  */
 #ifndef grid_h
@@ -18,7 +18,6 @@
 #include "particle.h"
 using namespace std;
 const int max_number_point =20000;
-//extern int gy_max, gx_max;
 class Particle;
 
 class Grid{

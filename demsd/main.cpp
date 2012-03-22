@@ -1,9 +1,9 @@
 //
 //  main.cpp
-//  demsd
+//  DEMsd
 //
 //  Created by Ryohei SETO on 12/03/21.
-//  Copyright (c) 2012 All rights reserved.
+//  Copyright (c) 2012 Ryohei Seto. All rights reserved.
 //
 #include <string>
 #include <iomanip>
@@ -19,8 +19,8 @@ int main (int argc, char** argv) {
 	if ( argc <= 1 ){
 		cerr << "Usage: stodyn TYPE ..." << endl;
         cerr << "D: DEM simulation" << endl;
-		cerr << "U: calcDragAndTorque in uniform flows" << endl;
-		cerr << "S: calcDragAndTorque in shear flows" << endl;
+		cerr << "u: calcDragAndTorque in uniform flows" << endl;
+		cerr << "s: calcDragAndTorque in shear flows" << endl;
         cerr << "T: Test simulation" << endl;
 		return 0;
 	}
@@ -38,14 +38,9 @@ int main (int argc, char** argv) {
             }
             demSimulation(argc, argv);
             break;
-        case 'U':
-            /* Drag forces in uniform flow.
-             *
-             */
-            calcDragAndTorque(argc, argv);
-            break;
-        case 'S':
-            /* Drag forces in shear flow.
+        case 'u':
+        case 's':
+            /* Drag forces in uniform or shear flow.
              */
             calcDragAndTorque(argc, argv);
             break;

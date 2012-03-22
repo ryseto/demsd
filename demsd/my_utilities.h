@@ -1,9 +1,9 @@
 /*
  *  my_utilities.h
- *  stodyn
+ *  DEMsd
  *
- *  Created by seto on 10/05/03.
- *  Copyright 2010 __MyCompanyName__. All rights reserved.
+ *  Created by Ryohei Seto on 10/05/03.
+ *  Copyright (c) 2010 Ryohei Seto. All rights reserved.
  *
  */
 
@@ -12,7 +12,6 @@
 #include <fstream>
 #include <iomanip>
 #include <sys/time.h>
-//#define DELETE(x) if(x){delete [] x; x = NULL;}
 using namespace std;
 
 /* math tools */

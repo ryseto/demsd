@@ -1,9 +1,9 @@
 /*
  *  common.h
- *  CCN_3D
+ *  DEMsd
  *
- *  Created by seto on 09/08/11.
- *  Copyright 2009 __MyCompanyName__. All rights reserved.
+ *  Created by Ryohei Seto on 09/08/11.
+ *  Copyright 2009. All rights reserved.
  *
  */
 
@@ -16,15 +16,6 @@
 #include <vector>
 #include <cstdlib>
 #include "vec3d.h"
-//#include "my_utilities.h"
-
-//class Particle;
-//class Bond;
-//class Particle;
-//class Bond;
-//class System;
-//class System;
-//class Wall;
 
 #define L_SIZE 5
 

@@ -1,8 +1,9 @@
 /*
  *  contable.cpp
+ *  DEMsd
  *
- *  Created by SETO Ryohei on 07/01/18.
- *  Copyright 2007 __MyCompanyName__. All rights reserved.
+ *  Created by Ryohei Seto on 07/01/18.
+ *  Copyright 2007 Ryohei Seto. All rights reserved.
  *
  */
 
@@ -10,49 +11,46 @@
 #include <iostream>
 #include <iomanip>
 
-using namespace std;
-#define DELETE(x) if(x){delete [] x; x = NULL;}
-
 ConTable::~ConTable(){
 	if (allocate){
 		for (int i=0; i<n+2; ++i){
-			DELETE(tbl[i]);
+			delete [] contact_table[i];
 		}
-		DELETE(tbl);
+		delete [] contact_table;
 	}
 }
 
 void ConTable::set(int num_of_particle){
 	allocate = true;
 	n = num_of_particle;
-	tbl = new bool* [n+2];
+	contact_table = new bool* [n+2];
 	for (int i=0; i < n+2; ++i){
-		tbl[i] = new bool[n+2];
+		contact_table[i] = new bool[n+2];
 	}
 	for (int i=0; i < n+2; ++i){
 		for (int j=0; j < i; ++j){
-			tbl[i][j] = false;
-			tbl[j][i] = false;
+			contact_table[i][j] = false;
+			contact_table[j][i] = false;
 		}
-		tbl[i][i] = true;
+		contact_table[i][i] = true;
 	}
 }
 
 void ConTable::on_connect(int i, int j){
-	tbl[i][j] = true;
-	tbl[j][i] = true;
+	contact_table[i][j] = true;
+	contact_table[j][i] = true;
 }
 
 void ConTable::off_connect(int i, int j){
-	tbl[i][j] = false;
-	tbl[j][i] = false;
+	contact_table[i][j] = false;
+	contact_table[j][i] = false;
 }
 
 void ConTable::reset(){
 	for (int i=0; i<n+2; ++i){
 		for (int j=0; j<n+2; ++j){
-			tbl[i][j] = false;
+			contact_table[i][j] = false;
 		}
-		tbl[i][i] = true;
+		contact_table[i][i] = true;
 	}
 }
