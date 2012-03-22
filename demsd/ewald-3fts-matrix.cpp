@@ -1555,7 +1555,7 @@ solve_mix_lub_3fts_matrix (struct stokes * sys,
 }
 
 
-/** Added by seto **/
+/********************* Added by R. Seto *****************************/
 /*
  * INPUT
  *  r [np * 11 * np * 11] : this is INVERSED form
@@ -1671,11 +1671,9 @@ calc_mob_3fts_matrix(struct stokes * sys,
     }
     
     int np = sys->np;
-    int n11 = np * 11;
     int n6 = np * 6;
     int n5 = np * 5;
     
-//    double *mat = (double *) malloc (sizeof (double) * n11 * n11);
     double *mat_ll = (double *) malloc (sizeof (double) * n6 * n6);
     double *mat_lh = (double *) malloc (sizeof (double) * n6 * n5);
     double *mat_hl = (double *) malloc (sizeof (double) * n5 * n6);
@@ -1684,8 +1682,6 @@ calc_mob_3fts_matrix(struct stokes * sys,
     double *mob_lh = (double *) malloc (sizeof (double) * n6 * n5);
     double *mob_hl = (double *) malloc (sizeof (double) * n5 * n6);
     double *mob_hh = (double *) malloc (sizeof (double) * n5 * n5);
-//    double *b = (double *) malloc (sizeof (double) * n11);
-//    double *x = (double *) malloc (sizeof (double) * n11);
     CHECK_MALLOC (mat, "solve_mob_3fts_matrix_0");
     CHECK_MALLOC (mat_ll, "solve_mob_3fts_matrix_0");
     CHECK_MALLOC (mat_lh, "solve_mob_3fts_matrix_0");
@@ -1695,12 +1691,6 @@ calc_mob_3fts_matrix(struct stokes * sys,
     CHECK_MALLOC (mob_lh, "solve_mob_3fts_matrix_0");
     CHECK_MALLOC (mob_hl, "solve_mob_3fts_matrix_0");
     CHECK_MALLOC (mob_hh, "solve_mob_3fts_matrix_0");
-//    CHECK_MALLOC (b, "solve_mob_3fts_matrix_0");
-//    CHECK_MALLOC (x, "solve_mob_3fts_matrix_0");
-    
-    /* b := (FTE) */
-    //  set_fts_by_FTS (np, b, f, t, e);
-    
     /* mobility matrix in EXTRACTED form */
     make_matrix_mob_3all (sys, mat); // sys->version is 2 (FTS)
     /* mat := M.T, where T.(FTS) = (FTS~) */
@@ -1710,10 +1700,6 @@ calc_mob_3fts_matrix(struct stokes * sys,
                   mat_hh, mat_hl, mat_lh, mat_ll,
                   mob_hh, mob_hl, mob_lh, mob_ll);
     merge_matrix_3fts (np, mob_ll, mob_lh, mob_hl, mob_hh, mat);
-    //  dot_prod_matrix (mat, n11, n11,
-    //                 b, x);
-    //  set_FTS_by_fts (np, u, o, s, x);
-    //free (mat);
     free (mat_ll);
     free (mat_lh);
     free (mat_hl);
@@ -1722,8 +1708,6 @@ calc_mob_3fts_matrix(struct stokes * sys,
     free (mob_lh);
     free (mob_hl);
     free (mob_hh);
-    //    free (b);
-    //free (x);
 }
 
 

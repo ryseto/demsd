@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		D9263126151B2F8A00C31218 /* makefile in Sources */ = {isa = PBXBuildFile; fileRef = D9263125151B2F8A00C31218 /* makefile */; };
 		D93EEBF91519CE3800CC77EF /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D93EEBF81519CE3800CC77EF /* main.cpp */; };
 		D93EEBFB1519CE3800CC77EF /* demsd.1 in CopyFiles */ = {isa = PBXBuildFile; fileRef = D93EEBFA1519CE3800CC77EF /* demsd.1 */; };
 		D9AFFAD71519DA35008A7178 /* ewald-3ft-matrix.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D9AFFA971519DA35008A7178 /* ewald-3ft-matrix.cpp */; };
@@ -63,6 +64,15 @@
 		D9AFFB1F1519DA70008A7178 /* cg.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D9AFFB121519DA70008A7178 /* cg.cpp */; };
 		D9AFFB201519DA70008A7178 /* steepest.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D9AFFB141519DA70008A7178 /* steepest.cpp */; };
 		D9AFFB211519DA70008A7178 /* libiter.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D9AFFB161519DA70008A7178 /* libiter.cpp */; };
+		D9AFFB59151A1EE9008A7178 /* sdsystem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D9AFFB4C151A1EE9008A7178 /* sdsystem.cpp */; };
+		D9AFFB5A151A1EE9008A7178 /* demsystem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D9AFFB4D151A1EE9008A7178 /* demsystem.cpp */; };
+		D9AFFB5B151A1EE9008A7178 /* contable.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D9AFFB51151A1EE9008A7178 /* contable.cpp */; };
+		D9AFFB5C151A1EE9008A7178 /* grid.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D9AFFB53151A1EE9008A7178 /* grid.cpp */; };
+		D9AFFB5D151A1EE9008A7178 /* bond.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D9AFFB55151A1EE9008A7178 /* bond.cpp */; };
+		D9AFFB5E151A1EE9008A7178 /* particle.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D9AFFB58151A1EE9008A7178 /* particle.cpp */; };
+		D9AFFB69151A20B0008A7178 /* system.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D9AFFB67151A20B0008A7178 /* system.cpp */; };
+		D9AFFB6C151A20FB008A7178 /* testSimulation.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D9AFFB6B151A20FB008A7178 /* testSimulation.cpp */; };
+		D9AFFB6E151A239D008A7178 /* Accelerate in Frameworks */ = {isa = PBXBuildFile; fileRef = D9AFFB6D151A239D008A7178 /* Accelerate */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -79,6 +89,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		D9263125151B2F8A00C31218 /* makefile */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.make; path = makefile; sourceTree = "<group>"; };
 		D93EEBF41519CE3800CC77EF /* demsd */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = demsd; sourceTree = BUILT_PRODUCTS_DIR; };
 		D93EEBF81519CE3800CC77EF /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 		D93EEBFA1519CE3800CC77EF /* demsd.1 */ = {isa = PBXFileReference; lastKnownFileType = text.man; path = demsd.1; sourceTree = "<group>"; };
@@ -166,6 +177,28 @@
 		D9AFFB151519DA70008A7178 /* steepest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = steepest.h; sourceTree = "<group>"; };
 		D9AFFB161519DA70008A7178 /* libiter.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = libiter.cpp; sourceTree = "<group>"; };
 		D9AFFB171519DA70008A7178 /* libiter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = libiter.h; sourceTree = "<group>"; };
+		D9AFFB4B151A1EE9008A7178 /* sdsystem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = sdsystem.h; sourceTree = "<group>"; };
+		D9AFFB4C151A1EE9008A7178 /* sdsystem.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = sdsystem.cpp; sourceTree = "<group>"; };
+		D9AFFB4D151A1EE9008A7178 /* demsystem.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = demsystem.cpp; sourceTree = "<group>"; };
+		D9AFFB4E151A1EE9008A7178 /* demsystem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = demsystem.h; sourceTree = "<group>"; };
+		D9AFFB4F151A1EE9008A7178 /* dem.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = dem.h; sourceTree = "<group>"; };
+		D9AFFB50151A1EE9008A7178 /* contable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = contable.h; sourceTree = "<group>"; };
+		D9AFFB51151A1EE9008A7178 /* contable.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = contable.cpp; sourceTree = "<group>"; };
+		D9AFFB52151A1EE9008A7178 /* common.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = common.h; sourceTree = "<group>"; };
+		D9AFFB53151A1EE9008A7178 /* grid.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = grid.cpp; sourceTree = "<group>"; };
+		D9AFFB54151A1EE9008A7178 /* grid.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = grid.h; sourceTree = "<group>"; };
+		D9AFFB55151A1EE9008A7178 /* bond.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = bond.cpp; sourceTree = "<group>"; };
+		D9AFFB56151A1EE9008A7178 /* bond.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = bond.h; sourceTree = "<group>"; };
+		D9AFFB57151A1EE9008A7178 /* particle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = particle.h; sourceTree = "<group>"; };
+		D9AFFB58151A1EE9008A7178 /* particle.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = particle.cpp; sourceTree = "<group>"; };
+		D9AFFB5F151A1F23008A7178 /* config.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = config.h; sourceTree = "<group>"; };
+		D9AFFB60151A1F64008A7178 /* my_utilities.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = my_utilities.h; sourceTree = "<group>"; };
+		D9AFFB65151A207C008A7178 /* calcDragAndTorque.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = calcDragAndTorque.h; sourceTree = "<group>"; };
+		D9AFFB67151A20B0008A7178 /* system.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = system.cpp; sourceTree = "<group>"; };
+		D9AFFB68151A20B0008A7178 /* system.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = system.h; sourceTree = "<group>"; };
+		D9AFFB6A151A20FB008A7178 /* testSimulation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = testSimulation.h; sourceTree = "<group>"; };
+		D9AFFB6B151A20FB008A7178 /* testSimulation.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = testSimulation.cpp; sourceTree = "<group>"; };
+		D9AFFB6D151A239D008A7178 /* Accelerate */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = Accelerate; path = ../../../../../System/Library/Frameworks/Accelerate.framework/Accelerate; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -173,6 +206,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D9AFFB6E151A239D008A7178 /* Accelerate in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -182,6 +216,8 @@
 		D93EEBE91519CE3700CC77EF = {
 			isa = PBXGroup;
 			children = (
+				D9AFFA8C1519D71D008A7178 /* libstokes */,
+				D9AFFB031519DA4C008A7178 /* libiter */,
 				D93EEBF71519CE3800CC77EF /* demsd */,
 				D93EEBF51519CE3800CC77EF /* Products */,
 			);
@@ -198,9 +234,30 @@
 		D93EEBF71519CE3800CC77EF /* demsd */ = {
 			isa = PBXGroup;
 			children = (
+				D9263125151B2F8A00C31218 /* makefile */,
 				D93EEBF81519CE3800CC77EF /* main.cpp */,
-				D9AFFB031519DA4C008A7178 /* libiter */,
-				D9AFFA8C1519D71D008A7178 /* libstokes */,
+				D9AFFB6A151A20FB008A7178 /* testSimulation.h */,
+				D9AFFB6B151A20FB008A7178 /* testSimulation.cpp */,
+				D9AFFB67151A20B0008A7178 /* system.cpp */,
+				D9AFFB68151A20B0008A7178 /* system.h */,
+				D9AFFB60151A1F64008A7178 /* my_utilities.h */,
+				D9AFFB65151A207C008A7178 /* calcDragAndTorque.h */,
+				D9AFFB5F151A1F23008A7178 /* config.h */,
+				D9AFFB4B151A1EE9008A7178 /* sdsystem.h */,
+				D9AFFB4C151A1EE9008A7178 /* sdsystem.cpp */,
+				D9AFFB4D151A1EE9008A7178 /* demsystem.cpp */,
+				D9AFFB4E151A1EE9008A7178 /* demsystem.h */,
+				D9AFFB4F151A1EE9008A7178 /* dem.h */,
+				D9AFFB50151A1EE9008A7178 /* contable.h */,
+				D9AFFB51151A1EE9008A7178 /* contable.cpp */,
+				D9AFFB52151A1EE9008A7178 /* common.h */,
+				D9AFFB53151A1EE9008A7178 /* grid.cpp */,
+				D9AFFB54151A1EE9008A7178 /* grid.h */,
+				D9AFFB55151A1EE9008A7178 /* bond.cpp */,
+				D9AFFB56151A1EE9008A7178 /* bond.h */,
+				D9AFFB57151A1EE9008A7178 /* particle.h */,
+				D9AFFB58151A1EE9008A7178 /* particle.cpp */,
+				D9AFFB6D151A239D008A7178 /* Accelerate */,
 				D93EEBFA1519CE3800CC77EF /* demsd.1 */,
 			);
 			path = demsd;
@@ -275,6 +332,7 @@
 				D9AFFAD61519DA35008A7178 /* ewald-3fts-matrix.h */,
 			);
 			name = libstokes;
+			path = demsd;
 			sourceTree = "<group>";
 		};
 		D9AFFB031519DA4C008A7178 /* libiter */ = {
@@ -302,6 +360,7 @@
 				D9AFFB171519DA70008A7178 /* libiter.h */,
 			);
 			name = libiter;
+			path = demsd;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -409,6 +468,15 @@
 				D9AFFB1F1519DA70008A7178 /* cg.cpp in Sources */,
 				D9AFFB201519DA70008A7178 /* steepest.cpp in Sources */,
 				D9AFFB211519DA70008A7178 /* libiter.cpp in Sources */,
+				D9AFFB59151A1EE9008A7178 /* sdsystem.cpp in Sources */,
+				D9AFFB5A151A1EE9008A7178 /* demsystem.cpp in Sources */,
+				D9AFFB5B151A1EE9008A7178 /* contable.cpp in Sources */,
+				D9AFFB5C151A1EE9008A7178 /* grid.cpp in Sources */,
+				D9AFFB5D151A1EE9008A7178 /* bond.cpp in Sources */,
+				D9AFFB5E151A1EE9008A7178 /* particle.cpp in Sources */,
+				D9AFFB69151A20B0008A7178 /* system.cpp in Sources */,
+				D9AFFB6C151A20FB008A7178 /* testSimulation.cpp in Sources */,
+				D9263126151B2F8A00C31218 /* makefile in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -430,6 +498,7 @@
 					"DEBUG=1",
 					"$(inherited)",
 				);
+				GCC_PREPROCESSOR_DEFINITIONS_NOT_USED_IN_PRECOMPS = "OSX=1";
 				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
@@ -452,6 +521,7 @@
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				GCC_PREPROCESSOR_DEFINITIONS_NOT_USED_IN_PRECOMPS = "OSX=1";
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
@@ -465,6 +535,11 @@
 		D93EEBFF1519CE3800CC77EF /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				GCC_PREPROCESSOR_DEFINITIONS_NOT_USED_IN_PRECOMPS = "OSX=1";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SYSTEM_LIBRARY_DIR)/Frameworks/Accelerate.framework\"",
+				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Debug;
@@ -472,6 +547,11 @@
 		D93EEC001519CE3800CC77EF /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				GCC_PREPROCESSOR_DEFINITIONS_NOT_USED_IN_PRECOMPS = "OSX=1";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SYSTEM_LIBRARY_DIR)/Frameworks/Accelerate.framework\"",
+				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Release;
