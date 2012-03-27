@@ -117,10 +117,11 @@ void SDsystem::initLibStokes(){
     sd->version = 2; /* 0 = F, 1 = FT, 2 = FTS  */
     sd->periodic = 0; 	/* 0 = non periodic, 1 = periodic */
 	stokes_set_np(sd, np, nm);
-    if (lx == 0 || ly == 0 || lz == 0 ){
-        cerr << "lx, ly, lz are not given." << endl;exit(1);
-    }
-    cerr << "=======" << endl;
+        if (lx == 0 || ly == 0 || lz == 0 ){
+          cerr << "lx, ly, lz are not given." << endl;exit(1);
+        }
+      cerr << "=======" << endl;
+     
 	stokes_set_l(sd, lx, ly, lz);
     
     int n3=np*3;

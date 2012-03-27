@@ -13,7 +13,6 @@
 #include <cmath>
 #include "contable.h"
 #include "particle.h"
-//#include "system.h"
 #include "sdsystem.h"
 #include "demsystem.h"
 #include "grid.h"

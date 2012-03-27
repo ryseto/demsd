@@ -41,6 +41,9 @@ int main (int argc, char** argv) {
         case 'u':
         case 's':
             /* Drag forces in uniform or shear flow.
+             * $ demsd u/s POSITIONS skipline method
+             * OUTPUT:
+             * 
              */
             calcDragAndTorque(argc, argv);
             break;

@@ -108,6 +108,8 @@ public:
     double * force;
     double * torque;
     double * stresslet;
+    // lx, ly, lz 
+    // box size. But
     double lx;
     double ly;
     double lz;
@@ -119,9 +121,7 @@ public:
     vec3d cl_torque; // torque for the rigid cluster
     double cl_stresslet[5]; // stresslet for the rigid cluster
     double cl_stresslet_norm;
-    
-    
-    
+
     
 };
 

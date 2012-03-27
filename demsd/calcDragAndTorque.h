@@ -75,7 +75,7 @@ void calcDragAndTorque(int argc, char** argv){
             exit(1);
 	} 
     /* init() is called in this function*/
-
+    //
     sd_sys.setBox(100, 100, 100);
 	sd_sys.importCluster(argv[2], atoi(argv[3]));
     sd_sys.initLibStokes();
