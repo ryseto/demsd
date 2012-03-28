@@ -30,8 +30,8 @@ void testSimulation(int argc, char** argv){
     dem.setVersion(argv[5]);
     /* Method of Hydrodynamic interaciton FDA(0), SD_nolub(1), SD_lub(2)*/
 	dem.readParameterFileDEM();
-    dem.readBondParameter();
-    dem.setSimulationBoxs();
+    dem.readParameterBond();
+//    dem.setSimulationBoxs();
     /* set imposed flow */
     sd_sys.setFlowType('s');
 	/* DEM */

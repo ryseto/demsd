@@ -74,9 +74,7 @@ void Bond::whichparticle(int &i, int &j){
 
 void Bond::addContactForce(){
 	calcForce();
-
 	(*p_particle0).stackForce( force0, torque0);
-//    (*p_particle1).stackForce(force1, torque1);
 	(*p_particle1).stackForce(-force0, torque1);
 }
 
@@ -100,8 +98,6 @@ void Bond::calcForce(){
 	moment_bending = para.kb*ang_bend;
 	moment_torsion = para.kt*ang_tort;
 
-    
-    
 	/** compose **/
 	/* force to particle 0 */
 	force0 = force_normal*e_normal + force_sliding;
@@ -259,19 +255,19 @@ void Bond::monitor_state(ofstream &out){
 
 void Bond::drawString(ofstream &out){
     out << "s ";
-    out << (*pp[0]).x - dem->lx0 << ' ';
-    out << (*pp[0]).y - dem->ly0 << ' ';
-    out << (*pp[0]).z - dem->lz0  << ' ';
-    out << (*pp[0]).x + (*pu[0]).x - dem->lx0 << ' ';
-    out << (*pp[0]).y + (*pu[0]).y - dem->ly0 << ' ';
-    out << (*pp[0]).z + (*pu[0]).z - dem->lz0 << endl;
+    out << (*pp[0]).x << ' ';
+    out << (*pp[0]).y << ' ';
+    out << (*pp[0]).z << ' ';
+    out << (*pp[0]).x + (*pu[0]).x << ' ';
+    out << (*pp[0]).y + (*pu[0]).y << ' ';
+    out << (*pp[0]).z + (*pu[0]).z << endl;
     out << "s ";
-    out << (*pp[1]).x - dem->lx0 << ' ';
-    out << (*pp[1]).y - dem->ly0 << ' ';
-    out << (*pp[1]).z - dem->lz0 << ' ';
-    out << (*pp[1]).x + (*pu[1]).x - dem->lx0 << ' ';
-    out << (*pp[1]).y + (*pu[1]).y - dem->ly0 << ' ';
-    out << (*pp[1]).z + (*pu[1]).z - dem->lz0 << endl;
+    out << (*pp[1]).x << ' ';
+    out << (*pp[1]).y << ' ';
+    out << (*pp[1]).z << ' ';
+    out << (*pp[1]).x + (*pu[1]).x << ' ';
+    out << (*pp[1]).y + (*pu[1]).y << ' ';
+    out << (*pp[1]).z + (*pu[1]).z << endl;
 }
 
 

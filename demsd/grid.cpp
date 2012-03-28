@@ -10,6 +10,7 @@
 #include <algorithm>
 
 Grid::Grid(){
+    l_center = 25;
 }
 
 Grid::~Grid(){
@@ -27,14 +28,14 @@ Grid::~Grid(){
 }
 
 void Grid::init
-(int num_of_particle_, double L[3], double grid_size)
+(int num_of_particle_, double grid_size)
 {
     allocated= true;
 	num_of_particle = num_of_particle_;
 	h = grid_size;
-	gx_max = (int)( L[0]/h );
-	gy_max = (int)( L[1]/h );
-	gz_max = (int)( L[2]/h );
+	gx_max = (int)( 2*l_center/h );
+	gy_max = (int)( 2*l_center/h );
+	gz_max = (int)( 2*l_center/h );
 
     cerr << gx_max << endl;
     
@@ -86,9 +87,9 @@ void Grid::remake(vector<Particle *> &particle){
 }
 
 GridPoint Grid::p_to_grid(const vec3d &p){
-    gp_tmp.x = (int)(p.x/h);
-	gp_tmp.y = (int)(p.y/h);
-	gp_tmp.z = (int)(p.z/h);
+    gp_tmp.x = (int)((p.x+l_center)/h);
+	gp_tmp.y = (int)((p.y+l_center)/h);
+	gp_tmp.z = (int)((p.z+l_center)/h);
     if (gp_tmp.x == gx_max ){
         gp_tmp.x --;
     }

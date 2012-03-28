@@ -22,6 +22,7 @@ class Particle;
 
 class Grid{
 	double h;
+    double l_center;
 	vector<GridPoint> gl;
 	vector<int> ***vcell;
 	vector<GridPoint> ***neighbor_cell;
@@ -35,7 +36,7 @@ public:
 	Grid();
 	~Grid();
     
-	void init(int num_of_particle, double L[3] , double grid_size);
+	void init(int num_of_particle , double grid_size);
 	void remake(vector<Particle *> &particle);
 	void entry(const vec3d &p, int i);
 	GridPoint p_to_grid(const vec3d &p);

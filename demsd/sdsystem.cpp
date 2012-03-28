@@ -12,9 +12,9 @@
 #include <fstream>
 
 SDsystem::SDsystem(){
-    np = 0;
+    np = -1;
 	lubrication = -1;
-	dr = NULL;
+	pos = NULL;
 	velocity = NULL;
 	omega = NULL;
 	strain_velocity = NULL;
@@ -44,12 +44,12 @@ void SDsystem::setOutputPrecision(int value){
 }
 
 void SDsystem::setBox(double lx_, double ly_, double lz_){
-	lx = lx_;
-	ly = ly_;
-	lz = lz_;
-	lx0 = lx/2.0;
-	ly0 = ly/2.0;
-	lz0 = lz/2.0;
+//	lx = lx_;
+//	ly = ly_;
+//	lz = lz_;
+//	lx0 = lx/2.0;
+//	ly0 = ly/2.0;
+//	lz0 = lz/2.0;
 }
 
 
@@ -109,31 +109,29 @@ void SDsystem::setFlowType(char type_of_flow_){
  * Basic parameters for the libstorks
  * and pos[] are set from init_aggregate.
  */
-void SDsystem::initLibStokes(){
+void SDsystem::initLibStokes(int num_of_particle_){
+    if (num_of_particle_ > 0)
+        np = num_of_particle_;
     nm = np ;	/* nm : number of mobile particles  */
-    cerr << "number of the particles : " << np << endl;
     sd = stokes_init();
 	sd->twobody_lub = lubrication;
+    // Shear flow requirs FTS version.
     sd->version = 2; /* 0 = F, 1 = FT, 2 = FTS  */
     sd->periodic = 0; 	/* 0 = non periodic, 1 = periodic */
 	stokes_set_np(sd, np, nm);
-        if (lx == 0 || ly == 0 || lz == 0 ){
-          cerr << "lx, ly, lz are not given." << endl;exit(1);
-        }
-      cerr << "=======" << endl;
-     
-	stokes_set_l(sd, lx, ly, lz);
-    
+    // Only non-periodic condition
+    // stokes_set_l(sd, lx, ly, lz);
+
     int n3=np*3;
     int n5=np*5;
     try{
+        pos = new vec3d [np];        
         velocity = new double [ n3 ];
         omega = new double [ n3 ];
         strain_velocity = new double [ n5 ];
         force = new double [ n3 ];
         torque = new double [ n3 ];
         stresslet = new double [ n5 ];
-        dr = new vec3d [np];
     } catch (bad_alloc &){
         cerr << "bad_alloc at System::init()" << endl;
         exit(1);
@@ -148,28 +146,14 @@ void SDsystem::initLibStokes(){
         /*
          * The shear rate of shear flow is always 1.0
          */
-        sd->Ui[0] = -1.0*lz/2 ;
+        //sd->Ui[0] = -1.0*lz/2 ;
+        sd->Ui[0] = 0;
         sd->Oi[1] = 1.0/2;
         sd->Ei[2] = 1.0/2;
     } else {
         cerr << "Type of flow should be given. (shear or uniform)" << endl;
     }
-    //    sy.setSD_IterationMethod();
-	/*
-	 * Set imposed flow 
-	 */ 
-    //	if ( sd_sys.typeOfFlow() ){
-    //		vec3d U(1.0, 0.0, 0.0);	
-    //		sd_sys.setImposedFlow_uniform(U);
-    //	} else {
-    //		sd_sys.setSimpleShearFlow(1.0);
-    //	}
-//    /*
-//	 * set pos[] for SD
-//	 */ 
-//    
 
-//    }
 }
 void SDsystem::setPositionLibStokes(){
     /* For SD calculation,
@@ -182,19 +166,17 @@ void SDsystem::setPositionLibStokes(){
 }
 
 
-void SDsystem::set_dr_from_sdpos(){    
-    for (int i = 0; i < np; i++){
-		dr[i].set(sd->pos[i*3 + 0] - lx0,
-				  sd->pos[i*3 + 1] - ly0,
-				  sd->pos[i*3 + 2] - lz0);
-	}  
-}
+//void SDsystem::set_dr_from_sdpos(){    
+  
+//}
 
 void SDsystem::setPosition(int i, const vec3d &position){
+    // Positions are set in libstokes.
 	int j = 3*i;
 	sd->pos[j] = position.x;
 	sd->pos[j+1] = position.y;
 	sd->pos[j+2] = position.z;
+	pos[i] = position;
 }
 
 void SDsystem::setMotionRigidCluster(double vx, double vy, double vz,
@@ -202,7 +184,8 @@ void SDsystem::setMotionRigidCluster(double vx, double vy, double vz,
     cl_velocity.set(vx, vy, vz);
     cl_omega.set(ox, oy, oz);
     for (int i = 0; i < np; i++){
-		vec3d v = cross(cl_omega, dr[i]) + cl_velocity;
+        vec3d p(sd->pos[i],sd->pos[i+1],sd->pos[i+2]);
+		vec3d v = cross(cl_omega, p) + cl_velocity;
 		velocity[i*3] = v.x;
 		velocity[i*3+1] = v.y;
 		velocity[i*3+2] = v.z;

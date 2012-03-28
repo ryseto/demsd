@@ -32,12 +32,12 @@ private:
     double *mov; // Mobility matrix of SD
     double *vos; // velocity, omega, stresslet
     double *fte; // force, torque, rate-of-strain
-    vec3d *pos; 
+//    vec3d *pos; 
     vec3d *pos_init; 
     bool mov_allocated;
     ////////////////////////////////////////////    
 	double dist_generate;
-    int count_MD_steps;
+//    int count_MD_steps;
     int count_SD_calc;
     vec3d total_torque;
 	vec3d total_force;
@@ -46,9 +46,9 @@ private:
     
     int cnt_grad_method;
     /* Simulation box */
-    double lx;
-    double ly;
-    double lz;
+//    double lx;
+//    double ly;
+//    double lz;
     /* 
      * !!!BUG!!!
      * Simulation box 
@@ -67,6 +67,7 @@ private:
     char init_config_file[128];
     string bond0_file;
     string bond1_file;
+    string shear_process_file;
     string rootdir;
     
     double radius_of_gyration;
@@ -107,50 +108,55 @@ private:
     void shiftCenterOfMass(vector<vec3d> &p);
     void set_FDA();
     double evaluateObjFunction(quaternion & q_, vec3d *po);
-//    double evaluateObjFunctionInitConfig(quaternion & q_);
-
-//    void compareIinitialConfiguration(quaternion & q_tmp);
+    void readParameterKey(const string &codeword, 
+						  const string &value);
+    void readShearProcessKey(const string &codeword,                               
+                             const string &value);
 
 public:
 	DEMsystem(SDsystem &sd_sys_);
 	~DEMsystem();
 
+    int np; // number of particle
     vector<Particle *> particle;
     vector<Bond *> bond;
     ConTable *ct;
     Grid *grid;
-    double shear_vs_bond;
-    double shear_vs_bond_min;
-    double shear_vs_bond_max;
-    double ratio_shear_vs_bond;
-    int stepnumber_shear_vs_bond;
-    double critical_deformation_SD;
+    string shear_process;
+    double shearrate; // = GammaDot (not real shear-rate)
+    double shearrate_min;
+    double shearrate_max;
+    double incrementratio_shearrate;
+    int stepnumber_shearrate;
+    double simu_time; // unit of time is [F0/6 pi eta a^2] second.
+    double h_stepsize; // unit of this is [1/GammaDot]
 
+    double shearstrain;
+    
+    double shearstrain_step;
+
+    double critical_deformation_SD;
     bool val_restructuring(){
         return restructuring;
-        
     }
-    double time_simulation; // [s]
-    double time_each_shear_vs_bond;
-    double timestep;
-    double time_interval_output;
+    double interval_strain_output;
     
-    void setTimeStep();
+    void setStepSize();
     void set_force_trac_max(double val){
         force_trac_max = val;
     }
+
     void setParameterFileDEM(char *parameters_file_);
-	void readParameterKey(const string &codeword, 
-						  const string &value);
+    void readParameterFileDEM();
+    void readParameterShearProcess();
+    void readParameterBond();
+
     void checkFailure();
     void pos_from_DEM_to_SD();
-
     void setVersion(char *);
-    void setSimulationBoxs();
-
     void calcInterParticleForce();
     void getMovMatrix();
-    void calcVelocityByMov();
+    void moveOverdampedMotionSDMov();
     void calcStresslet();
     void revertStresslet();
     void calcVelocityOmega();
@@ -163,17 +169,12 @@ public:
 
     void checkState();
     void generateBond();
-
-	void readParameterFileDEM();
-//    void setParticlePosition_sdpos_to_dem();
     void resetDeformation();
     void calcTotalDeformation();
 
-    
 	void initGrid();
     void setBox(double lx_, double ly_, double lz_);
 	void setDEMParameters();
-    void readBondParameter();
     void freeDrainingApproximation();
     
     void writeHeader(ofstream &out);
@@ -211,7 +212,7 @@ public:
     void calcGyrationRadius();
     void calcTotalFTS();
     
-    int np;
+
     BondParameter bond0;
     BondParameter bond1;
     char version[3];
@@ -247,9 +248,9 @@ public:
 	double cp_m_t_max;
     double robust_bond_compression;
 
-    double lx0;
-    double ly0;
-    double lz0;
+//    double lx0;
+//    double ly0;
+//    double lz0;
     double sq_dist_generate;
 
 

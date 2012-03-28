@@ -37,10 +37,10 @@ public:
     void setBox(double lx_, double ly_, double lz_);
     void setFlowType(char type_of_flow_);
     
-    void initLibStokes();
+    void initLibStokes(int num_of_particle_);
     void setSDIterationMethod();
     
-    void set_dr_from_sdpos();
+//    void set_dr_from_sdpos();
     void setPositionLibStokes();
 
 	void setPosition(int, const vec3d &);
@@ -50,9 +50,9 @@ public:
                                double ox, double oy, double oz);
     
     vec3d getPosition(int i){
-        return vec3d (sd->pos[i*3    ] - lx0,
-                      sd->pos[i*3 + 1] - ly0,
-                      sd->pos[i*3 + 2] - lz0);
+        return vec3d (sd->pos[i*3    ],
+                      sd->pos[i*3 + 1],
+                      sd->pos[i*3 + 2]);
     }
     vec3d getVelocity(int i){
         return vec3d (velocity[i*3],
@@ -101,7 +101,7 @@ public:
      *
      */
     int lubrication;
-    vec3d *dr;
+    vec3d *pos;
     double * velocity;
     double * omega;
     double * strain_velocity;
@@ -110,12 +110,12 @@ public:
     double * stresslet;
     // lx, ly, lz 
     // box size. But
-    double lx;
-    double ly;
-    double lz;
-    double lx0;
-    double ly0;
-    double lz0;
+//    double lx;
+//    double ly;
+//    double lz;
+//    double lx0;
+//    double ly0;
+//    double lz0;
     
     vec3d cl_force; // force for the rigid cluster
     vec3d cl_torque; // torque for the rigid cluster

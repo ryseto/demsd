@@ -75,13 +75,13 @@ void Particle::delConnectPoint(int bond_number){
 }
 
 void Particle::move_with_velocity(){
-    // velocity is given by unit of SD, i.e. 
-    p += velocity * dem->timestep;
-    d_rotation = omega * dem->timestep;
+    // velocity is given by unit of SD, i.e.    
+    p += velocity * dem->h_stepsize;
+    d_rotation = omega * dem->h_stepsize;
     orientation.infinitesimalRotation( d_rotation );
     for (int i = 0; i < cn_size ; ++i){
         cn[i].u.rotateInfinitesimal( d_rotation );
         cn[i].tor_angle += dot(d_rotation, cn[i].u);
-    }
-		
+    }		
 }
+

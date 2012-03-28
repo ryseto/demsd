@@ -24,6 +24,8 @@ int main (int argc, char** argv) {
         cerr << "T: Test simulation" << endl;
 		return 0;
 	}
+
+    
     switch (argv[1][0]){
         case 'D':
             /* DEM simulation for an isolated cluster in shear flow.

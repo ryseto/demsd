@@ -42,15 +42,6 @@ DEMsystem::~DEMsystem(){
     delete ct;
 };
 
-void DEMsystem::setBox(double lx_, double ly_, double lz_){
-    lx = lx_;
-    ly = ly_;
-    lz = lz_;    
-    lx0 = lx/2;
-    ly0 = ly/2;
-    lz0 = lz/2;
-}
-
 void DEMsystem::setVersion(char *version_)
 {
 	sprintf(version, "%s", version_);
@@ -106,15 +97,13 @@ void DEMsystem::calcStresslet(){
 }
 
 void DEMsystem::freeDrainingApproximation(){
-    count_MD_steps ++;
-    time_simulation += timestep;
-    double shear_vs_bond_inv = 1 / shear_vs_bond;
+//    count_MD_steps ++;
+//    time_simulation += timestep;
+    double shearrate_inv = 1 / shearrate;
     for (int i = 0; i < np ; i ++){
-        f_tmp = shear_vs_bond_inv * particle[i]->force;
-        t_tmp = shear_vs_bond_inv * particle[i]->torque;
-        
-        particle[i]->velocity.set(f_tmp.x + particle[i]->p.z - lz0, f_tmp.y, f_tmp.z);
-        
+        f_tmp = shearrate_inv * particle[i]->force;
+        t_tmp = shearrate_inv * particle[i]->torque;
+        particle[i]->velocity.set(f_tmp.x + particle[i]->p.z , f_tmp.y, f_tmp.z);
         particle[i]->omega.set(t_tmp.x, t_tmp.y + 0.5, t_tmp.z);
     }
     
@@ -124,9 +113,21 @@ void DEMsystem::freeDrainingApproximation(){
 }
 
 
-void DEMsystem::calcVelocityByMov(){
-    count_MD_steps ++;
-    time_simulation += timestep;
+void DEMsystem::moveOverdampedMotionSDMov(){
+    /*
+     *  Unit of velocity: U_0 = a * (real shearrate)
+     *  Unit of force: F_0
+     *  Typical hydrodynamic force: F_h0 = 6 pi mu a U_0
+     *  "shear rate" GammaDot is defined by GammaDot = F_h0 / F_0
+     *  
+     *  Velocity = Mov * F_h
+     *  If (F0, eta, a) are given, the time scale is given by
+     *  T0 = 1/(real shearrate) = (6 pi eta a^2/F_0)*(1/GammaDot)
+     *  Without giving them, the simulation time-unit is given by only GammaDot.
+     *  T0sim = (T0 F0)/(6 pi eta a^2) = (1/GammaDot)
+     *  
+     */
+        
     /* Stokesian dynamics */
     //////////////////////
     /* for inv_rotation_quickcalc_r and rotation_quickcalc
@@ -150,19 +151,19 @@ void DEMsystem::calcVelocityByMov(){
     e[2] = 0.5*(rot_0*irot_8 + rot_2*irot_2);
     e[3] = 0.5*(rot_3*irot_8 + rot_5*irot_2);
     e[4] = rot_3*rot_5;
-    double shear_vs_bond_inv = 1 / shear_vs_bond;
+    double shearrate_inv = 1 / shearrate;
     for (int i = 0; i < np ; i ++){
         int i11 = i*11;
         f_tmp = q_rot.inv_rotation_quickcalc_r( particle[i]->force );
         t_tmp = q_rot.inv_rotation_quickcalc_r( particle[i]->torque );
         //////////////////////////////////////////
         //// 
-        fte[i11]   = shear_vs_bond_inv*f_tmp.x;
-        fte[i11+1] = shear_vs_bond_inv*f_tmp.y;
-        fte[i11+2] = shear_vs_bond_inv*f_tmp.z;
-        fte[i11+3] = shear_vs_bond_inv*t_tmp.x;
-        fte[i11+4] = shear_vs_bond_inv*t_tmp.y;
-        fte[i11+5] = shear_vs_bond_inv*t_tmp.z;
+        fte[i11]   = shearrate_inv*f_tmp.x;
+        fte[i11+1] = shearrate_inv*f_tmp.y;
+        fte[i11+2] = shearrate_inv*f_tmp.z;
+        fte[i11+3] = shearrate_inv*t_tmp.x;
+        fte[i11+4] = shearrate_inv*t_tmp.y;
+        fte[i11+5] = shearrate_inv*t_tmp.z;
         //////////////////////////////////////////
         fte[i11+6]  = e[0];
         fte[i11+7]  = e[1];
@@ -181,11 +182,12 @@ void DEMsystem::calcVelocityByMov(){
         /* 
          * adding imposed flow u_inf and o_inf 
          */
-        particle[i]->velocity.set(v.x + particle[i]->p.z - lz0, v.y, v.z);
+        particle[i]->velocity.set(v.x + particle[i]->p.z, v.y, v.z);
         particle[i]->omega.set(o.x, o.y + 0.5, o.z);
     }
-    ForAllParticle{ 
-        (*p_iter)->move_with_velocity();
+    
+    for (int i=0; i < np ; i++){
+        particle[i]->move_with_velocity();
     }
 }
 
@@ -269,9 +271,6 @@ void DEMsystem::importCluster(char* importfilename, int skipline){
     init_radius_of_gyration = radius_of_gyration;
 }
 
-
-
-
 void DEMsystem::shiftCenterOfMass(vector<vec3d> &p){
 	vec3d cm(0,0,0);
 	foreach( vector<vec3d>, p, p_iter){
@@ -319,10 +318,54 @@ void setBondParameter( BondParameter &bondparameter, string &bond_file, string &
     return;
 }
 
-void DEMsystem::readBondParameter(){
+void DEMsystem::readParameterBond(){
     setBondParameter(bond0, bond0_file, rootdir);
     setBondParameter(bond1, bond1_file, rootdir);
 }
+
+void DEMsystem::readShearProcessKey(const string &codeword,                               
+                                    const string &value){
+    map<string,int> keylist;
+    keylist["shear_process:"]=0 ; const int _shear_process = 0;
+    keylist["shearrate_min:"]=1 ; const int _shearrate_min = 1;
+    keylist["shearrate_max:"]=2 ; const int _shearrate_max = 2;
+    keylist["stepnumber_shearrate:"]=3 ; const int _stepnumber_shearrate = 3;
+    keylist["shearstrain_step:"]=4 ; const int _shearstrain_step = 4;
+	cerr << codeword << ' ' << value  << endl;
+	switch(keylist[codeword]){
+        case _shear_process: shear_process = value; break;
+        case _shearrate_min: shearrate_min = atof(value.c_str()); break;
+        case _shearrate_max: shearrate_max = atof(value.c_str()); break;
+        case _stepnumber_shearrate: stepnumber_shearrate = atoi(value.c_str()); break;
+        case _shearstrain_step: shearstrain_step = atof(value.c_str()); break;
+		default:
+			cerr << "The codeword " << codeword << " is'nt associated" << endl;
+			exit(1);
+	}
+}
+
+void DEMsystem::readParameterShearProcess(){
+    ifstream fin;
+    fin.open(shear_process_file.c_str());
+    if(! fin.is_open()){
+        cerr << "Cannot open " << shear_process_file << endl;
+        exit(1);
+    }
+    string codeword, value;
+    while (!fin.eof()){
+		fin >> codeword ;
+		if ( codeword == "#") {
+			char buf[1024]; fin.get(buf, 1024);
+		} else if (codeword == "!"){
+			break;
+		} else {
+			fin >> value; if (fin.eof()) break;
+			readShearProcessKey(codeword, value);
+		}
+	}
+    cerr << "Completed reading " << shear_process_file << endl;
+}
+
 
 void DEMsystem::readParameterKey(const string &codeword,                               
                                  const string &value){
@@ -331,29 +374,17 @@ void DEMsystem::readParameterKey(const string &codeword,
     keylist["bond0_file:"]=2; const int _bond0_file = 2;
     keylist["bond1_file:"]=3; const int _bond1_file = 3;
     keylist["method_hydroint:"]=4; const int _method_hydroint = 4;
-    keylist["shear_vs_bond_min:"]=5; const int _shear_vs_bond_min = 5;
-    keylist["shear_vs_bond_max:"]=6; const int _shear_vs_bond_max = 6;
-    keylist["stepnumber_shear_vs_bond:"]=7;const int _stepnumber_shear_vs_bond = 7;
-    keylist["time_each_shear_vs_bond:"]=8; const int _time_each_shear_vs_bond = 8;
-    
-    keylist["time_interval_output:"]=9; const int _time_interval_output = 9;
+    keylist["shear_process_file:"]=5; const int _shear_process_file = 5;
+    keylist["interval_strain_output:"]=9; const int _interval_strain_output = 9;
     keylist["critical_deformation_SD:"]=10; const int _critical_deformation_SD = 10;
-    keylist["L_dem:"]= 30; const int _L_dem = 30;
-    keylist["L_sd:"]= 31; const int _L_sd = 31;
 	cerr << codeword << ' ' << value  << endl;
 	switch(keylist[codeword]){
         case _rootdir: rootdir = value; break;
         case _bond0_file: bond0_file = value; break;
         case _bond1_file: bond1_file = value; break;
         case _method_hydroint: sd_sys->method_hydroint = atoi(value.c_str()); break;
-        case _shear_vs_bond_min: shear_vs_bond_min =  atof(value.c_str() ); break;
-        case _shear_vs_bond_max: shear_vs_bond_max =  atof(value.c_str() ); break;
-//        case _time_interval: time_interval = atof(value.c_str()); break;
-        case _stepnumber_shear_vs_bond: stepnumber_shear_vs_bond = atoi(value.c_str()); break;
-        case _time_each_shear_vs_bond: time_each_shear_vs_bond = atof(value.c_str() ); break; 
-        case _time_interval_output: time_interval_output = atof(value.c_str());
-        case _L_dem: L_dem = atof(value.c_str() ); break;
-        case _L_sd: L_sd = atof(value.c_str() ); break;
+        case _shear_process_file: shear_process_file = value; break;
+        case _interval_strain_output: interval_strain_output = atof(value.c_str());
         case _critical_deformation_SD: critical_deformation_SD = atof(value.c_str()); break;
 		default:
 			cerr << "The codeword " << codeword << " is'nt associated with an parameter" << endl;
@@ -362,13 +393,13 @@ void DEMsystem::readParameterKey(const string &codeword,
 }
 
 void DEMsystem::readParameterFileDEM(){
-	//////////////////////////////////////////	
-	// input arguments:
-	//////////////////////////////////////////	
-	// Read parameter file
 	ifstream fin;
 	fin.open(parameters_file);
-	string codeword, value, unit;
+    if(! fin.is_open()){
+        cerr << "Cannot open " << parameters_file << endl;
+        exit(1);
+    }
+	string codeword, value;
 	while (!fin.eof()){
 		fin >> codeword ;
 		if ( codeword == "#") {
@@ -377,29 +408,27 @@ void DEMsystem::readParameterFileDEM(){
 			break;
 		} else {
 			fin >> value; if (fin.eof()) break;
-			//set_value(codeword, value, unit);
 			readParameterKey(codeword, value);
 		}
 	}
-    cerr << "completed to read parameters." << endl;
+    cerr << "Completed reading " << parameters_file << endl;
 }
 
-void DEMsystem::setSimulationBoxs(){
-    sd_sys->setBox(L_sd, L_sd, L_sd);
-    setBox(L_dem, L_dem, L_dem);
-}
-
-void DEMsystem::setTimeStep(){
+void DEMsystem::setStepSize(){
+    /* Determination of this step-size is not good.
+     * 
+     *
+     */
     if ( sd_sys->method_hydroint == 0){
-        timestep = 0.0001*shear_vs_bond;
-        if ( timestep > 0.0001)
-            timestep = 0.0001;
+        h_stepsize = 0.0001*shearrate;
+        if ( h_stepsize > 0.0001)
+            h_stepsize = 0.0001;
     } else {
-        timestep = 0.0004*shear_vs_bond;
-        if ( timestep > 0.0002)
-            timestep = 0.0002;
+        h_stepsize = 0.0004*shearrate;
+        if ( h_stepsize > 0.0002)
+            h_stepsize = 0.0002;
     }
-    cerr << "dt = " << timestep << endl;
+    cerr << "h_stepsize = " << h_stepsize << endl;
 }
 
 void DEMsystem::initDEM(){
@@ -415,23 +444,18 @@ void DEMsystem::initDEM(){
         restructuring = false;
     }
    
-    time_simulation = 0.;
+    simu_time = 0;
+    shearstrain = 0;
     init_continuity = 1;
-//    rup_normal = 0;
-//    rup_shear = 0;
-//    rup_bend = 0;
-//    rup_torsion = 0;
 	rupture_bond.clear();
 	regeneration_bond.clear();
 
 	counterBreak = 0;
 	counterRegenerate = 0;
-    count_MD_steps = 0;
     count_SD_calc = 0;
-    vec3d origin_shift(lx0,ly0,lz0);
 
     for (int i=0; i < np ; i++){
-		particle[i]->p = pos_init[i] + origin_shift;
+		particle[i]->p = pos_init[i]; //+ origin_shift;
 	}
     double contact_distance = 2.001;
     if (restructuring == false){
@@ -443,11 +467,8 @@ void DEMsystem::initDEM(){
     mov = new double [np*np*121];
     vos = new double [np*11];
     fte = new double [np*11];
-    pos = new vec3d [np];
-
+//    pos = new vec3d [np];
     set_FDA();
-    pos_center_of_mass.set(lx0, ly0, lz0);
-    
     q_rot.reset();
     q_rot_total.reset();
 //    delta_grad_method = 1e-3;
@@ -484,10 +505,7 @@ void DEMsystem::outputDeformationConf(){
 	if ( firsttime ){firsttime = false;}else{fout_conf_def << endl;}
 
     ForAllParticle{
-        vec3d p((*p_iter)->p.x - lx0,
-                (*p_iter)->p.y - ly0,
-                (*p_iter)->p.z - lz0);
-        vec3d pp = q_rot_total.inv_rotation(p);
+        vec3d pp = q_rot_total.inv_rotation((*p_iter)->p);
         fout_conf_def << "c ";
         fout_conf_def << pp.x << ' ';
         fout_conf_def << pp.y << ' ';
@@ -499,7 +517,8 @@ double DEMsystem::evaluateObjFunction(quaternion & q_, vec3d *po){
     double Obj_tmp = 0;
     q_.preparer_rotation_quickcalc();
     for (int i = 0; i < np; i++){
-        Obj_tmp += (q_.rotation_quickcalc_r(po[i]) - pos[i]).sq_norm();
+        //Obj_tmp += (q_.rotation_quickcalc_r(po[i]) - pos[i]).sq_norm();
+        Obj_tmp += (q_.rotation_quickcalc_r(po[i]) - particle[i]->p).sq_norm();
     }
     return Obj_tmp / np;
 }
@@ -508,12 +527,6 @@ double DEMsystem::findObjMinimum(quaternion &q_try, vec3d *po,
                                  double delta_init, double conv_diff){                                 
     double delta_grad_method = delta_init;
     double gradObj[4];
-    /* pos[i  ] is the precent position of particles*/
-    for (int i = 0; i< np; i++){
-        pos[i].set(particle[i]->p.x -lx0,
-                   particle[i]->p.y -ly0,
-                   particle[i]->p.z -lz0);
-    }
     double Obj;
     double Obj_old = evaluateObjFunction(q_try, po);
     vec3d d_pos;
@@ -527,10 +540,10 @@ double DEMsystem::findObjMinimum(quaternion &q_try, vec3d *po,
         q_try.preparer_rotation_quickcalc();
         for (int i = 0; i< np; i++){
             /* po[i]    :  master position
-             * rot_pos[i]   :  \bm{r}'_i
-             * pos[i]       :  \bm{r}_i current position
+             * rot_pos[i]   :  \bm{s}_i
+             * particle[i]->p   :  \bm{r}_i current position
              */
-            d_pos = q_try.rotation_quickcalc_r(po[i]) - pos[i];
+            d_pos = q_try.rotation_quickcalc_r(po[i]) - particle[i]->p;
             double dot_r_q = dot(po[i], q_try.q);
             tmp1.set( dot_r_q         , -q_try.q0*po[i].z,  q_try.q0*po[i].y);
             tmp2.set( q_try.q0*po[i].z,  dot_r_q         , -q_try.q0*po[i].x);
@@ -561,6 +574,7 @@ double DEMsystem::findObjMinimum(quaternion &q_try, vec3d *po,
         delta_grad_method *= 1.1;
         Obj_old = Obj;
         cnt_grad_method ++;
+
     } while (true);
     q_try.normalize();
     //Obj = evaluateObjFunction(q_try, po);
@@ -568,7 +582,9 @@ double DEMsystem::findObjMinimum(quaternion &q_try, vec3d *po,
 }
 
 void DEMsystem::estimateClusterRotation(){
-    step_deformation = findObjMinimum(q_rot, sd_sys->dr, 1e-4, 1e-12);
+    step_deformation = findObjMinimum(q_rot, sd_sys->pos, 1e-4, 1e-12);
+    
+    
 }
 
 /*
@@ -600,8 +616,8 @@ void DEMsystem::initGrid(){
 		exit(1); 
 	}
 	double cell_h = 2.2;
-    double l_box[3]={lx, ly, lz};
-	grid->init(np, l_box, cell_h);
+    //double l_box[3]={lx, ly, lz};
+	grid->init(np, cell_h);
 }
 
 void DEMsystem::checkFailure(){
@@ -683,17 +699,17 @@ void DEMsystem::calcTotalFTS(){
             s_average[k] += s[k];
         }
 		total_force += f;
-        total_torque += (cross(pos[i],f) + t);
+        total_torque += (cross(particle[i]->p,f) + t);
         sp_total[0] += s[0];
         sp_total[1] += s[1];
         sp_total[2] += s[2];
         sp_total[3] += s[3];
         sp_total[4] += s[4];
-        so_total[0] += (1./3)*(2*pos[i].x*f.x - pos[i].y*f.y - pos[i].z*f.z);
-        so_total[1] += (1./2)*(  pos[i].y*f.x + pos[i].x*f.y);
-        so_total[2] += (1./2)*(  pos[i].z*f.x + pos[i].x*f.z);
-        so_total[3] += (1./2)*(  pos[i].z*f.y + pos[i].y*f.z);
-        so_total[4] += (1./3)*(2*pos[i].y*f.y - pos[i].x*f.x - pos[i].z*f.z);
+        so_total[0] += (1./3)*(2*particle[i]->p.x*f.x - particle[i]->p.y*f.y - particle[i]->p.z*f.z);
+        so_total[1] += (1./2)*(  particle[i]->p.y*f.x + particle[i]->p.x*f.y);
+        so_total[2] += (1./2)*(  particle[i]->p.z*f.x + particle[i]->p.x*f.z);
+        so_total[3] += (1./2)*(  particle[i]->p.z*f.y + particle[i]->p.y*f.z);
+        so_total[4] += (1./3)*(2*particle[i]->p.y*f.y - particle[i]->p.x*f.x - particle[i]->p.z*f.z);
 	}
     for (int k=0; k < 5 ; k++){
         total_stresslet[k] = sp_total[k] + so_total[k];
@@ -719,7 +735,6 @@ void DEMsystem::calcTotalFTS(){
     return;
 }
 
-
 void DEMsystem::shiftClusterToCenter(){
     vec3d center_of_mass;
     center_of_mass.reset();
@@ -727,22 +742,19 @@ void DEMsystem::shiftClusterToCenter(){
         center_of_mass += particle[i]->p;
     }
     center_of_mass = center_of_mass/np;
-    center_of_mass.x -= lx0;
-    center_of_mass.y -= ly0;
-    center_of_mass.z -= lz0;
     for (int i=0; i < np ; i++){
-        particle[i]->p.x -= center_of_mass.x ;
+        particle[i]->p.x -= center_of_mass.x;
         particle[i]->p.y -= center_of_mass.y;
         particle[i]->p.z -= center_of_mass.z;
     }
-    pos_center_of_mass.add( -center_of_mass.x, -center_of_mass.y, -center_of_mass.z);
+    pos_center_of_mass.add( center_of_mass.x, center_of_mass.y, center_of_mass.z);
 }
 
 void DEMsystem::setDEMParameters(){
-    double r_exponent = 1.0 /(stepnumber_shear_vs_bond - 1);
-    ratio_shear_vs_bond = pow(shear_vs_bond_max/shear_vs_bond_min , r_exponent);
-    dist_generate = 2.0;
-	sq_dist_generate = dist_generate*dist_generate;	/* square of distance to generate new bond  */
+    double r_exponent = 1.0 /(stepnumber_shearrate - 1);
+    incrementratio_shearrate = pow(shearrate_max/shearrate_min , r_exponent);
+    //dist_generate = 2.0;
+	//sq_dist_generate = dist_generate*dist_generate;	/* square of distance to generate new bond  */
 }
 
 void DEMsystem::openOutputFileDEM(){
@@ -869,10 +881,10 @@ void DEMsystem::calcGyrationRadius(){
     /* calculate gyration radius */
     double sum_sq_dist = 0.0;
     for (int i = 0; i< np ; i++){
-        pos[i].set(particle[i]->p.x -lx0,
-                   particle[i]->p.y -ly0,
-                   particle[i]->p.z -lz0);
-        sum_sq_dist += pos[i].sq_norm();
+//        pos[i].set(particle[i]->p.x,
+//                   particle[i]->p.y,
+//                   particle[i]->p.z);
+        sum_sq_dist += particle[i]->p.sq_norm();
     }	
     radius_of_gyration = sqrt(sum_sq_dist/np);
 }
@@ -992,8 +1004,9 @@ void DEMsystem::outputLogDEM(){
     int number_of_bond = n_bond - counterBreak;
     double average_contact_number = 2.0*number_of_bond / np;
 
-	fout_dem_log << time_simulation << ' '; // 1
-    fout_dem_log << shear_vs_bond << ' '; //2
+	fout_dem_log << simu_time << ' '; // 1
+    fout_dem_log << shearstrain  << ' '; // 1
+    fout_dem_log << shearrate << ' '; //2
     fout_dem_log << radius_of_gyration << ' ' ; // 3
     fout_dem_log << radius_of_gyration/init_radius_of_gyration << ' '; // 4
     fout_dem_log << total_deformation << ' '; //5
@@ -1013,39 +1026,40 @@ void DEMsystem::outputLogDEM(){
     fout_dem_log << moment_tors_max << ' '; // 19
     fout_dem_log << r_min << ' '; //20
     fout_dem_log << r_max << ' '; //21
-    fout_dem_log << count_MD_steps << ' '; // 22
+//    fout_dem_log << count_MD_steps << ' '; // 22
     fout_dem_log << count_SD_calc << ' '; // 23
     fout_dem_log << total_stresslet[0] << ' ';//24
     fout_dem_log << total_stresslet[1] << ' ';//25
     fout_dem_log << total_stresslet[2] << ' ';//26
     fout_dem_log << total_stresslet[3] << ' ';//27
     fout_dem_log << total_stresslet[4] << ' ';//28
-    fout_dem_log << min_x - lx0 << ' '; //29
-    fout_dem_log << max_x - lx0 << ' '; //30
-	fout_dem_log << endl; 
+    fout_dem_log << min_x << ' '; //29
+    fout_dem_log << max_x << ' '; //30
+	fout_dem_log << endl;
 
-    fout_trace << time_simulation << ' ' ; // 1
-    fout_trace << cnt_grad_method << ' ' ; // 2
-    fout_trace << step_deformation << ' ' ; // 3
-//    fout_trace << delta_grad_method << ' ';
-    fout_trace << q_rot_total.q0 << ' '; //4
-    fout_trace << q_rot_total.q.x << ' ';//5
-    fout_trace << q_rot_total.q.y << ' ';//6
-    fout_trace << q_rot_total.q.z << ' ';//7
-    fout_trace << q_rot_total.norm() << endl;
+    fout_trace << simu_time << ' ' ;       //1
+    fout_trace << shearstrain << ' ';      //2
+    fout_trace << cnt_grad_method << ' ' ; //3
+    fout_trace << step_deformation << ' '; //4
+    fout_trace << q_rot_total.q0 << ' ';   //5
+    fout_trace << q_rot_total.q.x << ' ';  //6
+    fout_trace << q_rot_total.q.y << ' ';  //7
+    fout_trace << q_rot_total.q.z << ' ';  //8
+    fout_trace << q_rot_total.norm();      //9
+    fout_trace << endl;
 }
 
 void DEMsystem::outputConfiguration(){
     int number_of_live_bonds = n_bond - counterBreak ;
 	fout_conf << "# ";
-	fout_conf << time_simulation << ' ' << number_of_live_bonds;
+	fout_conf << simu_time << ' ' << shearstrain << number_of_live_bonds;
 	//fout_conf << ' ' << average_contact_number;
 	fout_conf << endl;
     fout_conf << "P " << particle.size() << endl;
 	ForAllParticle{
-		fout_conf << (*p_iter)->p.x - lx0  << ' ';
-		fout_conf << (*p_iter)->p.y - ly0  << ' ';
-		fout_conf << (*p_iter)->p.z - lz0  << ' ';
+		fout_conf << (*p_iter)->p.x << ' ';
+		fout_conf << (*p_iter)->p.y << ' ';
+		fout_conf << (*p_iter)->p.z << ' ';
 		fout_conf << (*p_iter)->orientation.q0 << ' ';
 		fout_conf << (*p_iter)->orientation.q.x << ' ';
 		fout_conf << (*p_iter)->orientation.q.y << ' ';
@@ -1128,8 +1142,9 @@ void DEMsystem::outputData(){
     revertStresslet();
     quaternion q_tmp;
     q_tmp = q_rot*q_rot_total_step;
-    fout_data << "# t " << time_simulation << endl;
-    fout_data << "# shear_vs_bond " << shear_vs_bond << endl;
+    fout_data << "# t " << simu_time << endl;
+    fout_data << "# shearstrain " << shearstrain << endl;
+    fout_data << "# shearrate " << shearrate << endl;
     fout_data << "# q_rot_init ";
     fout_data << q_rot_total.q0 << ' ';
     fout_data << q_rot_total.q.x << ' ';
@@ -1141,9 +1156,9 @@ void DEMsystem::outputData(){
     fout_data << q_tmp.q.y << ' ';
     fout_data << q_tmp.q.z << endl; 
     for (int i=0; i < np; i++){
-		fout_data << particle[i]->p.x - lx0  << ' ';//1
-		fout_data << particle[i]->p.y - ly0  << ' ';//2
-		fout_data << particle[i]->p.z - lz0  << ' ';//3
+		fout_data << particle[i]->p.x << ' ';//1
+		fout_data << particle[i]->p.y << ' ';//2
+		fout_data << particle[i]->p.z << ' ';//3
 		fout_data << particle[i]->orientation.q0 << ' '; //4
 		fout_data << particle[i]->orientation.q.x << ' ';//5
 		fout_data << particle[i]->orientation.q.y << ' ';//6
@@ -1203,9 +1218,9 @@ void DEMsystem::outputYaplotDEM(){
 	fout_dem << "@ 2" << endl;
 	ForAllParticle{
 		//(*p_iter)->output(fout_dem);
-        fout_dem << "c " << (*p_iter)->p.x - lx0;
-        fout_dem << ' '  << (*p_iter)->p.y - ly0;
-        fout_dem << ' '  << (*p_iter)->p.z - lz0 << endl;
+        fout_dem << "c " << (*p_iter)->p.x ;
+        fout_dem << ' '  << (*p_iter)->p.y ;
+        fout_dem << ' '  << (*p_iter)->p.z << endl;
 	}
 	fout_dem << "y 5" << endl;
 	ForAllBond{

@@ -76,9 +76,9 @@ void calcDragAndTorque(int argc, char** argv){
 	} 
     /* init() is called in this function*/
     //
-    sd_sys.setBox(100, 100, 100);
+  //  sd_sys.setBox(100, 100, 100);
 	sd_sys.importCluster(argv[2], atoi(argv[3]));
-    sd_sys.initLibStokes();
+    sd_sys.initLibStokes(-1);
     sd_sys.setPositionLibStokes();
     sd_sys.setMotionRigidCluster(0,0,0,0,0,0); // (vx,vy,vz,ox,oy,oz)
 	sd_sys.setSDIterationMethod();
