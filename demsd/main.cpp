@@ -13,18 +13,16 @@
 #include "dem.h"
 #include "common.h"
 #include "calcDragAndTorque.h"
-#include "testSimulation.h"
 using namespace std;
+
 int main (int argc, char** argv) {
 	if ( argc <= 1 ){
 		cerr << "Usage: stodyn TYPE ..." << endl;
         cerr << "D: DEM simulation" << endl;
 		cerr << "u: calcDragAndTorque in uniform flows" << endl;
 		cerr << "s: calcDragAndTorque in shear flows" << endl;
-        cerr << "T: Test simulation" << endl;
 		return 0;
 	}
-
     
     switch (argv[1][0]){
         case 'D':
@@ -49,16 +47,8 @@ int main (int argc, char** argv) {
              */
             calcDragAndTorque(argc, argv);
             break;
-        case 'T':
-            /*
-             * Simple version of particle simulation.
-             *  
-             *
-             */
-            testSimulation(argc, argv);
-            break;
         default:
-            cerr << "D/U/S/A" << endl;
+            cerr << "D/u/s" << endl;
     }
 	return 0;
 }

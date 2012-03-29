@@ -10,7 +10,7 @@
 #define stodyn_calcDragAndTorque_h
 #include <fstream>
 #include <iomanip>
-#include "SDsystem.h"
+#include "sdsystem.h"
 
 
 void outputVector(ofstream &fout, vec3d &vec){
@@ -78,7 +78,7 @@ void calcDragAndTorque(int argc, char** argv){
     //
   //  sd_sys.setBox(100, 100, 100);
 	sd_sys.importCluster(argv[2], atoi(argv[3]));
-    sd_sys.initLibStokes(-1);
+    sd_sys.initFlowModel(-1);
     sd_sys.setPositionLibStokes();
     sd_sys.setMotionRigidCluster(0,0,0,0,0,0); // (vx,vy,vz,ox,oy,oz)
 	sd_sys.setSDIterationMethod();

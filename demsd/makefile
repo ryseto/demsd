@@ -1,4 +1,4 @@
-objsmain = main.o system.o grid.o contable.o bond.o particle.o demsystem.o testSimulation.o sdsystem.o
+objsmain = main.o grid.o contable.o bond.o particle.o demsystem.o sdsystem.o
 objsryuon = XA-slip.o YH.o ft.o XA.o YM-slip.o fts.o XC-slip.o YM.o gmres.o \
 XC.o ZM-slip.o libiter.o XG-slip.o ZM.o lub-matrix.o XG.o bench.o\
 lub.o XM-slip.o bi-cgstab.o  XM.o  bicgstab.o matrix.o\
@@ -14,27 +14,21 @@ LFLAGS = -L/usr/lib/atlas -llapack -lf77blas -lcblas -latlas -lgfortran
 CXXFLAGS = -O3 
 
 all : demsd
-
 demsd: $(objsmain) $(objsryuon)
 	$(CC) -o $HOME/bin/demsd $(CXXFLAGS) $(objs) /usr/lib/lapack/lapack_DellHPC.a  $(LFLAGS)
-
-clean: 
-	@rm -rf $(objsmain) $HOME/bin/stodyn
-cleanall: 
-	@rm -rf $(objs) $HOME/bin/stodyn
+clean:
+    rm -rf $(objsmain) $HOME/bin/demsd
+cleanall:
+    rm -rf $(objs) $HOME/bin/demsd
 
 main.o : main.cpp
-	$(CC) -c $(CXXFLAGS) $<
+    $(CC) -c $(CXXFLAGS) $<
 sdsystem.o : sdsystem.cpp
-	$(CC) -c $(CXXFLAGS) $<
-testSimulation.o : testSimulation.cpp
-	$(CC) -c $(CXXFLAGS) $<
-system.o : system.cpp 
-	$(CC) -c $(CXXFLAGS) $<
+    $(CC) -c $(CXXFLAGS) $<
 grid.o : grid.cpp
-	$(CC) -c $(CXXFLAGS) $<
-contable.o : contable.cpp 
-	$(CC) -c $(CXXFLAGS) $<
+    $(CC) -c $(CXXFLAGS) $<
+contable.o : contable.cpp
+    $(CC) -c $(CXXFLAGS) $<
 bond.o : bond.cpp
 	$(CC) -c $(CXXFLAGS) $<
 particle.o : particle.cpp

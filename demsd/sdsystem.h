@@ -21,12 +21,13 @@ using namespace std;
 class SDsystem {
 private:
     char type_of_flow;
+    int lubrication;
+
     int output_precision;
     int output_width;
     char cluster_file[64];
     vector<vec3d> init_cluster;
     vec3d center_of_mass;
-    
     void calcCenterOfMass(vector<vec3d> &p);
     vec3d cl_velocity;
     vec3d cl_omega;
@@ -34,16 +35,11 @@ private:
 public:
 	SDsystem();
 	~SDsystem();
-    void setBox(double lx_, double ly_, double lz_);
     void setFlowType(char type_of_flow_);
-    
-    void initLibStokes(int num_of_particle_);
+    void initFlowModel(int num_of_particle_);
     void setSDIterationMethod();
-    
-//    void set_dr_from_sdpos();
     void setPositionLibStokes();
-
-	void setPosition(int, const vec3d &);
+	void setPositionSD(int, const vec3d &);
     void setLubrication(int lub_);
     void setOutputPrecision(int);
     void setMotionRigidCluster(double vx, double vy, double vz,
@@ -75,20 +71,15 @@ public:
                       torque[i*3 + 2]);
     }
     
-    
     void importCluster(char*, int skipline);    
     char typeOfFlow(){return type_of_flow;}
-
     char* infoString();
-      
     /*************************
      *   Stokesian Dynamics
      *************************/
     struct stokes *sd;
     void calcGrandMovMatrix(double* mov);
     void solveStokesianDynamics();
-    
-    
     /* method_hydroint
      * 0: Free-draining approximation
      * 1: Stokesian dynamics without lubrication
@@ -100,7 +91,6 @@ public:
     /*
      *
      */
-    int lubrication;
     vec3d *pos;
     double * velocity;
     double * omega;
@@ -108,21 +98,11 @@ public:
     double * force;
     double * torque;
     double * stresslet;
-    // lx, ly, lz 
-    // box size. But
-//    double lx;
-//    double ly;
-//    double lz;
-//    double lx0;
-//    double ly0;
-//    double lz0;
-    
+
     vec3d cl_force; // force for the rigid cluster
     vec3d cl_torque; // torque for the rigid cluster
     double cl_stresslet[5]; // stresslet for the rigid cluster
     double cl_stresslet_norm;
-
-    
 };
 
 #endif

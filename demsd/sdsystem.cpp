@@ -43,15 +43,6 @@ void SDsystem::setOutputPrecision(int value){
     output_width = value + 9;
 }
 
-void SDsystem::setBox(double lx_, double ly_, double lz_){
-//	lx = lx_;
-//	ly = ly_;
-//	lz = lz_;
-//	lx0 = lx/2.0;
-//	ly0 = ly/2.0;
-//	lz0 = lz/2.0;
-}
-
 
 /* Import the configuration (x,y,z) of particles.
  * The center of mass is set to (0,0,0)
@@ -101,6 +92,7 @@ void SDsystem::calcCenterOfMass(vector<vec3d> &pos_vec){
 
 void SDsystem::setFlowType(char type_of_flow_){
     /* s : shear flow
+     * u : uniform flow
      */
     type_of_flow = type_of_flow_;
 }
@@ -109,74 +101,65 @@ void SDsystem::setFlowType(char type_of_flow_){
  * Basic parameters for the libstorks
  * and pos[] are set from init_aggregate.
  */
-void SDsystem::initLibStokes(int num_of_particle_){
+void SDsystem::initFlowModel(int num_of_particle_){
     if (num_of_particle_ > 0)
         np = num_of_particle_;
     nm = np ;	/* nm : number of mobile particles  */
-    sd = stokes_init();
-	sd->twobody_lub = lubrication;
-    // Shear flow requirs FTS version.
-    sd->version = 2; /* 0 = F, 1 = FT, 2 = FTS  */
-    sd->periodic = 0; 	/* 0 = non periodic, 1 = periodic */
-	stokes_set_np(sd, np, nm);
-    // Only non-periodic condition
-    // stokes_set_l(sd, lx, ly, lz);
-
-    int n3=np*3;
-    int n5=np*5;
+    
+    if (method_hydroint != 0){
+        sd = stokes_init(); // ---> libstokes
+        sd->twobody_lub = lubrication;
+        // For shear flows,"FTS version" is required.
+        sd->version = 2; /* 0 = F, 1 = FT, 2 = FTS  */
+        sd->periodic = 0; /* 0 = non periodic, 1 = periodic */
+        stokes_set_np(sd, np, nm);
+        if (type_of_flow == 'u'){
+            /*
+             * The velocity of uniform flow is alywas (1,0,0)
+             */
+            stokes_set_Ui(sd, 1.0, 0.0, 0.0);
+        } else if (type_of_flow == 's'){
+            /*
+             * The shear rate of shear flow is always 1.0
+             */
+            //sd->Ui[0] = -1.0*lz/2 ;
+            sd->Ui[0] = 0;
+            sd->Oi[1] = 1.0/2;
+            sd->Ei[2] = 1.0/2;
+        } else {
+            cerr << "Type of flow should be given. (shear or uniform)" << endl;
+        }
+    }
     try{
         pos = new vec3d [np];        
-        velocity = new double [ n3 ];
-        omega = new double [ n3 ];
-        strain_velocity = new double [ n5 ];
-        force = new double [ n3 ];
-        torque = new double [ n3 ];
-        stresslet = new double [ n5 ];
+        velocity = new double [ np*3 ];
+        omega = new double [ np*3 ];
+        strain_velocity = new double [ np*5 ];
+        force = new double [ np*3 ];
+        torque = new double [ np*3 ];
+        stresslet = new double [ np*5 ];
     } catch (bad_alloc &){
         cerr << "bad_alloc at System::init()" << endl;
-        exit(1);
     }
-    
-    if (type_of_flow == 'u'){
-        /*
-         * The velocity of uniform flow is alywas (1,0,0)
-         */
-        stokes_set_Ui(sd, 1.0, 0.0, 0.0);
-    } else if (type_of_flow == 's'){
-        /*
-         * The shear rate of shear flow is always 1.0
-         */
-        //sd->Ui[0] = -1.0*lz/2 ;
-        sd->Ui[0] = 0;
-        sd->Oi[1] = 1.0/2;
-        sd->Ei[2] = 1.0/2;
-    } else {
-        cerr << "Type of flow should be given. (shear or uniform)" << endl;
-    }
-
 }
+
 void SDsystem::setPositionLibStokes(){
     /* For SD calculation,
      * sd->pos[*] needs to be set.
      */
     double scale = 1.0;
     for (int i = 0; i < np; i++){
-        setPosition(i, scale*init_cluster[i]);
+        setPositionSD(i, scale*init_cluster[i]);
     }
 }
 
-
-//void SDsystem::set_dr_from_sdpos(){    
-  
-//}
-
-void SDsystem::setPosition(int i, const vec3d &position){
+void SDsystem::setPositionSD(int i, const vec3d &position){
     // Positions are set in libstokes.
 	int j = 3*i;
+    pos[i] = position;
 	sd->pos[j] = position.x;
 	sd->pos[j+1] = position.y;
 	sd->pos[j+2] = position.z;
-	pos[i] = position;
 }
 
 void SDsystem::setMotionRigidCluster(double vx, double vy, double vz,
@@ -184,8 +167,7 @@ void SDsystem::setMotionRigidCluster(double vx, double vy, double vz,
     cl_velocity.set(vx, vy, vz);
     cl_omega.set(ox, oy, oz);
     for (int i = 0; i < np; i++){
-        vec3d p(sd->pos[i],sd->pos[i+1],sd->pos[i+2]);
-		vec3d v = cross(cl_omega, p) + cl_velocity;
+		vec3d v = cross(cl_omega, pos[i]) + cl_velocity;
 		velocity[i*3] = v.x;
 		velocity[i*3+1] = v.y;
 		velocity[i*3+2] = v.z;

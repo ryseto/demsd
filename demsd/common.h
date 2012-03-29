@@ -95,12 +95,6 @@ struct BondParameter {
     double dist_generate;
 };
 
-struct GridPoint {
-	int x;
-	int y;
-	int z;
-};
-
 inline int ipow(int p, int q){
 	int x = 1;
 	for (int i=0; i < q; i++){

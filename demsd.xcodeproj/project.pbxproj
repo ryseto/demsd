@@ -70,7 +70,6 @@
 		D9AFFB5D151A1EE9008A7178 /* bond.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D9AFFB55151A1EE9008A7178 /* bond.cpp */; };
 		D9AFFB5E151A1EE9008A7178 /* particle.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D9AFFB58151A1EE9008A7178 /* particle.cpp */; };
 		D9AFFB69151A20B0008A7178 /* old_system.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D9AFFB67151A20B0008A7178 /* old_system.cpp */; };
-		D9AFFB6C151A20FB008A7178 /* testSimulation.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D9AFFB6B151A20FB008A7178 /* testSimulation.cpp */; };
 		D9AFFB6E151A239D008A7178 /* Accelerate in Frameworks */ = {isa = PBXBuildFile; fileRef = D9AFFB6D151A239D008A7178 /* Accelerate */; };
 /* End PBXBuildFile section */
 
@@ -195,8 +194,6 @@
 		D9AFFB65151A207C008A7178 /* calcDragAndTorque.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = calcDragAndTorque.h; sourceTree = "<group>"; };
 		D9AFFB67151A20B0008A7178 /* old_system.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = old_system.cpp; sourceTree = "<group>"; };
 		D9AFFB68151A20B0008A7178 /* old_system.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = old_system.h; sourceTree = "<group>"; };
-		D9AFFB6A151A20FB008A7178 /* testSimulation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = testSimulation.h; sourceTree = "<group>"; };
-		D9AFFB6B151A20FB008A7178 /* testSimulation.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = testSimulation.cpp; sourceTree = "<group>"; };
 		D9AFFB6D151A239D008A7178 /* Accelerate */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = Accelerate; path = ../../../../../System/Library/Frameworks/Accelerate.framework/Accelerate; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -235,8 +232,7 @@
 			children = (
 				D9263125151B2F8A00C31218 /* makefile */,
 				D93EEBF81519CE3800CC77EF /* main.cpp */,
-				D9AFFB6A151A20FB008A7178 /* testSimulation.h */,
-				D9AFFB6B151A20FB008A7178 /* testSimulation.cpp */,
+				D9AFFB4F151A1EE9008A7178 /* dem.h */,
 				D9AFFB4E151A1EE9008A7178 /* demsystem.h */,
 				D9AFFB4D151A1EE9008A7178 /* demsystem.cpp */,
 				D9AFFB4B151A1EE9008A7178 /* sdsystem.h */,
@@ -245,15 +241,14 @@
 				D9AFFB52151A1EE9008A7178 /* common.h */,
 				D9AFFB57151A1EE9008A7178 /* particle.h */,
 				D9AFFB58151A1EE9008A7178 /* particle.cpp */,
-				D9AFFB60151A1F64008A7178 /* my_utilities.h */,
-				D9AFFB5F151A1F23008A7178 /* config.h */,
-				D9AFFB4F151A1EE9008A7178 /* dem.h */,
+				D9AFFB56151A1EE9008A7178 /* bond.h */,
+				D9AFFB55151A1EE9008A7178 /* bond.cpp */,
+				D9AFFB54151A1EE9008A7178 /* grid.h */,
+				D9AFFB53151A1EE9008A7178 /* grid.cpp */,
 				D9AFFB50151A1EE9008A7178 /* contable.h */,
 				D9AFFB51151A1EE9008A7178 /* contable.cpp */,
-				D9AFFB53151A1EE9008A7178 /* grid.cpp */,
-				D9AFFB54151A1EE9008A7178 /* grid.h */,
-				D9AFFB55151A1EE9008A7178 /* bond.cpp */,
-				D9AFFB56151A1EE9008A7178 /* bond.h */,
+				D9AFFB60151A1F64008A7178 /* my_utilities.h */,
+				D9AFFB5F151A1F23008A7178 /* config.h */,
 				D9AFFB67151A20B0008A7178 /* old_system.cpp */,
 				D9AFFB68151A20B0008A7178 /* old_system.h */,
 				D9AFFB6D151A239D008A7178 /* Accelerate */,
@@ -474,7 +469,6 @@
 				D9AFFB5D151A1EE9008A7178 /* bond.cpp in Sources */,
 				D9AFFB5E151A1EE9008A7178 /* particle.cpp in Sources */,
 				D9AFFB69151A20B0008A7178 /* old_system.cpp in Sources */,
-				D9AFFB6C151A20FB008A7178 /* testSimulation.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

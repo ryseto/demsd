@@ -10,7 +10,7 @@
 #include "common.h"
 #include "bond.h"
 #include "particle.h"
-#include "SDsystem.h"
+#include "sdsystem.h"
 #include <vector>
 using namespace std;
 
@@ -19,22 +19,20 @@ void shearStepwiseIncreaseTest(SDsystem &sd_sys, DEMsystem &dem);
 void demSimulation(int argc, char** argv){
     SDsystem sd_sys;    
     DEMsystem dem(sd_sys);
-    dem.initialprocess = true;
-    /* parameter file */
 	dem.setParameterFileDEM(argv[2]);   
-    /* Cluster configuration : num. of skip lines */
+    /* Import positions of the cluster: (file, skip lines)*/
 	dem.importCluster(argv[3], atoi(argv[4]));
+    /* You can add arbitary string for name of outpuf file. */
     dem.setVersion(argv[5]);
+    /* Read parameter file */
     dem.readParameterFileDEM();
     dem.readParameterBond();
-    dem.readParameterShearProcess();
-    sd_sys.setFlowType('s');
-	/* DEM */
-	dem.setDEMParameters();
+    dem.readParameterShearProcess();    
+	/* Setup simulation */
+    sd_sys.setFlowType('s'); // set shear flow
 	dem.initDEM();
-    /* Stokesian Dynamics */
-    sd_sys.initLibStokes(dem.np);
-
+    sd_sys.initFlowModel(dem.np);
+    /* Main simulation */
 	if ( dem.shear_process == "stepwise"){
         shearStepwiseIncreaseTest(sd_sys, dem);
     } else if ( dem.shear_process == "you_can_define_test"){
@@ -48,14 +46,16 @@ void demSimulation(int argc, char** argv){
 
 void shearStepwiseIncreaseTest(SDsystem &sd_sys,
                                DEMsystem &dem){    
+    double r_exponent = 1.0 /(dem.stepnumber_shearrate - 1);
+    dem.incrementratio_shearrate = pow(dem.shearrate_max/dem.shearrate_min , r_exponent);
     dem.openOutputFileDEM();
 	dem.outputYaplotDEM();
     dem.outputDeformationConf();
-
-	ofstream out_povray ;
     dem.setInitialMotion();
     dem.shiftClusterToCenter();
-    dem.getMovMatrix();
+    if (sd_sys.method_hydroint != 0){
+        dem.getSDMovMatrix();
+    }
     dem.initialprocess = false;
     dem.outputConfiguration();
     
@@ -72,33 +72,27 @@ void shearStepwiseIncreaseTest(SDsystem &sd_sys,
             dem.makeNeighbor();
             int i =0;
             while (dem.shearstrain < nexttime_output){
-
                 dem.calcInterParticleForce();
                 if (sd_sys.method_hydroint == 0){
-                    dem.freeDrainingApproximation();
+                    dem.moveOverdampedMotionFDA();
                 } else {
                     dem.moveOverdampedMotionSDMov();
                 }
-
                 dem.simu_time += (dem.h_stepsize / dem.shearrate);
                 dem.shearstrain += dem.h_stepsize;
-                
                 dem.checkFailure();
                 if (!dem.regeneration_bond.empty()){
                     dem.regeneration_onebyone();
                     dem.regeneration_bond.clear();
                 }
                 dem.generateBond();
-
                 if (sd_sys.method_hydroint != 0){
-//                    dem.outputYaplotDEM();
                     dem.estimateClusterRotation();
                     if ( dem.step_deformation > dem.critical_deformation_SD ){
                         cerr << "renew matrix" << ' ' << dem.step_deformation << endl;
                         dem.shiftClusterToCenter();                    
-                        dem.getMovMatrix();
+                        dem.getSDMovMatrix();
                         dem.resetDeformation();
-                        //sd_sys.set_dr_from_sdpos();
                         if (dem.version[0] == 'o'){
                             dem.outputYaplotDEM();
                             dem.outputDeformationConf();
@@ -109,8 +103,6 @@ void shearStepwiseIncreaseTest(SDsystem &sd_sys,
                         }                        
                     }
                 }
-
-                
                 i ++; 
                 if ( i % 200 == 0){
                     dem.shiftClusterToCenter(); 
@@ -120,8 +112,6 @@ void shearStepwiseIncreaseTest(SDsystem &sd_sys,
                         dem.particle[i]->orientation.normalize(); /*********** IMPORTANT ************/
                     }
                 }
-                //   dem.outputYaplotDEM();
-                
             }
             dem.shiftClusterToCenter();
             dem.calcGyrationRadius();
@@ -135,5 +125,4 @@ void shearStepwiseIncreaseTest(SDsystem &sd_sys,
             dem.outputConfiguration();
         }while (dem.shearstrain < shearstrain_end);    
     }
-
 }

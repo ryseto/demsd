@@ -14,9 +14,8 @@ DEMsystem::DEMsystem(SDsystem &sd_sys_){
     ct = new ConTable;
     grid = new Grid;
     mov_allocated = false;
-
-    sprintf(version, "0");
-	n_bond = 0 ; /* number of bond */
+    version =  "0";
+	n_bond = 0 ;
     restructuring = true;
 }
 
@@ -44,7 +43,7 @@ DEMsystem::~DEMsystem(){
 
 void DEMsystem::setVersion(char *version_)
 {
-	sprintf(version, "%s", version_);
+	version = version_;
 }
 
 void DEMsystem::setInitialMotion(){
@@ -96,9 +95,7 @@ void DEMsystem::calcStresslet(){
     }
 }
 
-void DEMsystem::freeDrainingApproximation(){
-//    count_MD_steps ++;
-//    time_simulation += timestep;
+void DEMsystem::moveOverdampedMotionFDA(){
     double shearrate_inv = 1 / shearrate;
     for (int i = 0; i < np ; i ++){
         f_tmp = shearrate_inv * particle[i]->force;
@@ -106,7 +103,6 @@ void DEMsystem::freeDrainingApproximation(){
         particle[i]->velocity.set(f_tmp.x + particle[i]->p.z , f_tmp.y, f_tmp.z);
         particle[i]->omega.set(t_tmp.x, t_tmp.y + 0.5, t_tmp.z);
     }
-    
     ForAllParticle{ 
         (*p_iter)->move_with_velocity();
     }
@@ -195,7 +191,7 @@ void DEMsystem::moveOverdampedMotionSDMov(){
  */
 void DEMsystem::pos_from_DEM_to_SD(){
     for( int i=0; i< np; i++){
-        sd_sys->setPosition(i, particle[i]->p);
+        sd_sys->setPositionSD(i, particle[i]->p);
     }        
 }  
 
@@ -219,7 +215,7 @@ void DEMsystem::set_FDA(){
     }
 }
 
-void DEMsystem::getMovMatrix(){
+void DEMsystem::getSDMovMatrix(){
     // position transport from DEMsystem to SDsystem.
     count_SD_calc ++;
     pos_from_DEM_to_SD();
@@ -283,7 +279,7 @@ void DEMsystem::shiftCenterOfMass(vector<vec3d> &p){
 }
 
 void prepareBond(BondParameter & _bond){
-    double a0 = 1.0;
+    double a0 = 1;
     _bond.kn = _bond.fnc / _bond.n_max;
     _bond.ks = _bond.fsc / _bond.s_max;
     _bond.kb = _bond.mbc / (_bond.b_max * a0 * a0);
@@ -292,8 +288,49 @@ void prepareBond(BondParameter & _bond){
     
     _bond.c_norm = 2*sqrt( _bond.kn);
     _bond.c_slid = 2*sqrt( _bond.ks);
-    _bond.c_bend = 2*sqrt( _bond.kb * 1.0 * 1.0);
-    _bond.c_tort = 2*sqrt( _bond.kt * 1.0 * 1.0);
+    _bond.c_bend = 2*sqrt( _bond.kb * a0 * a0);
+    _bond.c_tort = 2*sqrt( _bond.kt * a0 * a0);
+}
+
+void readBondParameterKey(BondParameter &bondparameter,
+                          const string &codeword,
+                          const string &value){
+    map<string,int> keylist;
+    keylist["Fnc:"]=1; const int _Fnc = 1;
+    keylist["Fsc:"]=2; const int _Fsc = 2;
+    keylist["Mbc:"]=3; const int _Mbc = 3;
+    keylist["Mtc:"]=4; const int _Mtc = 4;
+    keylist["n_max:"]=5; const int _n_max = 5;
+    keylist["s_max:"]=6; const int _s_max = 6;
+    keylist["b_max:"]=7; const int _b_max = 7;
+    keylist["t_max:"]=8; const int _t_max = 8;
+    keylist["dist_generate:"]=9; const int _dist_generate = 9;
+    keylist["overlap_force_factor:"]=10; const int _overlap_force_factor = 10;
+    keylist["robust_bond_compression:"]=11; const int _robust_bond_compression = 11;
+
+	cerr << codeword << ' ' << value  << endl;
+	switch(keylist[codeword]){
+        case _Fnc: bondparameter.fnc = atof(value.c_str()); break;
+        case _Fsc: bondparameter.fsc = atof(value.c_str()); break;
+        case _Mbc: bondparameter.mbc = atof(value.c_str()); break;
+        case _Mtc: bondparameter.mtc = atof(value.c_str()); break;
+        case _n_max: bondparameter.n_max = atof(value.c_str()); break;
+        case _s_max: bondparameter.s_max = atof(value.c_str()); break;
+        case _b_max: bondparameter.b_max = atof(value.c_str()); break;
+        case _t_max: bondparameter.t_max = atof(value.c_str()); break;
+        case _dist_generate:
+            bondparameter.dist_generate = atof(value.c_str());
+            break;
+        case _overlap_force_factor:
+            bondparameter.overlap_force_factor = atof(value.c_str());
+            break;
+        case _robust_bond_compression:
+            bondparameter.robust_bond_compression = atof(value.c_str());
+            break;
+		default:
+			cerr << "The codeword " << codeword << " is'nt associated with an parameter" << endl;
+			exit(1);
+	}
 }
 
 void setBondParameter( BondParameter &bondparameter, string &bond_file, string &dir){
@@ -302,18 +339,19 @@ void setBondParameter( BondParameter &bondparameter, string &bond_file, string &
     if(fin.is_open())
         fin.close();
     fin.open(path_bond.c_str());
-    string codeword;
-    fin >> codeword >> bondparameter.fnc;
-    fin >> codeword >> bondparameter.fsc;
-    fin >> codeword >> bondparameter.mbc;
-    fin >> codeword >> bondparameter.mtc;
-    fin >> codeword >> bondparameter.n_max;
-    fin >> codeword >> bondparameter.s_max;
-    fin >> codeword >> bondparameter.b_max;
-    fin >> codeword >> bondparameter.t_max;
-    fin >> codeword >> bondparameter.overlap_force_factor;
-    fin >> codeword >> bondparameter.robust_bond_compression;
-    fin.close();
+    string codeword, value;
+    while (!fin.eof()){
+		fin >> codeword ;
+		if ( codeword == "#") {
+			char buf[1024]; fin.get(buf, 1024);
+		} else if (codeword == "!"){
+			break;
+		} else {
+			fin >> value;
+            if (fin.eof()) break;
+			readBondParameterKey(bondparameter, codeword, value);
+		}
+	}
     prepareBond(bondparameter);
     return;
 }
@@ -453,35 +491,28 @@ void DEMsystem::initDEM(){
 	counterBreak = 0;
 	counterRegenerate = 0;
     count_SD_calc = 0;
-
     for (int i=0; i < np ; i++){
-		particle[i]->p = pos_init[i]; //+ origin_shift;
+		particle[i]->p = pos_init[i];
 	}
-    double contact_distance = 2.001;
-    if (restructuring == false){
-        contact_distance = 2.1;
-    }
-        
-	makeInitialBond(contact_distance);
+    initialprocess = true;
+	makeInitialBond();
+    initialprocess = false;
+    sq_dist_generate = sq(bond1.dist_generate);
     mov_allocated = true;
     mov = new double [np*np*121];
     vos = new double [np*11];
     fte = new double [np*11];
-//    pos = new vec3d [np];
     set_FDA();
     q_rot.reset();
     q_rot_total.reset();
-//    delta_grad_method = 1e-3;
 }
 
 
-void DEMsystem::makeInitialBond(double generation_distance)
+void DEMsystem::makeInitialBond()
 {
-	double tmp = sq_dist_generate;
-	sq_dist_generate = sq(generation_distance);
+	sq_dist_generate = sq(bond0.dist_generate);
 	makeNeighbor();
 	generateBond();	
-	sq_dist_generate = tmp;
 }
 
 void DEMsystem::makeNeighbor(){
@@ -718,19 +749,6 @@ void DEMsystem::calcTotalFTS(){
                                      +sq(total_stresslet[4])
                                      +sq(total_stresslet[0] +total_stresslet[4]))
                                 + sq(total_stresslet[1])+sq(total_stresslet[2])+sq(total_stresslet[3]));
-//    cout << endl;
-//    cerr << sp_total[0]  << ' ';
-//    cerr << sp_total[1]  << ' ';
-//    cerr << sp_total[2]  << ' ';
-//    cerr << sp_total[3]  << ' ';
-//    cerr << sp_total[4]  << endl;
-//    cerr << so_total[0]  << ' ';
-//    cerr << so_total[1]  << ' ';
-//    cerr << so_total[2]  << ' ';
-//    cerr << so_total[3]  << ' ';
-//    cerr << so_total[4]  << endl;
-//    total_torque.cerr();
-//    cerr << endl;
 
     return;
 }
@@ -748,13 +766,6 @@ void DEMsystem::shiftClusterToCenter(){
         particle[i]->p.z -= center_of_mass.z;
     }
     pos_center_of_mass.add( center_of_mass.x, center_of_mass.y, center_of_mass.z);
-}
-
-void DEMsystem::setDEMParameters(){
-    double r_exponent = 1.0 /(stepnumber_shearrate - 1);
-    incrementratio_shearrate = pow(shearrate_max/shearrate_min , r_exponent);
-    //dist_generate = 2.0;
-	//sq_dist_generate = dist_generate*dist_generate;	/* square of distance to generate new bond  */
 }
 
 void DEMsystem::openOutputFileDEM(){
@@ -783,26 +794,26 @@ void DEMsystem::openOutputFileDEM(){
             "DEM_%s_%s_%s_%s.yap", 
             s_dem_algorithm.c_str(),
             parameters, 
-            init_config_file, version);
+            init_config_file, version.c_str());
     
 	sprintf(filenameLog, "log_DEM_%s_%s_%s_%s.dat", s_dem_algorithm.c_str(),parameters, 
-            init_config_file, version);
+            init_config_file, version.c_str());
     
     sprintf(filename_conf,"conf_DEM_%s_%s_%s_%s.dat", 
             s_dem_algorithm.c_str(),parameters, 
-            init_config_file, version);
+            init_config_file, version.c_str());
 
     sprintf(filename_conf_def,"def_DEM_%s_%s_%s_%s.dat", 
             s_dem_algorithm.c_str(),parameters, 
-            init_config_file, version);
+            init_config_file, version.c_str());
     
     sprintf(filename_trace,"trace_DEM_%s_%s_%s_%s.dat", 
             s_dem_algorithm.c_str(),parameters, 
-            init_config_file, version);
+            init_config_file, version.c_str());
     
     sprintf(filename_data,"data_DEM_%s_%s_%s_%s.dat", 
             s_dem_algorithm.c_str(),parameters, 
-            init_config_file, version);
+            init_config_file, version.c_str());
     
 	fout_dem.open(filenameYaplotDEM);
 	fout_dem_log.open(filenameLog);

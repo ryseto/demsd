@@ -33,7 +33,8 @@ private:
     DEMsystem *dem;
     Grid *p_grid;
     ConTable *p_ct;
-    
+    vector< vector<int> *> neighbor_cells;
+
 	int i_array[3];
 protected:
 	void (vec3d::*p_change)(double, double, double);
@@ -132,7 +133,7 @@ public:
 	inline vec3d pos(){return p;}	
 	void setInitial(int disk_number_);
 	void setPosition(const vec3d &position);
-	void setPositionFromArray(const double *pos);
+//	void setPositionFromArray(const double *pos);
 	inline double distOverlap(const vec3d &pp){
 		return dist(p, pp) - 2.0; // ro = 2a = 1.0
 	}

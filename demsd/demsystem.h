@@ -14,11 +14,11 @@
 #include <fstream>
 #include "sdsystem.h"
 #include "vec3d.h"
+#include "quaternion.h"
+#include "grid.h"
+#include "common.h"
 #include "bond.h"
 #include "particle.h"
-#include "grid.h"
-#include "quaternion.h"
-#include "common.h"
 using namespace std;
 
 class Particle;
@@ -32,32 +32,16 @@ private:
     double *mov; // Mobility matrix of SD
     double *vos; // velocity, omega, stresslet
     double *fte; // force, torque, rate-of-strain
-//    vec3d *pos; 
-    vec3d *pos_init; 
+    vec3d *pos_init; // position of initial cluster
     bool mov_allocated;
     ////////////////////////////////////////////    
-	double dist_generate;
-//    int count_MD_steps;
+    //	double dist_generate;
     int count_SD_calc;
     vec3d total_torque;
 	vec3d total_force;
     double total_stresslet[5];
     double norm_total_stresslet;
-    
     int cnt_grad_method;
-    /* Simulation box */
-//    double lx;
-//    double ly;
-//    double lz;
-    /* 
-     * !!!BUG!!!
-     * Simulation box 
-     * For the moment, 
-     * L_dem != L_sd makes conflict.
-     * 
-     */    
-    double L_dem;
-    double L_sd;
     int n11;
     /* DEM */
     bool firsttime_dem;
@@ -132,10 +116,44 @@ public:
     double h_stepsize; // unit of this is [1/GammaDot]
 
     double shearstrain;
-    
     double shearstrain_step;
 
     double critical_deformation_SD;
+        
+    BondParameter bond0; // For bonds in initial clusters
+    BondParameter bond1; // For newly generated bonds
+    string version;
+    bool initialprocess;
+    vec3d pos_center_of_mass;
+    double rot_ang;
+    double step_deformation;
+    double total_deformation;
+    int init_continuity; // 1: continuous, 0: discontinuous
+    quaternion q_rot;
+    quaternion q_rot_total;
+    quaternion q_rot_total_step;
+    
+    double calc_rotation_time;
+    
+    int n_bond; // number of bond
+    int rup_normal;
+	int rup_shear;
+	int rup_bend;
+	int rup_torsion;
+    vector<int> regeneration_bond;
+    vector<int> rupture_bond;
+	int counterRegenerate;
+	int counterBreak;
+    double cp_f_n_max;
+	double cp_f_s_max;
+	double cp_m_b_max;
+	double cp_m_t_max;
+    double robust_bond_compression;
+    
+    double sq_dist_generate;
+
+    
+    
     bool val_restructuring(){
         return restructuring;
     }
@@ -155,8 +173,10 @@ public:
     void pos_from_DEM_to_SD();
     void setVersion(char *);
     void calcInterParticleForce();
-    void getMovMatrix();
+    void getSDMovMatrix();
     void moveOverdampedMotionSDMov();
+    void moveOverdampedMotionFDA(); // Free-draining approximation
+
     void calcStresslet();
     void revertStresslet();
     void calcVelocityOmega();
@@ -164,7 +184,7 @@ public:
     void initDEM();
     void importCluster(char*, int skipline);    
 
-    void makeInitialBond(double generation_distance);
+    void makeInitialBond();
     void makeNeighbor();
 
     void checkState();
@@ -174,13 +194,8 @@ public:
 
 	void initGrid();
     void setBox(double lx_, double ly_, double lz_);
-	void setDEMParameters();
-    void freeDrainingApproximation();
     
     void writeHeader(ofstream &out);
-    void output(){
-   
-    }
 	void openOutputFileDEM();
     void outputLogDEM();
     void outputYaplotDEM();
@@ -200,10 +215,6 @@ public:
     void timeEvolution();
     void rupture();
     void shiftClusterToCenter();
-
-
-   // void estimateClusterRotation();
-
     void estimateClusterRotation();
     double findObjMinimum(quaternion &q_try, vec3d *po, 
                           double delta_init, double conv_diff);
@@ -211,51 +222,5 @@ public:
     void calcLocalStrains();
     void calcGyrationRadius();
     void calcTotalFTS();
-    
-
-    BondParameter bond0;
-    BondParameter bond1;
-    char version[3];
-    bool initialprocess;
-    vec3d pos_center_of_mass;
-    double rot_ang;
-    double step_deformation;
-    double total_deformation;
-    int init_continuity; // 1: continuous, 0: discontinuous
-    quaternion q_rot;
-//    quaternion q_rot_old;
-    quaternion q_rot_total;
-    quaternion q_rot_total_step;
-    
-    
-    //double diff_q_rot_0;
-//    vec3d diff_q_rot_q;
-
-       double calc_rotation_time;
-
-    int n_bond;
-    int rup_normal;
-	int rup_shear;
-	int rup_bend;
-	int rup_torsion;
-    vector<int> regeneration_bond;
-    vector<int> rupture_bond;
-	int counterRegenerate;
-	int counterBreak;
-    double cp_f_n_max;
-	double cp_f_s_max;
-	double cp_m_b_max;
-	double cp_m_t_max;
-    double robust_bond_compression;
-
-//    double lx0;
-//    double ly0;
-//    double lz0;
-    double sq_dist_generate;
-
-
-    };
+};
 #endif
-
-
-
