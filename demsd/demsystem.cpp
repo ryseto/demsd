@@ -33,7 +33,7 @@ DEMsystem::~DEMsystem(){
     if (fout_data.is_open())
         fout_data.close();
     if (mov_allocated){
-        delete [] mov;
+        delete [] mov_mtrx;
         delete [] vos;
         delete [] fte;
     }
@@ -75,7 +75,7 @@ void DEMsystem::calcVelocityOmega(){
             int ii = i*11 + k;
             vos[ii] = 0;
             for (int j = 0 ; j < n11 ; j++){
-                vos[ii] += mov[ii*n11 + j]*fte[j];
+                vos[ii] += mov_mtrx[ii*n11 + j]*fte[j];
             }
         }
     }
@@ -89,7 +89,7 @@ void DEMsystem::calcStresslet(){
             int ii = i*11 + k;
             vos[ii] = 0;
             for (int j = 0 ; j < n11 ; j++){
-                vos[ii] += mov[ii*n11 + j]*fte[j];
+                vos[ii] += mov_mtrx[ii*n11 + j]*fte[j];
             }
         }
     }
@@ -200,17 +200,17 @@ void DEMsystem::set_FDA(){
     double self_OT = 0.75;
     double self_ES = 0.9;
     for (int i = 0; i < n11*n11; i++){
-        mov[i] = 0.0;
+        mov_mtrx[i] = 0.0;
     }
     
     for (int i = 0; i < np; i++){
         int i11 = i*11;
         for (int k = 0; k < 3; k++){
-            mov[n11*(i11+k)   + i11 + k] = self_VF ;
-            mov[n11*(i11+3+k) + i11 + 3+k] = self_OT ;
+            mov_mtrx[n11*(i11+k)   + i11 + k] = self_VF ;
+            mov_mtrx[n11*(i11+3+k) + i11 + 3+k] = self_OT ;
         }
         for (int k = 0; k < 5; k++){
-            mov[n11*(i11+6+k) + i11 + 6+k] = 1.0/self_ES ;
+            mov_mtrx[n11*(i11+6+k) + i11 + 6+k] = 1.0/self_ES ;
         }
     }
 }
@@ -219,7 +219,12 @@ void DEMsystem::getSDMovMatrix(){
     // position transport from DEMsystem to SDsystem.
     count_SD_calc ++;
     pos_from_DEM_to_SD();
-    sd_sys->calcGrandMovMatrix(mov);
+    
+    // Keep the positions for the object function
+    for( int i=0; i< np; i++){
+        pos_mm[i] = particle[i]->p;
+    }        
+    sd_sys->calcGrandMovMatrix(mov_mtrx);
 }
 
 /* Import the configuration (x,y,z) of particles.
@@ -499,9 +504,11 @@ void DEMsystem::initDEM(){
     initialprocess = false;
     sq_dist_generate = sq(bond1.dist_generate);
     mov_allocated = true;
-    mov = new double [np*np*121];
+    mov_mtrx = new double [np*np*121];
     vos = new double [np*11];
     fte = new double [np*11];
+    pos_mm = new vec3d [np*11]; // positions for the mobility matrix.
+
     set_FDA();
     q_rot.reset();
     q_rot_total.reset();
@@ -544,12 +551,12 @@ void DEMsystem::outputDeformationConf(){
     }
 }
 
-double DEMsystem::evaluateObjFunction(quaternion & q_, vec3d *po){
+double DEMsystem::evaluateObjFunction(quaternion & q_ ){
     double Obj_tmp = 0;
     q_.preparer_rotation_quickcalc();
     for (int i = 0; i < np; i++){
         //Obj_tmp += (q_.rotation_quickcalc_r(po[i]) - pos[i]).sq_norm();
-        Obj_tmp += (q_.rotation_quickcalc_r(po[i]) - particle[i]->p).sq_norm();
+        Obj_tmp += (q_.rotation_quickcalc_r(pos_mm[i]) - particle[i]->p).sq_norm();
     }
     return Obj_tmp / np;
 }
@@ -559,7 +566,7 @@ double DEMsystem::findObjMinimum(quaternion &q_try, vec3d *po,
     double delta_grad_method = delta_init;
     double gradObj[4];
     double Obj;
-    double Obj_old = evaluateObjFunction(q_try, po);
+    double Obj_old = evaluateObjFunction(q_try);
     vec3d d_pos;
     cnt_grad_method = 0;
     vec3d tmp1;
@@ -590,12 +597,11 @@ double DEMsystem::findObjMinimum(quaternion &q_try, vec3d *po,
             q_tmp.q.x = q_try.q.x - delta_grad_method*gradObj[1];
             q_tmp.q.y = q_try.q.y - delta_grad_method*gradObj[2];
             q_tmp.q.z = q_try.q.z - delta_grad_method*gradObj[3];
-            Obj = evaluateObjFunction(q_tmp, po);
+            Obj = evaluateObjFunction(q_tmp);
             if (Obj <= Obj_old ){
                 q_try = q_tmp;
                 break;
             }
-
             delta_grad_method *= 0.5;
         }
 
@@ -613,9 +619,7 @@ double DEMsystem::findObjMinimum(quaternion &q_try, vec3d *po,
 }
 
 void DEMsystem::estimateClusterRotation(){
-    step_deformation = findObjMinimum(q_rot, sd_sys->pos, 1e-4, 1e-12);
-    
-    
+    step_deformation = findObjMinimum(q_rot, pos_mm, 1e-4, 1e-12);
 }
 
 /*

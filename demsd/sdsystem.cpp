@@ -14,7 +14,7 @@
 SDsystem::SDsystem(){
     np = -1;
 	lubrication = -1;
-	pos = NULL;
+//	pos = NULL;
 	velocity = NULL;
 	omega = NULL;
 	strain_velocity = NULL;
@@ -131,7 +131,7 @@ void SDsystem::initFlowModel(int num_of_particle_){
         }
     }
     try{
-        pos = new vec3d [np];        
+//        pos = new vec3d [np];        
         velocity = new double [ np*3 ];
         omega = new double [ np*3 ];
         strain_velocity = new double [ np*5 ];
@@ -156,7 +156,7 @@ void SDsystem::setPositionLibStokes(){
 void SDsystem::setPositionSD(int i, const vec3d &position){
     // Positions are set in libstokes.
 	int j = 3*i;
-    pos[i] = position;
+//    pos[i] = position;
 	sd->pos[j] = position.x;
 	sd->pos[j+1] = position.y;
 	sd->pos[j+2] = position.z;
@@ -166,8 +166,11 @@ void SDsystem::setMotionRigidCluster(double vx, double vy, double vz,
                                      double ox, double oy, double oz){                                   
     cl_velocity.set(vx, vy, vz);
     cl_omega.set(ox, oy, oz);
+    
     for (int i = 0; i < np; i++){
-		vec3d v = cross(cl_omega, pos[i]) + cl_velocity;
+        vec3d pos(sd->pos[3*i], sd->pos[3*i+1], sd->pos[3*i+2]);
+		vec3d v = cross(cl_omega, pos) + cl_velocity;
+        //vec3d v = cross_vec_array(cl_omega, &(sd->pos[3*i]))+ cl_velocity;
 		velocity[i*3] = v.x;
 		velocity[i*3+1] = v.y;
 		velocity[i*3+2] = v.z;

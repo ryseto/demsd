@@ -12,7 +12,7 @@
 #include "my_utilities.h"
 #include "dem.h"
 #include "common.h"
-#include "calcDragAndTorque.h"
+#include "dragforces.h"
 using namespace std;
 
 int main (int argc, char** argv) {

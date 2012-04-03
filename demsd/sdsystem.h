@@ -45,27 +45,27 @@ public:
     void setMotionRigidCluster(double vx, double vy, double vz,
                                double ox, double oy, double oz);
     
-    vec3d getPosition(int i){
+    vec3d Position(int i){
         return vec3d (sd->pos[i*3    ],
                       sd->pos[i*3 + 1],
                       sd->pos[i*3 + 2]);
     }
-    vec3d getVelocity(int i){
+    vec3d Velocity(int i){
         return vec3d (velocity[i*3],
                       velocity[i*3 + 1],
                       velocity[i*3 + 2]);
     }
-    vec3d getOmega(int i){
+    vec3d Omega(int i){
         return vec3d (omega[i*3],
                       omega[i*3 + 1],
                       omega[i*3 + 2]);
     }
-    vec3d getForce(int i){
+    vec3d Force(int i){
         return vec3d (force[i*3],
                       force[i*3 + 1],
                       force[i*3 + 2]);
     }
-    vec3d getTorque(int i){
+    vec3d Torque(int i){
         return vec3d (torque[i*3],
                       torque[i*3 + 1],
                       torque[i*3 + 2]);
@@ -91,7 +91,6 @@ public:
     /*
      *
      */
-    vec3d *pos;
     double * velocity;
     double * omega;
     double * strain_velocity;

@@ -28,11 +28,12 @@ class Grid;
 
 class DEMsystem {
 private:
-    SDsystem *sd_sys;
-    double *mov; // Mobility matrix of SD
+    SDsystem *sd_sys; // SD class
+    double *mov_mtrx; // Mobility matrix of SD
     double *vos; // velocity, omega, stresslet
     double *fte; // force, torque, rate-of-strain
-    vec3d *pos_init; // position of initial cluster
+    vec3d *pos_init; // positions of the initial cluster
+    vec3d *pos_mm; // positions for the mobility matrix.
     bool mov_allocated;
     ////////////////////////////////////////////    
     //	double dist_generate;
@@ -91,7 +92,7 @@ private:
     
     void shiftCenterOfMass(vector<vec3d> &p);
     void set_FDA();
-    double evaluateObjFunction(quaternion & q_, vec3d *po);
+    double evaluateObjFunction(quaternion & q_);
     void readParameterKey(const string &codeword, 
 						  const string &value);
     void readShearProcessKey(const string &codeword,                               
@@ -216,7 +217,7 @@ public:
     void rupture();
     void shiftClusterToCenter();
     void estimateClusterRotation();
-    double findObjMinimum(quaternion &q_try, vec3d *po, 
+    double findObjMinimum(quaternion &q_try, vec3d *po,
                           double delta_init, double conv_diff);
 
     void calcLocalStrains();

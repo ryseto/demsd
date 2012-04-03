@@ -81,10 +81,19 @@ public:
 	/* vector product */
 	inline friend vec3d cross(const vec3d &v1, const vec3d &v2){
 		return vec3d(v1.y*v2.z - v1.z*v2.y, 
-								 v1.z*v2.x - v1.x*v2.z, 
-								 v1.x*v2.y - v1.y*v2.x);
+                     v1.z*v2.x - v1.x*v2.z, 
+                     v1.x*v2.y - v1.y*v2.x);
 	}	
-	
+
+    /* vector product */
+	inline friend vec3d cross_vec_array(const vec3d &v1, 
+                                        const double *v2p){
+		return vec3d(v1.y*(*(v2p+2)) - v1.z*(*(v2p+1)), 
+                     v1.z*(*v2p) - v1.x*(*(v2p+2)), 
+                     v1.x*(*(v2p+1)) - v1.y*(*v2p));
+	}	
+
+    
 	/* division */
 	inline friend vec3d operator / (const vec3d &v, const double &d){
 		double d_tmp = 1.0/d;
