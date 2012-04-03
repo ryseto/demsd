@@ -10,6 +10,7 @@
 #define stodyn_calcDragAndTorque_h
 #include <fstream>
 #include <iomanip>
+#include <cstdlib>
 #include "sdsystem.h"
 
 void outputVector(ofstream &fout, vec3d &vec){
@@ -22,6 +23,57 @@ void outputVector(ofstream &fout, vec3d &vec){
     fout << setw(output_width) << vec.z;
 }
 
+
+vec3d calcCenterOfMass(vector<vec3d> &pos_vec){
+    vec3d center_of_mass(0,0,0);
+    int np = pos_vec.size();
+    for (int i=0; i < np; i ++){
+        center_of_mass += pos_vec[i];
+    }
+    center_of_mass *= 1.0/np;
+    return center_of_mass;
+}
+
+
+/* Import the configuration (x,y,z) of particles.
+ * The center of mass is set to (0,0,0)
+ * INPUT 
+ * importfilename: File name
+ * skipline: Line number of the header
+ */
+void importCluster(char* cluster_file_, int skipline, vector <vec3d> &pos){
+    //	sprintf( cluster_file, "%s", cluster_file_);
+    //	string s_filename = cluster_file_;
+	//int i_backslash = s_filename.find_last_of( "/") + 1;
+    //	int i_extention = s_filename.find( ".dat" );	
+    //	sprintf(cluster_file, "%s",
+    //			(s_filename.substr(i_backslash,i_extention-i_backslash)).c_str());
+
+	ifstream fin;
+	fin.open( cluster_file_ );
+	double x, y, z;
+	char buf[1000];
+	for (int i = 0; i< skipline; i++){
+		fin.getline( buf, 1000 );
+	}
+
+	do{
+		fin >> x >> y >> z;
+        if( fin.fail() )
+            break; 
+        vec3d new_pos(x,y,z);
+        pos.push_back(new_pos);
+	} while (!fin.eof());
+    /*
+     * Set center-of-mass to (0,0,0)
+     */
+    vec3d com = calcCenterOfMass(pos);
+    for (int i=0; i < pos.size() ; i++){
+        pos[i] -= com;
+    }
+}
+
+
 void calcDragAndTorque(int argc, char** argv){    
     SDsystem sd_sys;
 	/* Shear-rate or typical velocity is set one.
@@ -31,10 +83,10 @@ void calcDragAndTorque(int argc, char** argv){
 		/* POSITIONS indicates the path to a file including (x,y,z) of particles
 		 *
 		 */
-		cerr << "Usage: stodyn u POSITIONS skipline method" << endl;
-		cerr << "Usage: stodyn s POSITIONS skipline method" << endl;
-        cerr << "method=1 : Stokesian dynamics without lublication correction" << endl;
-		cerr << "method=2 : Stokesian dynamics with lublication correction " << endl;
+		cerr << "Usage: stodyn u POSITIONS skipline lub" << endl;
+		cerr << "Usage: stodyn s POSITIONS skipline lub" << endl;
+        cerr << "lub=0 : Stokesian dynamics without lublication correction" << endl;
+		cerr << "lub=1 : Stokesian dynamics with lublication correction " << endl;
         cerr << "This calculation will be conducted by dimensionless variables." << endl;
         cerr << "The unit of length is given by the radius of particle." << endl;
         cerr << "The unit of velocity is given by the velocity of uniform flow." << endl;
@@ -56,34 +108,29 @@ void calcDragAndTorque(int argc, char** argv){
         cerr << "-------------------" << endl;
 		return;
 	}
-    sd_sys.setFlowType(argv[1][0]);
-    sd_sys.method_hydroint = atoi(argv[4]); 
-    switch( sd_sys.method_hydroint ){
-		case 1:
-            // without lubrication corrections
-            sd_sys.setLubrication(0);
-			break;
-		case 2:
-            // with lubrication corrections
-			sd_sys.setLubrication(1);
-			break;
-        default:
-            cerr << "4th argument\n";
-            cerr << "1: without lubrication\n";
-            cerr << "2: with lubrication\n";
-            exit(1);
-	} 
+    vector <vec3d> pos;
+    char type_of_flow = argv[1][0];
+    char *cluster_file = argv[2];
+    int skip_line =  atoi(argv[3]); 
+    int lub_correction = atoi(argv[4]);
+    sd_sys.setFlowType(type_of_flow);
     /* init() is called in this function*/
-	sd_sys.importCluster(argv[2], atoi(argv[3]));
-    sd_sys.initFlowModel(-1);
-    sd_sys.setPositionLibStokes();
+	importCluster(cluster_file, skip_line, pos);
+    int np = pos.size();
+    sd_sys.initFlowModel(np, lub_correction, true);
+
+    for (int i = 0; i < np; i++){
+        sd_sys.setPositionSD(i, pos[i]);
+    }
     sd_sys.setMotionRigidCluster(0,0,0,0,0,0); // (vx,vy,vz,ox,oy,oz)
 	sd_sys.setSDIterationMethod();
 	sd_sys.solveStokesianDynamics();
+
     ofstream fout;
     char fout_name[128];
     sprintf(fout_name, "DragTorque_%s.dat", sd_sys.infoString());
     fout.open( fout_name );
+
     fout << "# N " << sd_sys.np << endl; 
     fout << "# x y z vx vy vz ox oy oz fx fy fz tx ty tz"<< endl;
 	for (int i = 0; i < sd_sys.np; i ++){

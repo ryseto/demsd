@@ -12,6 +12,7 @@
 void demSimulation(int argc, char** argv){
     SDsystem sd_sys;    
     DEMsystem dem(sd_sys);
+    int lub_correction = 0; // lubrication correction is not used.
 	dem.setParameterFileDEM(argv[2]);   
     /* Import positions of the cluster: (file, skip lines)*/
 	dem.importCluster(argv[3], atoi(argv[4]));
@@ -22,9 +23,15 @@ void demSimulation(int argc, char** argv){
     dem.readParameterBond();
     dem.readParameterShearProcess();    
 	/* Setup simulation */
-    sd_sys.setFlowType('s'); // set shear flow
+    if (dem.method_hydroint > 0){
+        sd_sys.setFlowType('s'); // set shear flow
+    }
 	dem.initDEM();
-    sd_sys.initFlowModel(dem.np);
+    if (dem.method_hydroint > 0){
+        sd_sys.initFlowModel(dem.np,
+                             lub_correction,
+                             false);
+    }
     /* Main simulation */
 	if ( dem.shear_process == "stepwise"){
         shearStepwiseIncreaseTest(sd_sys, dem);
@@ -46,12 +53,11 @@ void shearStepwiseIncreaseTest(SDsystem &sd_sys,
     dem.outputDeformationConf();
     dem.setInitialMotion();
     dem.shiftClusterToCenter();
-    if (sd_sys.method_hydroint != 0){
+    if (dem.method_hydroint == 1){
         dem.getSDMovMatrix();
     }
     dem.initialprocess = false;
     dem.outputConfiguration();
-    
     dem.shearrate = dem.shearrate_min;
     for(int m = 0; m < dem.stepnumber_shearrate; m++){
         /*
@@ -60,17 +66,16 @@ void shearStepwiseIncreaseTest(SDsystem &sd_sys,
         if (m > 0){
             dem.shearrate *= dem.incrementratio_shearrate;
         }
-        cerr << "shear rate = "  << dem.shearrate << endl;
         dem.setStepSize();
         double shearstrain_end = dem.shearstrain + dem.shearstrain_step;
         int step_counter =0;
         do{
             double nexttime_output = dem.shearstrain + dem.interval_strain_output;
             dem.makeNeighbor();
-            
-            while (dem.shearstrain < nexttime_output){
+            cerr << "ss=" << dem.shearstrain << endl;
+            while (dem.shearstrain <= nexttime_output){
                 dem.calcInterParticleForce();
-                if (sd_sys.method_hydroint == 0){
+                if (dem.method_hydroint == 0){
                     dem.moveOverdampedMotionFDA();
                 } else {
                     dem.moveOverdampedMotionSDMov();
@@ -83,7 +88,7 @@ void shearStepwiseIncreaseTest(SDsystem &sd_sys,
                     dem.regeneration_bond.clear();
                 }
                 dem.generateBond();
-                if (sd_sys.method_hydroint != 0){
+                if (dem.method_hydroint == 1){
                     dem.estimateClusterRotation();
                     if ( dem.step_deformation > dem.critical_deformation_SD ){
                         cerr << "renew matrix" << ' ' << dem.step_deformation << endl;
@@ -103,7 +108,7 @@ void shearStepwiseIncreaseTest(SDsystem &sd_sys,
                 if ( step_counter++ % 200 == 0){
                     dem.shiftClusterToCenter(); 
                     dem.q_rot.normalize();
-                    for (int i=0; i < sd_sys.np; i++){
+                    for (int i=0; i < dem.np; i++){
                         dem.particle[i]->setNorm_u(); /*********** IMPORTANT ************/
                         dem.particle[i]->orientation.normalize(); /*********** IMPORTANT ************/
                     }
@@ -125,4 +130,3 @@ void shearStepwiseIncreaseTest(SDsystem &sd_sys,
         } while (dem.shearstrain < shearstrain_end);    
     }
 }
-

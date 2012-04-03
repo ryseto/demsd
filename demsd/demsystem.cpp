@@ -187,12 +187,12 @@ void DEMsystem::moveOverdampedMotionSDMov(){
     }
 }
 
-/* Positions of particles are set to SD_system
+/* Positions of particles are set to libstokes.
  */
 void DEMsystem::pos_from_DEM_to_SD(){
     for( int i=0; i< np; i++){
         sd_sys->setPositionSD(i, particle[i]->p);
-    }        
+    }     
 }  
 
 void DEMsystem::set_FDA(){
@@ -219,7 +219,6 @@ void DEMsystem::getSDMovMatrix(){
     // position transport from DEMsystem to SDsystem.
     count_SD_calc ++;
     pos_from_DEM_to_SD();
-    
     // Keep the positions for the object function
     for( int i=0; i< np; i++){
         pos_mm[i] = particle[i]->p;
@@ -425,7 +424,7 @@ void DEMsystem::readParameterKey(const string &codeword,
         case _rootdir: rootdir = value; break;
         case _bond0_file: bond0_file = value; break;
         case _bond1_file: bond1_file = value; break;
-        case _method_hydroint: sd_sys->method_hydroint = atoi(value.c_str()); break;
+        case _method_hydroint: method_hydroint = atoi(value.c_str()); break;
         case _shear_process_file: shear_process_file = value; break;
         case _interval_strain_output: interval_strain_output = atof(value.c_str());
         case _critical_deformation_SD: critical_deformation_SD = atof(value.c_str()); break;
@@ -462,7 +461,7 @@ void DEMsystem::setStepSize(){
      * 
      *
      */
-    if ( sd_sys->method_hydroint == 0){
+    if ( method_hydroint == 0){
         h_stepsize = 0.0001*shearrate;
         if ( h_stepsize > 0.0001)
             h_stepsize = 0.0001;
@@ -782,15 +781,12 @@ void DEMsystem::openOutputFileDEM(){
     //	char filenameSample[64];
 	string s_dem_algorithm;
 
-    switch (sd_sys->method_hydroint){
+    switch (method_hydroint){
         case 0:
             s_dem_algorithm = "FD";
             break;
         case 1:
-            s_dem_algorithm = "SD_nolub";
-            break;
-        case 2:
-            s_dem_algorithm = "SD_lub";
+            s_dem_algorithm = "SD0";
             break;
     }
 

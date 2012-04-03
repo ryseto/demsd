@@ -107,6 +107,7 @@ public:
     vector<Bond *> bond;
     ConTable *ct;
     Grid *grid;
+    int method_hydroint;
     string shear_process;
     double shearrate; // = GammaDot (not real shear-rate)
     double shearrate_min;

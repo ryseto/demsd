@@ -20,76 +20,15 @@ using namespace std;
 
 class SDsystem {
 private:
-    char type_of_flow;
-    int lubrication;
-
-    int output_precision;
-    int output_width;
-    char cluster_file[64];
-    vector<vec3d> init_cluster;
-    vec3d center_of_mass;
-    void calcCenterOfMass(vector<vec3d> &p);
-    vec3d cl_velocity;
-    vec3d cl_omega;
-    
+    char type_of_flow; // s: shear flow, u: uniform flow
+    vec3d cl_velocity; // For rigid clusters
+    vec3d cl_omega; // For rigid clusters
 public:
-	SDsystem();
-	~SDsystem();
-    void setFlowType(char type_of_flow_);
-    void initFlowModel(int num_of_particle_);
-    void setSDIterationMethod();
-    void setPositionLibStokes();
-	void setPositionSD(int, const vec3d &);
-    void setLubrication(int lub_);
-    void setOutputPrecision(int);
-    void setMotionRigidCluster(double vx, double vy, double vz,
-                               double ox, double oy, double oz);
-    
-    vec3d Position(int i){
-        return vec3d (sd->pos[i*3    ],
-                      sd->pos[i*3 + 1],
-                      sd->pos[i*3 + 2]);
-    }
-    vec3d Velocity(int i){
-        return vec3d (velocity[i*3],
-                      velocity[i*3 + 1],
-                      velocity[i*3 + 2]);
-    }
-    vec3d Omega(int i){
-        return vec3d (omega[i*3],
-                      omega[i*3 + 1],
-                      omega[i*3 + 2]);
-    }
-    vec3d Force(int i){
-        return vec3d (force[i*3],
-                      force[i*3 + 1],
-                      force[i*3 + 2]);
-    }
-    vec3d Torque(int i){
-        return vec3d (torque[i*3],
-                      torque[i*3 + 1],
-                      torque[i*3 + 2]);
-    }
-    
-    void importCluster(char*, int skipline);    
-    char typeOfFlow(){return type_of_flow;}
-    char* infoString();
-    /*************************
-     *   Stokesian Dynamics
-     *************************/
-    struct stokes *sd;
-    void calcGrandMovMatrix(double* mov);
-    void solveStokesianDynamics();
-    /* method_hydroint
-     * 0: Free-draining approximation
-     * 1: Stokesian dynamics without lubrication
-     * 2: Stokesian dynamics with lubrication
-     */
-    int method_hydroint;
+    struct stokes *sd; // composition of libstokes (Ichiki)
     int np;
     int nm;
-    /*
-     *
+    /* 
+     * 
      */
     double * velocity;
     double * omega;
@@ -97,11 +36,56 @@ public:
     double * force;
     double * torque;
     double * stresslet;
-
     vec3d cl_force; // force for the rigid cluster
     vec3d cl_torque; // torque for the rigid cluster
     double cl_stresslet[5]; // stresslet for the rigid cluster
     double cl_stresslet_norm;
+    
+	SDsystem();
+	~SDsystem();
+    void setFlowType(char type_of_flow_);
+    /* prepare_vectors: Whether allocate or not of memories for velocity and force vectors.
+     *
+     */
+    void initFlowModel(int num_of_particle_,
+                       int lub_correction_,
+                       bool prepare_vectors);
+    void setSDIterationMethod();
+//    void setPositionLibStokes(vector <vec3d> &_pos);
+	void setPositionSD(int, const vec3d &);
+//    void setLubrication(int lub_);
+    void setOutputPrecision(int);
+    void setMotionRigidCluster(double vx, double vy, double vz,
+                               double ox, double oy, double oz);
+    void importCluster(char*, int skipline);    
+    char typeOfFlow(){return type_of_flow;}
+    char* infoString();
+    void calcGrandMovMatrix(double* mov_mtrx);
+    void solveStokesianDynamics();
+    inline vec3d Position(int i){
+        return vec3d (sd->pos[i*3    ],
+                      sd->pos[i*3 + 1],
+                      sd->pos[i*3 + 2]);
+    }
+    inline vec3d Velocity(int i){
+        return vec3d (velocity[i*3],
+                      velocity[i*3 + 1],
+                      velocity[i*3 + 2]);
+    }
+    inline vec3d Omega(int i){
+        return vec3d (omega[i*3],
+                      omega[i*3 + 1],
+                      omega[i*3 + 2]);
+    }
+    inline vec3d Force(int i){
+        return vec3d (force[i*3],
+                      force[i*3 + 1],
+                      force[i*3 + 2]);
+    }
+    inline vec3d Torque(int i){
+        return vec3d (torque[i*3],
+                      torque[i*3 + 1],
+                      torque[i*3 + 2]);
+    }
 };
-
 #endif
