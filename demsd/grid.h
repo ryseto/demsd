@@ -55,7 +55,7 @@ public:
 	inline int min_gy(int gy){ return ( gy >= 0 ? gy : 0 ) ; }
 	inline int max_gy(int gy){ return ( gy <= gy_max ? gy : gy_max ); }
 	int gy(int i){ return gl[i].y;}
-	int size(int x, int y, int z) { return vcell[x][y][z].size(); }
+	int size(int x, int y, int z) { return (int)vcell[x][y][z].size(); }
 	void gl_resize(int n){ gl.resize(n); }
 	void get_neighbor_list(const vec3d &p, vector<int> &neighbor);
 	void get_neighbor_list_pointer(const vec3d &p, vector< vector<int>* > &p_neighbor);

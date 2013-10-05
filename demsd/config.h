@@ -1,4 +1,4 @@
-#define __cplusplus 1
+//#define __cplusplus 1
 
 /* config.h.in.  Generated from configure.ac by autoheader.  */
 

@@ -132,7 +132,7 @@ void SDsystem::setSDIterationMethod(){
 	double ewald_eps = 1.0e-12;
 	stokes_set_xi(sd, xi, ewald_eps);
 	//fprintf (stdout, "xi = %f\n", xi);
-	//sys->lubmin = 2.0000000001;
+//	sd->lubmin = 2.0000000001;
 	
 	sd->lubmin2 = 4.0000000001;
 	sd->lubmax = 4.00;

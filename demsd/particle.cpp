@@ -11,7 +11,7 @@
 
 Particle::Particle(int particle_number_, 
                    DEMsystem &dem_,
-                   SDsystem &sd_sys_   ){
+                   SDsystem &sd_sys_){
 	dem = &dem_;
     sd_sys = &sd_sys_;
 	setInitial(particle_number_);
@@ -50,7 +50,7 @@ void  Particle::makeNeighbor(){
 }
 
 void Particle::generateBond(){
-    int n_neighbor = neighbor.size();
+    int n_neighbor = (int)neighbor.size();
 	for (int i=0; i < n_neighbor; i++){
 		if (sq_dist(p, dem->particle[neighbor[i]]->p) <= dem->sq_dist_generate ){
 			dem->bond.push_back(new Bond (neighbor[i], particle_number, *dem));
@@ -83,3 +83,5 @@ void Particle::move_with_velocity(){
         cn[i].tor_angle += dot(d_rotation, cn[i].u);
     }
 }
+
+

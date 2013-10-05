@@ -46,7 +46,7 @@ private:
     int n11;
     /* DEM */
     bool firsttime_dem;
-    bool restructuring;
+//    bool restructuring;
 	char parameters_file[128];
 	char parameters[32];
     char init_config_file[128];
@@ -100,6 +100,8 @@ private:
 
 public:
 	DEMsystem(SDsystem &sd_sys_);
+    DEMsystem();
+
 	~DEMsystem();
 
     int np; // number of particle
@@ -156,9 +158,9 @@ public:
 
     
     
-    bool val_restructuring(){
-        return restructuring;
-    }
+//    bool val_restructuring(){
+//        return restructuring;
+//    }
     double interval_strain_output;
     
     void setStepSize();
@@ -167,6 +169,7 @@ public:
     }
 
     void setParameterFileDEM(char *parameters_file_);
+    void setBondFile(char *bondfile0, char *bondfile1);
     void readParameterFileDEM();
     void readParameterShearProcess();
     void readParameterBond();
@@ -177,15 +180,17 @@ public:
     void calcInterParticleForce();
     void getSDMovMatrix();
     void moveOverdampedMotionSDMov();
-    void moveOverdampedMotionFDA(); // Free-draining approximation
-
+    void moveOverdampedMotionFDAShear(); // Shear
+    void moveOverdampedMotionFDA();  // Resting fluid
     void calcStresslet();
     void revertStresslet();
     void calcVelocityOmega();
     
     void initDEM();
     void importCluster(char*, int skipline);    
+    void setTwoParticleSystem();    
 
+    
     void makeInitialBond();
     void makeNeighbor();
 

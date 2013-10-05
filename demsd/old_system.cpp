@@ -128,7 +128,7 @@ void System::initLibStokes(){
         exit(1);
     }
     if (np == 0)
-        np = init_aggregate.size(); 	/* np : number of all particles  */
+        np = (int)init_aggregate.size(); 	/* np : number of all particles  */
     nm = np;	/* nm : number of mobile particles  */
     cerr << "number of the particles : " << np << endl;
     sd = stokes_init();
@@ -279,8 +279,8 @@ void System::setLubrication(int lub_){
 void System::importCluster(char* importfilename, int skipline){
 	sprintf( filename, "%s", importfilename);
 	string s_filename = filename;
-	int i_backslash = s_filename.find_last_of( "/") + 1;
-	int i_extention = s_filename.find( ".dat" );	
+	int i_backslash = (int)s_filename.find_last_of( "/") + 1;
+	int i_extention = (int)s_filename.find( ".dat" );
 	sprintf(filename, "%s",
 			(s_filename.substr(i_backslash,i_extention-i_backslash)).c_str());
 	ifstream fin;
@@ -307,8 +307,8 @@ void System::importTBMfile(char* importfilename,
     
 	sprintf( filename, "%s", importfilename);
 	string s_filename = filename;
-	int i_backslash = s_filename.find_last_of( "/") + 1;
-	int i_extention = s_filename.find( ".dat" );	
+	int i_backslash = (int)s_filename.find_last_of( "/") + 1;
+	int i_extention = (int)s_filename.find( ".dat" );
 	sprintf(filename, "%s",
 			(s_filename.substr( i_backslash, i_extention-i_backslash)).c_str());
 	ifstream fin;

@@ -16,7 +16,18 @@ DEMsystem::DEMsystem(SDsystem &sd_sys_){
     mov_allocated = false;
     version =  "0";
 	n_bond = 0 ;
-    restructuring = true;
+    rootdir = "./";
+
+}
+
+DEMsystem::DEMsystem(){
+    ct = new ConTable;
+    grid = new Grid;
+    mov_allocated = false;
+    version =  "0";
+	n_bond = 0 ;
+    rootdir = "./";
+
 }
 
 DEMsystem::~DEMsystem(){
@@ -95,13 +106,23 @@ void DEMsystem::calcStresslet(){
     }
 }
 
-void DEMsystem::moveOverdampedMotionFDA(){
+void DEMsystem::moveOverdampedMotionFDAShear(){
     double shearrate_inv = 1 / shearrate;
     for (int i = 0; i < np ; i ++){
         f_tmp = shearrate_inv * particle[i]->force;
         t_tmp = shearrate_inv * particle[i]->torque;
         particle[i]->velocity.set(f_tmp.x + particle[i]->p.z , f_tmp.y, f_tmp.z);
         particle[i]->omega.set(t_tmp.x, t_tmp.y + 0.5, t_tmp.z);
+    }
+    ForAllParticle{ 
+        (*p_iter)->move_with_velocity();
+    }
+}
+
+void DEMsystem::moveOverdampedMotionFDA(){
+    for (int i = 0; i < np ; i ++){
+        particle[i]->velocity = particle[i]->force;
+        particle[i]->omega = particle[i]->torque;
     }
     ForAllParticle{ 
         (*p_iter)->move_with_velocity();
@@ -237,8 +258,8 @@ void DEMsystem::importCluster(char* importfilename, int skipline){
 
 	sprintf(init_config_file, "%s", importfilename);
 	string s_filename = init_config_file;
-	int i_backslash = s_filename.find_last_of( "/") + 1;
-	int i_extention = s_filename.find( ".dat" );	
+	int i_backslash = (int)s_filename.find_last_of( "/") + 1;
+	int i_extention = (int)s_filename.find( ".dat" );
 	sprintf(init_config_file, "%s",
 			(s_filename.substr(i_backslash,i_extention-i_backslash)).c_str());
 	ifstream fin;
@@ -257,7 +278,7 @@ void DEMsystem::importCluster(char* importfilename, int skipline){
 		init_config.push_back(new_p);
 	} while (!fin.eof());
 	shiftCenterOfMass( init_config );
-    np = init_config.size();
+    np = (int)init_config.size();
     n11 = 11*np;
     
     pos_init = new vec3d [np];
@@ -271,13 +292,20 @@ void DEMsystem::importCluster(char* importfilename, int skipline){
     init_radius_of_gyration = radius_of_gyration;
 }
 
+void DEMsystem::setTwoParticleSystem(){
+    np = 2;    
+    pos_init = new vec3d [np];
+    pos_init[0].set(-1, 0, 0);
+    pos_init[1].set(1, 0, 0);
+}
+
 void DEMsystem::shiftCenterOfMass(vector<vec3d> &p){
 	vec3d cm(0,0,0);
 	foreach( vector<vec3d>, p, p_iter){
 		cm += (*p_iter);
 	}
 	cm *= 1.0/p.size();
-	foreach( vector<vec3d>, p, p_iter){
+	foreach(vector<vec3d>, p, p_iter){
 		*p_iter -= cm;
 	}
 }
@@ -346,6 +374,7 @@ void setBondParameter( BondParameter &bondparameter, string &bond_file, string &
     string codeword, value;
     while (!fin.eof()){
 		fin >> codeword ;
+        cerr << codeword << endl; 
 		if ( codeword == "#") {
 			char buf[1024]; fin.get(buf, 1024);
 		} else if (codeword == "!"){
@@ -361,9 +390,18 @@ void setBondParameter( BondParameter &bondparameter, string &bond_file, string &
 }
 
 void DEMsystem::readParameterBond(){
+    cerr << rootdir << endl;
     setBondParameter(bond0, bond0_file, rootdir);
     setBondParameter(bond1, bond1_file, rootdir);
 }
+
+void DEMsystem::setBondFile(char *bondfile0, char *bondfile1){
+    
+    bond0_file = bondfile0;
+    bond1_file = bondfile1;
+    
+}
+
 
 void DEMsystem::readShearProcessKey(const string &codeword,                               
                                     const string &value){
@@ -474,18 +512,11 @@ void DEMsystem::setStepSize(){
 }
 
 void DEMsystem::initDEM(){
-	for (int i=0; i < np ; i++){
+	for (int i = 0; i < np ; i++){
 		particle.push_back(new Particle(i, *this, *sd_sys) );
 	}
 	ct->set(np);	
 	initGrid();
-    
-    string str_version = version;
-    if (str_version == "nr"){
-        // no restructuring
-        restructuring = false;
-    }
-   
     simu_time = 0;
     shearstrain = 0;
     init_continuity = 1;
@@ -507,7 +538,6 @@ void DEMsystem::initDEM(){
     vos = new double [np*11];
     fte = new double [np*11];
     pos_mm = new vec3d [np*11]; // positions for the mobility matrix.
-
     set_FDA();
     q_rot.reset();
     q_rot_total.reset();
@@ -527,7 +557,7 @@ void DEMsystem::makeNeighbor(){
 }
 
 void DEMsystem::generateBond(){
-	for (int i=0; i < particle.size(); i++){
+	for (int i=0; i < particle.size(); i++){        
 		particle[i]->generateBond();
 	}
 }
@@ -627,8 +657,8 @@ void DEMsystem::estimateClusterRotation(){
 void DEMsystem::setParameterFileDEM(char *parameters_file_){
 	sprintf(parameters_file, "%s", parameters_file_);
 	string s_parameters_file = parameters_file;
-	int i_backslash = s_parameters_file.find_last_of( "/") + 1;
-	int i_extention = s_parameters_file.find( ".txt" );	
+	int i_backslash = (int)s_parameters_file.find_last_of( "/") + 1;
+	int i_extention = (int)s_parameters_file.find( ".txt" );
 	sprintf(parameters, "%s",
 			(s_parameters_file.substr( i_backslash, i_extention-i_backslash)).c_str());
 	cerr << " parameters = " << parameters << endl;
@@ -666,7 +696,7 @@ void DEMsystem::regeneration_onebyone(){
 
     double D_max = 0.;
     int most_stressed_bond = -1;
-    int n_regeneration_bond = regeneration_bond.size();
+    int n_regeneration_bond = (int)regeneration_bond.size();
     for (int i=0; i < n_regeneration_bond; i++){
         if ( D_max < bond[ regeneration_bond[ i ] ]->D_function ){
             D_max =  bond[ regeneration_bond[ i ] ]->D_function;
@@ -680,7 +710,7 @@ void DEMsystem::regeneration_onebyone(){
 void DEMsystem::rupture_onebyone(){
     double D_max = 0;
     int most_stressed_bond = -1;
-    int n_rupture_bond =  rupture_bond.size();
+    int n_rupture_bond = (int)rupture_bond.size();
     for (int i=0; i< n_rupture_bond; i++){
         if ( D_max < bond[ rupture_bond[ i ] ]->D_function ){
             D_max =  bond[ rupture_bond[ i ] ]->D_function;
@@ -1016,27 +1046,27 @@ void DEMsystem::outputLogDEM(){
     double average_contact_number = 2.0*number_of_bond / np;
 
 	fout_dem_log << simu_time << ' '; // 1
-    fout_dem_log << shearstrain  << ' '; // 1
-    fout_dem_log << shearrate << ' '; //2
-    fout_dem_log << radius_of_gyration << ' ' ; // 3
-    fout_dem_log << radius_of_gyration/init_radius_of_gyration << ' '; // 4
-    fout_dem_log << total_deformation << ' '; //5
-    fout_dem_log << step_deformation << ' '; //6
-    fout_dem_log << init_continuity << ' ' ; //7
-    fout_dem_log << average_contact_number << ' '; //8
-    fout_dem_log << number_of_bond << ' '; //9
-    fout_dem_log << counterRegenerate << ' '; //10
-    fout_dem_log << counterBreak << ' '; //11
-    fout_dem_log << total_force.norm() << ' ';//12
-    fout_dem_log << total_torque.norm() << ' ';//13
-    fout_dem_log << norm_total_stresslet << ' ';//14
-    fout_dem_log << force_trac_max << ' '; // 15
-    fout_dem_log << force_comp_max << ' '; // 16
-    fout_dem_log << force_slid_max << ' '; // 17
-    fout_dem_log << moment_bend_max << ' '; // 18
-    fout_dem_log << moment_tors_max << ' '; // 19
-    fout_dem_log << r_min << ' '; //20
-    fout_dem_log << r_max << ' '; //21
+    fout_dem_log << shearstrain  << ' '; // 2
+    fout_dem_log << shearrate << ' '; //3
+    fout_dem_log << radius_of_gyration << ' ' ; // 4
+    fout_dem_log << radius_of_gyration/init_radius_of_gyration << ' '; // 5
+    fout_dem_log << total_deformation << ' '; //6
+    fout_dem_log << step_deformation << ' '; //7
+    fout_dem_log << init_continuity << ' ' ; //8
+    fout_dem_log << average_contact_number << ' '; //9
+    fout_dem_log << number_of_bond << ' '; //10
+    fout_dem_log << counterRegenerate << ' '; //11
+    fout_dem_log << counterBreak << ' '; //12
+    fout_dem_log << total_force.norm() << ' ';//13
+    fout_dem_log << total_torque.norm() << ' ';//14
+    fout_dem_log << norm_total_stresslet << ' ';//15
+    fout_dem_log << force_trac_max << ' '; // 16
+    fout_dem_log << force_comp_max << ' '; // 17
+    fout_dem_log << force_slid_max << ' '; // 18
+    fout_dem_log << moment_bend_max << ' '; // 19
+    fout_dem_log << moment_tors_max << ' '; // 20
+    fout_dem_log << r_min << ' '; //21
+    fout_dem_log << r_max << ' '; //22
 //    fout_dem_log << count_MD_steps << ' '; // 22
     fout_dem_log << count_SD_calc << ' '; // 23
     fout_dem_log << total_stresslet[0] << ' ';//24

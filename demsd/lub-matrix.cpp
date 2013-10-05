@@ -6,12 +6,12 @@
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; either version 2
  * of the License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
@@ -30,6 +30,9 @@
 #include "lub.h" // cond_lub(), cond_lub_poly()
 #include "lub-matrix.h"
 
+#include <iomanip>
+#include <iostream>
+
 
 /*
  * INPUT
@@ -40,25 +43,25 @@
  */
 static void
 set_imax_lub_periodic (struct stokes *sys,
-		       int *imaxx, int *imaxy, int *imaxz)
+					   int *imaxx, int *imaxy, int *imaxz)
 {
-  double lubmax;
-  if (sys->lubmax <= 0.0)
+	double lubmax;
+	if (sys->lubmax <= 0.0)
     {
-      // if lubmax2 is not define, at least, take symmetric in x, y, z.
-      // set lubmax by max (lx, ly, lz)
-      lubmax = sys->lx;
-      if (sys->ly > lubmax) lubmax = sys->ly;
-      if (sys->lz > lubmax) lubmax = sys->lz;
+		// if lubmax2 is not define, at least, take symmetric in x, y, z.
+		// set lubmax by max (lx, ly, lz)
+		lubmax = sys->lx;
+		if (sys->ly > lubmax) lubmax = sys->ly;
+		if (sys->lz > lubmax) lubmax = sys->lz;
     }
-  else
+	else
     {
-      lubmax = sys->lubmax;
+		lubmax = sys->lubmax;
     }
-
-  *imaxx = (int)(lubmax / sys->lx) + 1;
-  *imaxy = (int)(lubmax / sys->ly) + 1;
-  *imaxz = (int)(lubmax / sys->lz) + 1;
+	
+	*imaxx = (int)(lubmax / sys->lx) + 1;
+	*imaxy = (int)(lubmax / sys->ly) + 1;
+	*imaxz = (int)(lubmax / sys->lz) + 1;
 }
 
 
@@ -74,140 +77,144 @@ set_imax_lub_periodic (struct stokes *sys,
  */
 void
 make_matrix_lub_3f (struct stokes *sys,
-		    double *mat)
+					double *mat)
 {
-  int i, j;
-  int i3;
-  int j3;
-  int n;
-
-  double tmp_pos [3];
-
-  int np = sys->np;
-  n = np * 3;
-  /* clear result */
-  for (i = 0; i < n * n; ++i)
+	int i, j;
+	int i3;
+	int j3;
+	int n;
+	
+	double tmp_pos [3];
+	
+	int np = sys->np;
+	n = np * 3;
+	/* clear result */
+	for (i = 0; i < n * n; ++i)
     {
-      mat [i] = 0.0;
+		mat [i] = 0.0;
     }
-
-  // set lubmax2 for cond_lub()
-  double lubmax2 = sys->lubmax * sys->lubmax;
-
-  // set imax[xyz] for periodic systems
-  // which covers enough images for sys->lubmax
-  int imaxx = 0;
-  int imaxy = 0;
-  int imaxz = 0;
-  if (sys->periodic != 0)
+	
+	// set lubmax2 for cond_lub()
+	double lubmax2 = sys->lubmax * sys->lubmax;
+	
+	
+	// set imax[xyz] for periodic systems
+	// which covers enough images for sys->lubmax
+	int imaxx = 0;
+	int imaxy = 0;
+	int imaxz = 0;
+	if (sys->periodic != 0)
     {
-      set_imax_lub_periodic (sys, &imaxx, &imaxy, &imaxz);
+		set_imax_lub_periodic (sys, &imaxx, &imaxy, &imaxz);
+		
     }
-
-
-  for (i = 0; i < np; ++i)
+	
+	
+	for (i = 0; i < np; ++i)
     {
-      i3 = i * 3;
-      for (j = i; j < np; ++j)
-	{
-	  /*
-	  if (list_ex_check (sys->ex_lub, i, j) == 1)
-	    {
-	      // j is in the exclusion list for i
-	      continue;
-	    }
-	  */
-
-	  j3 = j * 3;
-
-	  if (sys->periodic == 0)
-	    {
-	      // non-periodic
-	      if (sys->a == NULL)
+		i3 = i * 3;
+		
+		
+		for (j = i; j < np; ++j)
 		{
-		  // monodisperse
-		  if (cond_lub (sys->pos + i3, sys->pos + j3,
-				lubmax2) == 0)
-		    {
-		      matrix_lub_f_2b (sys,
-				       i, j,
-				       sys->pos + i3, sys->pos + j3,
-				       n, mat);
-		    }
-		}
-	      else
-		{
-		  // polydisperse
-		  if (cond_lub_poly (sys->pos + i3, sys->pos + j3,
-				     sys->a[i], sys->a[j],
-				     lubmax2) == 0)
-		    {
-		      matrix_lub_f_2b_poly (sys,
-					    i, j,
-					    sys->pos + i3, sys->pos + j3,
-					    i, j,
-					    n, mat);
-		    }
-		}
-	    }
-	  else
-	    {
-	      // periodic system
-	      int ix, iy, iz;
-	      for (ix = -imaxx; ix <= imaxx; ix++)
-		{
-		  tmp_pos[0] = sys->pos[j3 + 0] + sys->lx * (double)ix;
-		  for (iy = -imaxy; iy <= imaxy; iy++)
-		    {
-		      tmp_pos[1] = sys->pos[j3 + 1] + sys->ly * (double)iy;
-		      for (iz = -imaxz; iz <= imaxz; iz++)
+			/*
+			 if (list_ex_check (sys->ex_lub, i, j) == 1)
+			 {
+			 // j is in the exclusion list for i
+			 continue;
+			 }
+			 */
+			
+			j3 = j * 3;
+			
+			if (sys->periodic == 0)
 			{
-			  tmp_pos[2] = sys->pos[j3 + 2] + sys->lz * (double)iz;
-
-			  /* shift for shear */
-			  if (sys->shear_mode == 1)
-			    {
-			      tmp_pos[0] += (double)iy * sys->shear_shift;
-			    }
-			  else if (sys->shear_mode == 2)
-			    {
-			      tmp_pos[0] += (double)iz * sys->shear_shift;
-			    }
-
-			  if (sys->a == NULL)
-			    {
-			      // monodisperse
-			      if (cond_lub (sys->pos + i3, tmp_pos,
-					    lubmax2) == 0)
+				// non-periodic
+				if (sys->a == NULL)
 				{
-				  matrix_lub_f_2b
-				    (sys,
-				     i, j,
-				     sys->pos + i3, tmp_pos,
-				     n, mat);
+					// monodisperse
+					if (cond_lub (sys->pos + i3, sys->pos + j3,
+								  lubmax2) == 0)
+					{
+						matrix_lub_f_2b (sys,
+										 i, j,
+										 sys->pos + i3, sys->pos + j3,
+										 n, mat);
+					}
 				}
-			    }
-			  else
-			    {
-			      // polydisperse
-			      if (cond_lub_poly (sys->pos + i3, tmp_pos,
-						 sys->a[i], sys->a[j],
-						 lubmax2) == 0)
+				else
 				{
-				  matrix_lub_f_2b_poly
-				    (sys,
-				     i, j,
-				     sys->pos + i3, tmp_pos,
-				     i, j,
-				     n, mat);
+					// polydisperse
+					if (cond_lub_poly (sys->pos + i3, sys->pos + j3,
+									   sys->a[i], sys->a[j],
+									   lubmax2) == 0)
+					{
+						matrix_lub_f_2b_poly (sys,
+											  i, j,
+											  sys->pos + i3, sys->pos + j3,
+											  i, j,
+											  n, mat);
+					}
 				}
-			    }
 			}
-		    }
+			else
+			{
+				// periodic system
+				int ix, iy, iz;
+				for (ix = -imaxx; ix <= imaxx; ix++)
+				{
+					tmp_pos[0] = sys->pos[j3 + 0] + sys->lx * (double)ix;
+					for (iy = -imaxy; iy <= imaxy; iy++)
+					{
+						tmp_pos[1] = sys->pos[j3 + 1] + sys->ly * (double)iy;
+						for (iz = -imaxz; iz <= imaxz; iz++)
+						{
+							tmp_pos[2] = sys->pos[j3 + 2] + sys->lz * (double)iz;
+							
+							/* shift for shear */
+							if (sys->shear_mode == 1)
+							{
+								tmp_pos[0] += (double)iy * sys->shear_shift;
+							}
+							else if (sys->shear_mode == 2)
+							{
+								tmp_pos[0] += (double)iz * sys->shear_shift;
+							}
+							
+							if (sys->a == NULL)
+							{
+								// monodisperse
+								if (cond_lub (sys->pos + i3, tmp_pos,
+											  lubmax2) == 0)
+								{
+									matrix_lub_f_2b
+									(sys,
+									 i, j,
+									 sys->pos + i3, tmp_pos,
+									 n, mat);
+								}
+							}
+							else
+							{
+								// polydisperse
+								if (cond_lub_poly (sys->pos + i3, tmp_pos,
+												   sys->a[i], sys->a[j],
+												   lubmax2) == 0)
+								{
+									matrix_lub_f_2b_poly
+									(sys,
+									 i, j,
+									 sys->pos + i3, tmp_pos,
+									 i, j,
+									 n, mat);
+								}
+							}
+						}
+					}
+				}
+				// endif for periodic
+			}
 		}
-	      // endif for periodic
-	    }
-	}
     }
 }
 
@@ -223,139 +230,139 @@ make_matrix_lub_3f (struct stokes *sys,
  */
 void
 make_matrix_lub_3ft (struct stokes *sys,
-		     double *mat)
+					 double *mat)
 {
-  int i, j;
-  int i3, j3;
-  int n;
-
-  double tmp_pos [3];
-
-  int np = sys->np;
-  n = np * 6;
-  /* clear result */
-  for (i = 0; i < n * n; ++i)
+	int i, j;
+	int i3, j3;
+	int n;
+	
+	double tmp_pos [3];
+	
+	int np = sys->np;
+	n = np * 6;
+	/* clear result */
+	for (i = 0; i < n * n; ++i)
     {
-      mat [i] = 0.0;
+		mat [i] = 0.0;
     }
-
-  // set lubmax2 for cond_lub()
-  double lubmax2 = sys->lubmax * sys->lubmax;
-
-  // set imax[xyz] for periodic systems
-  // which covers enough images for sys->lubmax
-  int imaxx = 0;
-  int imaxy = 0;
-  int imaxz = 0;
-  if (sys->periodic != 0)
+	
+	// set lubmax2 for cond_lub()
+	double lubmax2 = sys->lubmax * sys->lubmax;
+	
+	// set imax[xyz] for periodic systems
+	// which covers enough images for sys->lubmax
+	int imaxx = 0;
+	int imaxy = 0;
+	int imaxz = 0;
+	if (sys->periodic != 0)
     {
-      set_imax_lub_periodic (sys, &imaxx, &imaxy, &imaxz);
+		set_imax_lub_periodic (sys, &imaxx, &imaxy, &imaxz);
     }
-
-
-  for (i = 0; i < np; ++i)
+	
+	
+	for (i = 0; i < np; ++i)
     {
-      i3 = i * 3;
-      for (j = i; j < np; ++j)
-	{
-	  /*
-	  if (list_ex_check (sys->ex_lub, i, j) == 1)
-	    {
-	      // j is in the exclusion list for i
-	      continue;
-	    }
-	  */
-
-	  j3 = j * 3;
-
-	  if (sys->periodic == 0)
-	    {
-	      // non-periodic
-	      if (sys->a == NULL)
+		i3 = i * 3;
+		for (j = i; j < np; ++j)
 		{
-		  // monodisperse
-		  if (cond_lub (sys->pos + i3, sys->pos + j3,
-				lubmax2) == 0)
-		    {
-		      matrix_lub_ft_2b (sys,
-					i, j,
-					sys->pos + i3, sys->pos + j3,
-					n, mat);
-		    }
-		}
-	      else
-		{
-		  // polydisperse
-		  if (cond_lub_poly (sys->pos + i3, sys->pos + j3,
-				     sys->a[i], sys->a[j],
-				     lubmax2) == 0)
-		    {
-		      matrix_lub_ft_2b_poly (sys,
-					     i, j,
-					     sys->pos + i3, sys->pos + j3,
-					     i, j,
-					     n, mat);
-		    }
-		}
-	    }
-	  else
-	    {
-	      // periodic system
-	      int ix, iy, iz;
-	      for (ix = -imaxx; ix <= imaxx; ix++)
-		{
-		  tmp_pos[0] = sys->pos[j3 + 0] + sys->lx * (double)ix;
-		  for (iy = -imaxy; iy <= imaxy; iy++)
-		    {
-		      tmp_pos[1] = sys->pos[j3 + 1] + sys->ly * (double)iy;
-		      for (iz = -imaxz; iz <= imaxz; iz++)
+			/*
+			 if (list_ex_check (sys->ex_lub, i, j) == 1)
+			 {
+			 // j is in the exclusion list for i
+			 continue;
+			 }
+			 */
+			
+			j3 = j * 3;
+			
+			if (sys->periodic == 0)
 			{
-			  tmp_pos[2] = sys->pos[j3 + 2] + sys->lz * (double)iz;
-
-			  /* shift for shear */
-			  if (sys->shear_mode == 1)
-			    {
-			      tmp_pos[0] += (double)iy * sys->shear_shift;
-			    }
-			  else if (sys->shear_mode == 2)
-			    {
-			      tmp_pos[0] += (double)iz * sys->shear_shift;
-			    }
-
-			  if (sys->a == NULL)
-			    {
-			      // monodisperse
-			      if (cond_lub (sys->pos + i3, tmp_pos,
-					    lubmax2) == 0)
+				// non-periodic
+				if (sys->a == NULL)
 				{
-				  matrix_lub_ft_2b
-				    (sys,
-				     i, j,
-				     sys->pos + i3, tmp_pos,
-				     n, mat);
+					// monodisperse
+					if (cond_lub (sys->pos + i3, sys->pos + j3,
+								  lubmax2) == 0)
+					{
+						matrix_lub_ft_2b (sys,
+										  i, j,
+										  sys->pos + i3, sys->pos + j3,
+										  n, mat);
+					}
 				}
-			    }
-			  else
-			    {
-			      // polydisperse
-			      if (cond_lub_poly (sys->pos + i3, tmp_pos,
-						 sys->a[i], sys->a[j],
-						 lubmax2) == 0)
+				else
 				{
-				  matrix_lub_ft_2b_poly
-				    (sys,
-				     i, j,
-				     sys->pos + i3, tmp_pos,
-				     i, j,
-				     n, mat);
+					// polydisperse
+					if (cond_lub_poly (sys->pos + i3, sys->pos + j3,
+									   sys->a[i], sys->a[j],
+									   lubmax2) == 0)
+					{
+						matrix_lub_ft_2b_poly (sys,
+											   i, j,
+											   sys->pos + i3, sys->pos + j3,
+											   i, j,
+											   n, mat);
+					}
 				}
-			    }
 			}
-		    }
+			else
+			{
+				// periodic system
+				int ix, iy, iz;
+				for (ix = -imaxx; ix <= imaxx; ix++)
+				{
+					tmp_pos[0] = sys->pos[j3 + 0] + sys->lx * (double)ix;
+					for (iy = -imaxy; iy <= imaxy; iy++)
+					{
+						tmp_pos[1] = sys->pos[j3 + 1] + sys->ly * (double)iy;
+						for (iz = -imaxz; iz <= imaxz; iz++)
+						{
+							tmp_pos[2] = sys->pos[j3 + 2] + sys->lz * (double)iz;
+							
+							/* shift for shear */
+							if (sys->shear_mode == 1)
+							{
+								tmp_pos[0] += (double)iy * sys->shear_shift;
+							}
+							else if (sys->shear_mode == 2)
+							{
+								tmp_pos[0] += (double)iz * sys->shear_shift;
+							}
+							
+							if (sys->a == NULL)
+							{
+								// monodisperse
+								if (cond_lub (sys->pos + i3, tmp_pos,
+											  lubmax2) == 0)
+								{
+									matrix_lub_ft_2b
+									(sys,
+									 i, j,
+									 sys->pos + i3, tmp_pos,
+									 n, mat);
+								}
+							}
+							else
+							{
+								// polydisperse
+								if (cond_lub_poly (sys->pos + i3, tmp_pos,
+												   sys->a[i], sys->a[j],
+												   lubmax2) == 0)
+								{
+									matrix_lub_ft_2b_poly
+									(sys,
+									 i, j,
+									 sys->pos + i3, tmp_pos,
+									 i, j,
+									 n, mat);
+								}
+							}
+						}
+					}
+				}
+				// endif for periodic
+			}
 		}
-	      // endif for periodic
-	    }
-	}
     }
 }
 
@@ -371,137 +378,137 @@ make_matrix_lub_3ft (struct stokes *sys,
  */
 void
 make_matrix_lub_3fts (struct stokes *sys,
-		      double *mat)
+					  double *mat)
 {
-  int i, j;
-  int i3, j3;
-  int n;
-
-  double tmp_pos [3];
-
-  int np = sys->np;
-  n = np * 11;
-  /* clear result */
-  for (i = 0; i < n * n; ++i)
+	int i, j;
+	int i3, j3;
+	int n;
+	
+	double tmp_pos [3];
+	
+	int np = sys->np;
+	n = np * 11;
+	/* clear result */
+	for (i = 0; i < n * n; ++i)
     {
-      mat [i] = 0.0;
+		mat [i] = 0.0;
     }
-
-  // set lubmax2 for cond_lub()
-  double lubmax2 = sys->lubmax * sys->lubmax;
-
-  // set imax[xyz] for periodic systems
-  // which covers enough images for sys->lubmax
-  int imaxx = 0;
-  int imaxy = 0;
-  int imaxz = 0;
-  if (sys->periodic != 0)
+	
+	// set lubmax2 for cond_lub()
+	double lubmax2 = sys->lubmax * sys->lubmax;
+	
+	// set imax[xyz] for periodic systems
+	// which covers enough images for sys->lubmax
+	int imaxx = 0;
+	int imaxy = 0;
+	int imaxz = 0;
+	if (sys->periodic != 0)
     {
-      set_imax_lub_periodic (sys, &imaxx, &imaxy, &imaxz);
+		set_imax_lub_periodic (sys, &imaxx, &imaxy, &imaxz);
     }
-
-
-  for (i = 0; i < np; ++i)
+	
+	
+	for (i = 0; i < np; ++i)
     {
-      i3 = i * 3;
-      for (j = i; j < np; ++j)
-	{
-	  /*
-	  if (list_ex_check (sys->ex_lub, i, j) == 1)
-	    {
-	      // j is in the exclusion list for i
-	      continue;
-	    }
-	  */
-
-	  j3 = j * 3;
-
-	  if (sys->periodic == 0)
-	    {
-	      // non-periodic
-	      if (sys->a == NULL)
+		i3 = i * 3;
+		for (j = i; j < np; ++j)
 		{
-		  // monodisperse
-		  if (cond_lub (sys->pos + i3, sys->pos + j3,
-				lubmax2) == 0)
-		    {
-		      matrix_lub_fts_2b (sys,
-					 i, j,
-					 sys->pos + i3, sys->pos + j3,
-					 n, mat);
-		    }
-		}
-	      else
-		{
-		  // polydisperse
-		  if (cond_lub_poly (sys->pos + i3, sys->pos + j3,
-				     sys->a[i], sys->a[j],
-				     lubmax2) == 0)
-		    {
-		      matrix_lub_fts_2b_poly (sys,
-					      i, j,
-					      sys->pos + i3, sys->pos + j3,
-					      i, j,
-					      n, mat);
-		    }
-		}
-	    }
-	  else
-	    {
-	      // periodic system
-	      int ix, iy, iz;
-	      for (ix = -imaxx; ix <= imaxx; ix++)
-		{
-		  tmp_pos[0] = sys->pos[j3 + 0] + sys->lx * (double)ix;
-		  for (iy = -imaxy; iy <= imaxy; iy++)
-		    {
-		      tmp_pos[1] = sys->pos[j3 + 1] + sys->ly * (double)iy;
-		      for (iz = -imaxz; iz <= imaxz; iz++)
+			/*
+			 if (list_ex_check (sys->ex_lub, i, j) == 1)
+			 {
+			 // j is in the exclusion list for i
+			 continue;
+			 }
+			 */
+			
+			j3 = j * 3;
+			
+			if (sys->periodic == 0)
 			{
-			  tmp_pos[2] = sys->pos[j3 + 2] + sys->lz * (double)iz;
-
-			  /* shift for shear */
-			  if (sys->shear_mode == 1)
-			    {
-			      tmp_pos[0] += (double)iy * sys->shear_shift;
-			    }
-			  else if (sys->shear_mode == 2)
-			    {
-			      tmp_pos[0] += (double)iz * sys->shear_shift;
-			    }
-
-			  if (sys->a == NULL)
-			    {
-			      // monodisperse
-			      if (cond_lub (sys->pos + i3, tmp_pos,
-					    lubmax2) == 0)
+				// non-periodic
+				if (sys->a == NULL)
 				{
-				  matrix_lub_fts_2b
-				    (sys,
-				     i, j,
-				     sys->pos + i3, tmp_pos,
-				     n, mat);
+					// monodisperse
+					if (cond_lub (sys->pos + i3, sys->pos + j3,
+								  lubmax2) == 0)
+					{
+						matrix_lub_fts_2b (sys,
+										   i, j,
+										   sys->pos + i3, sys->pos + j3,
+										   n, mat);
+					}
 				}
-			    }
-			  else
-			    {
-			      // polydisperse
-			      if (cond_lub_poly (sys->pos + i3, tmp_pos,
-						 sys->a[i], sys->a[j],
-						 lubmax2) == 0)
+				else
 				{
-				  matrix_lub_fts_2b_poly
-				    (sys,
-				     i, j,
-				     sys->pos + i3, tmp_pos,
-				     i, j,
-				     n, mat);
+					// polydisperse
+					if (cond_lub_poly (sys->pos + i3, sys->pos + j3,
+									   sys->a[i], sys->a[j],
+									   lubmax2) == 0)
+					{
+						matrix_lub_fts_2b_poly (sys,
+												i, j,
+												sys->pos + i3, sys->pos + j3,
+												i, j,
+												n, mat);
+					}
 				}
-			    }
 			}
-		    }
+			else
+			{
+				// periodic system
+				int ix, iy, iz;
+				for (ix = -imaxx; ix <= imaxx; ix++)
+				{
+					tmp_pos[0] = sys->pos[j3 + 0] + sys->lx * (double)ix;
+					for (iy = -imaxy; iy <= imaxy; iy++)
+					{
+						tmp_pos[1] = sys->pos[j3 + 1] + sys->ly * (double)iy;
+						for (iz = -imaxz; iz <= imaxz; iz++)
+						{
+							tmp_pos[2] = sys->pos[j3 + 2] + sys->lz * (double)iz;
+							
+							/* shift for shear */
+							if (sys->shear_mode == 1)
+							{
+								tmp_pos[0] += (double)iy * sys->shear_shift;
+							}
+							else if (sys->shear_mode == 2)
+							{
+								tmp_pos[0] += (double)iz * sys->shear_shift;
+							}
+							
+							if (sys->a == NULL)
+							{
+								// monodisperse
+								if (cond_lub (sys->pos + i3, tmp_pos,
+											  lubmax2) == 0)
+								{
+									matrix_lub_fts_2b
+									(sys,
+									 i, j,
+									 sys->pos + i3, tmp_pos,
+									 n, mat);
+								}
+							}
+							else
+							{
+								// polydisperse
+								if (cond_lub_poly (sys->pos + i3, tmp_pos,
+												   sys->a[i], sys->a[j],
+												   lubmax2) == 0)
+								{
+									matrix_lub_fts_2b_poly
+									(sys,
+									 i, j,
+									 sys->pos + i3, tmp_pos,
+									 i, j,
+									 n, mat);
+								}
+							}
+						}
+					}
+				}
+			}
 		}
-	    }
-	}
     }
 }

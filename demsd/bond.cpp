@@ -10,6 +10,7 @@
 #include "bond.h"
 
 Bond::Bond(int d0, int d1, DEMsystem &dem_){
+    cerr << "!!!" << endl;
     dem = &dem_;
 	status = 1;
     initial_bond = dem->initialprocess;

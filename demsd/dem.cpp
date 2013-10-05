@@ -12,7 +12,9 @@
 void demSimulation(int argc, char** argv){
     SDsystem sd_sys;    
     DEMsystem dem(sd_sys);
-    int lub_correction = 0; // lubrication correction is not used.
+    /* lubrication correction is not used.
+     */
+    int lub_correction = 0; 
 	dem.setParameterFileDEM(argv[2]);   
     /* Import positions of the cluster: (file, skip lines)*/
 	dem.importCluster(argv[3], atoi(argv[4]));
@@ -23,14 +25,10 @@ void demSimulation(int argc, char** argv){
     dem.readParameterBond();
     dem.readParameterShearProcess();    
 	/* Setup simulation */
-    if (dem.method_hydroint > 0){
-        sd_sys.setFlowType('s'); // set shear flow
-    }
 	dem.initDEM();
     if (dem.method_hydroint > 0){
-        sd_sys.initFlowModel(dem.np,
-                             lub_correction,
-                             false);
+        sd_sys.setFlowType('s'); // Set shear flow in SD.        
+        sd_sys.initFlowModel(dem.np, lub_correction, false);
     }
     /* Main simulation */
 	if ( dem.shear_process == "stepwise"){
@@ -38,7 +36,7 @@ void demSimulation(int argc, char** argv){
     } else if ( dem.shear_process == "you_can_define_test"){
         // youCanDefineTest(sd_sys, dem);
     } else {
-        cerr << dem.shear_process << " is not programed." << endl;
+        cerr << dem.shear_process << " is not programmed." << endl;
     }
     
 	return;
@@ -76,7 +74,7 @@ void shearStepwiseIncreaseTest(SDsystem &sd_sys,
             while (dem.shearstrain <= nexttime_output){
                 dem.calcInterParticleForce();
                 if (dem.method_hydroint == 0){
-                    dem.moveOverdampedMotionFDA();
+                    dem.moveOverdampedMotionFDAShear();
                 } else {
                     dem.moveOverdampedMotionSDMov();
                 }
@@ -130,3 +128,33 @@ void shearStepwiseIncreaseTest(SDsystem &sd_sys,
         } while (dem.shearstrain < shearstrain_end);    
     }
 }
+
+
+void testContactModel(int argc, char** argv){
+    //
+    // UNFINISHED...
+    //
+    DEMsystem dem;
+    dem.setBondFile(argv[2],argv[3]);
+    dem.readParameterBond();
+    dem.setTwoParticleSystem();
+	dem.initDEM();
+    dem.openOutputFileDEM();
+    dem.outputYaplotDEM();
+    dem.particle[1]->p.z += 0.3;
+    dem.h_stepsize = 0.0001;
+    dem.outputYaplotDEM();
+    while(1){
+        dem.calcInterParticleForce();
+        dem.moveOverdampedMotionFDA();
+        dem.outputYaplotDEM();
+    }
+
+}
+
+
+
+
+
+
+

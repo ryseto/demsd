@@ -26,7 +26,7 @@ void outputVector(ofstream &fout, vec3d &vec){
 
 vec3d calcCenterOfMass(vector<vec3d> &pos_vec){
     vec3d center_of_mass(0,0,0);
-    int np = pos_vec.size();
+    int np = (int)pos_vec.size();
     for (int i=0; i < np; i ++){
         center_of_mass += pos_vec[i];
     }
@@ -116,7 +116,7 @@ void calcDragAndTorque(int argc, char** argv){
     sd_sys.setFlowType(type_of_flow);
     /* init() is called in this function*/
 	importCluster(cluster_file, skip_line, pos);
-    int np = pos.size();
+    int np = (int)pos.size();
     sd_sys.initFlowModel(np, lub_correction, true);
 
     for (int i = 0; i < np; i++){

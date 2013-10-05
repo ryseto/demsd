@@ -15,10 +15,7 @@
 using namespace std;
 
 void demSimulation(int argc, char** argv);
-
-
-
 void shearStepwiseIncreaseTest(SDsystem &sd_sys, DEMsystem &dem);
-void shearStepwiseIncreaseTest(SDsystem &sd_sys,
-                               DEMsystem &dem); 
 
+
+void testContactModel(int argc, char** argv);

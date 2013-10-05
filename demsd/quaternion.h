@@ -102,7 +102,9 @@ public:
     
     inline void infinitesimalRotation(vec3d & dw){
         q0 -= 0.5*dot(q, dw);
-        q += 0.5*(q0*dw + cross(q, dw));
+        //q += 0.5*(q0*dw + cross(q, dw));
+        // Mistake!! 
+        q += 0.5*(q0*dw - cross(q, dw));
     }
     
     inline double norm(){

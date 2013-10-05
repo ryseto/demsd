@@ -13,6 +13,7 @@
 #include "dem.h"
 #include "common.h"
 #include "dragforces.h"
+#include "ShearRheology.h"
 using namespace std;
 
 int main (int argc, char** argv) {
@@ -25,6 +26,10 @@ int main (int argc, char** argv) {
 	}
     
     switch (argv[1][0]){
+		case 'R':
+			shearRheology(argc, argv);
+			break;
+			
         case 'D':
             /* DEM simulation for an isolated cluster in shear flow.
              * The method is explained in the publification;
@@ -37,6 +42,12 @@ int main (int argc, char** argv) {
                 return 0;
             }
             demSimulation(argc, argv);
+            break;
+        case 'C':
+            /*
+             * Test for contact model
+             */ 
+            testContactModel(argc, argv);
             break;
         case 'u':
         case 's':
