@@ -66,8 +66,6 @@ void shearRheology(int argc, char** argv){
 	 */
 	stokes_set_iter(sd, "gmres", 2000, 20, 1.0e-6, 0, stdout);
 	//stokes_set_iter(sd, "sta", 2000, 20, 1.0e-6, 0, stdout);
-	/////////////////////////
-
 	//sd->twobody_lub = lub_correction_;
     // For shear flows,"FTS version" is required.
   
