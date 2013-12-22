@@ -27,9 +27,9 @@ void shearRheology(int argc, char** argv){
 
 	sd->version = 2; /* 0 = F, 1 = FT, 2 = FTS  */
     sd->periodic = 1; /* 0 = non periodic, 1 = periodic */
-	
+
     stokes_set_np(sd, np, nm);
-//	sd->twobody_nmax = 100;
+	//	sd->twobody_nmax = 100;
 	sd->twobody_lub = 1;
 	/*
      * Set parameters for the Ichiki's codes.
@@ -147,9 +147,7 @@ void shearRheology(int argc, char** argv){
 	
 	//	solve_mob_3ft(sd, force, torque, veolocity, omega);
 	solve_mob_3fts(sd, force, torque, rate_of_strain, velocity, omega, stresslet);
-	
-	
-	
+
 	for (int i=0;i<10; i++){
 		int j = 3*i;
 		cout << "r " << sd->a[i] << endl;

@@ -10,12 +10,12 @@
 #include "dem.h"
 
 void demSimulation(int argc, char** argv){
-    SDsystem sd_sys;    
+    SDsystem sd_sys;
     DEMsystem dem(sd_sys);
     /* lubrication correction is not used.
      */
-    int lub_correction = 0; 
-	dem.setParameterFileDEM(argv[2]);   
+    int lub_correction = 0;
+	dem.setParameterFileDEM(argv[2]);
     /* Import positions of the cluster: (file, skip lines)*/
 	dem.importCluster(argv[3], atoi(argv[4]));
     /* You can add arbitary string for name of outpuf file. */
@@ -23,11 +23,11 @@ void demSimulation(int argc, char** argv){
     /* Read parameter file */
     dem.readParameterFileDEM();
     dem.readParameterBond();
-    dem.readParameterShearProcess();    
+    dem.readParameterShearProcess();
 	/* Setup simulation */
 	dem.initDEM();
     if (dem.method_hydroint > 0){
-        sd_sys.setFlowType('s'); // Set shear flow in SD.        
+        sd_sys.setFlowType('s'); // Set shear flow in SD.
         sd_sys.initFlowModel(dem.np, lub_correction, false);
     }
     /* Main simulation */
@@ -38,12 +38,11 @@ void demSimulation(int argc, char** argv){
     } else {
         cerr << dem.shear_process << " is not programmed." << endl;
     }
-    
 	return;
 }
 
 void shearStepwiseIncreaseTest(SDsystem &sd_sys,
-                               DEMsystem &dem){    
+                               DEMsystem &dem){
     double r_exponent = 1.0 /(dem.stepnumber_shearrate - 1);
     dem.incrementratio_shearrate = pow(dem.shearrate_max/dem.shearrate_min , r_exponent);
     dem.openOutputFileDEM();
@@ -60,7 +59,7 @@ void shearStepwiseIncreaseTest(SDsystem &sd_sys,
     for(int m = 0; m < dem.stepnumber_shearrate; m++){
         /*
          * Change shear rate.
-         */ 
+         */
         if (m > 0){
             dem.shearrate *= dem.incrementratio_shearrate;
         }
@@ -90,7 +89,7 @@ void shearStepwiseIncreaseTest(SDsystem &sd_sys,
                     dem.estimateClusterRotation();
                     if ( dem.step_deformation > dem.critical_deformation_SD ){
                         cerr << "renew matrix" << ' ' << dem.step_deformation << endl;
-                        dem.shiftClusterToCenter();                    
+                        dem.shiftClusterToCenter();
                         dem.getSDMovMatrix();
                         dem.resetDeformation();
                         if (dem.version[0] == 'o'){
@@ -100,11 +99,11 @@ void shearStepwiseIncreaseTest(SDsystem &sd_sys,
                         if (dem.step_deformation > 100){
                             cerr << "the simulation failed." << endl;
                             exit(1);
-                        }                        
+                        }
                     }
                 }
                 if ( step_counter++ % 200 == 0){
-                    dem.shiftClusterToCenter(); 
+                    dem.shiftClusterToCenter();
                     dem.q_rot.normalize();
                     for (int i=0; i < dem.np; i++){
                         dem.particle[i]->setNorm_u(); /*********** IMPORTANT ************/
@@ -125,10 +124,9 @@ void shearStepwiseIncreaseTest(SDsystem &sd_sys,
             dem.outputLogDEM();
             dem.outputData();
             dem.outputConfiguration();
-        } while (dem.shearstrain < shearstrain_end);    
+        } while (dem.shearstrain < shearstrain_end);
     }
 }
-
 
 void testContactModel(int argc, char** argv){
     //
@@ -149,12 +147,5 @@ void testContactModel(int argc, char** argv){
         dem.moveOverdampedMotionFDA();
         dem.outputYaplotDEM();
     }
-
+	
 }
-
-
-
-
-
-
-

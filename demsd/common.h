@@ -59,11 +59,6 @@ cout << "c " << X << ' ' << Y << ' ' << Z << endl;
 cout << "o " << X << ' ' << Y << ' ' << Z  << endl;
 
 
-#define SIN fast_sin // @@@@@@@@@@@@@@@@@@@@@@@@@@@@
-#define COS fast_cos
-inline double fast_sin(double x){return x*(1.0 - 0.1666666667*x*x );}
-inline double fast_cos(double x){return 1.0 - 0.5*x*x;}
-inline double sqrt_1(double x){return 1.0 + (x - 1.0) * ( 0.625 - 0.125*x);}
 
 struct ConnectPoint {
 	int bond;
