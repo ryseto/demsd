@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		D93EEBF91519CE3800CC77EF /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D93EEBF81519CE3800CC77EF /* main.cpp */; };
 		D93EEBFB1519CE3800CC77EF /* demsd.1 in CopyFiles */ = {isa = PBXBuildFile; fileRef = D93EEBFA1519CE3800CC77EF /* demsd.1 */; };
+		D9AD89F91867740F001A0AFA /* Accelerate.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D9AD89F7186770EB001A0AFA /* Accelerate.framework */; };
 		D9AFFAD71519DA35008A7178 /* ewald-3ft-matrix.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D9AFFA971519DA35008A7178 /* ewald-3ft-matrix.cpp */; };
 		D9AFFAD81519DA35008A7178 /* ewald-3ft.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D9AFFA991519DA35008A7178 /* ewald-3ft.cpp */; };
 		D9AFFAD91519DA35008A7178 /* XA-slip.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D9AFFA9B1519DA35008A7178 /* XA-slip.cpp */; };
@@ -70,7 +71,6 @@
 		D9AFFB5D151A1EE9008A7178 /* bond.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D9AFFB55151A1EE9008A7178 /* bond.cpp */; };
 		D9AFFB5E151A1EE9008A7178 /* particle.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D9AFFB58151A1EE9008A7178 /* particle.cpp */; };
 		D9AFFB69151A20B0008A7178 /* old_system.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D9AFFB67151A20B0008A7178 /* old_system.cpp */; };
-		D9D8FD33164B1F770093E145 /* Accelerate.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D9D8FD32164B1F770093E145 /* Accelerate.framework */; };
 		D9E5211D1529B1F0008FB98D /* dem.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D9E5211C1529B1F0008FB98D /* dem.cpp */; };
 /* End PBXBuildFile section */
 
@@ -93,6 +93,7 @@
 		D93EEBF81519CE3800CC77EF /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 		D93EEBFA1519CE3800CC77EF /* demsd.1 */ = {isa = PBXFileReference; lastKnownFileType = text.man; path = demsd.1; sourceTree = "<group>"; };
 		D9712A79164D4C9B00CE7B45 /* vec3d.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = vec3d.h; sourceTree = "<group>"; };
+		D9AD89F7186770EB001A0AFA /* Accelerate.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accelerate.framework; path = System/Library/Frameworks/Accelerate.framework; sourceTree = SDKROOT; };
 		D9AFFA971519DA35008A7178 /* ewald-3ft-matrix.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = "ewald-3ft-matrix.cpp"; sourceTree = "<group>"; };
 		D9AFFA981519DA35008A7178 /* ewald-3ft-matrix.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "ewald-3ft-matrix.h"; sourceTree = "<group>"; };
 		D9AFFA991519DA35008A7178 /* ewald-3ft.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = "ewald-3ft.cpp"; sourceTree = "<group>"; };
@@ -198,7 +199,6 @@
 		D9AFFB68151A20B0008A7178 /* old_system.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = old_system.h; sourceTree = "<group>"; };
 		D9B9529216803EEF00CCABCD /* memory-check.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "memory-check.h"; sourceTree = "<group>"; };
 		D9D7C8EF164ADF29007B188C /* ShearRheology.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ShearRheology.h; sourceTree = "<group>"; };
-		D9D8FD32164B1F770093E145 /* Accelerate.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Accelerate.framework; sourceTree = "<group>"; };
 		D9E5211C1529B1F0008FB98D /* dem.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = dem.cpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -207,7 +207,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				D9D8FD33164B1F770093E145 /* Accelerate.framework in Frameworks */,
+				D9AD89F91867740F001A0AFA /* Accelerate.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -217,7 +217,7 @@
 		D93EEBE91519CE3700CC77EF = {
 			isa = PBXGroup;
 			children = (
-				D9D8FD32164B1F770093E145 /* Accelerate.framework */,
+				D9AD89F7186770EB001A0AFA /* Accelerate.framework */,
 				D9AFFA8C1519D71D008A7178 /* libstokes */,
 				D9AFFB031519DA4C008A7178 /* libiter */,
 				D93EEBF71519CE3800CC77EF /* demsd */,
@@ -492,7 +492,7 @@
 				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
 				CLANG_ENABLE_OBJC_ARC = YES;
 				COPY_PHASE_STRIP = YES;
-				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_C_LANGUAGE_STANDARD = "compiler-default";
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
 				GCC_OPTIMIZATION_LEVEL = 0;
@@ -503,12 +503,13 @@
 				GCC_PREPROCESSOR_DEFINITIONS_NOT_USED_IN_PRECOMPS = "OSX=1";
 				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
 				GCC_VERSION = "";
-				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
-				GCC_WARN_ABOUT_RETURN_TYPE = YES;
-				GCC_WARN_UNINITIALIZED_AUTOS = YES;
-				GCC_WARN_UNUSED_VARIABLE = YES;
-				MACOSX_DEPLOYMENT_TARGET = 10.8;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = NO;
+				GCC_WARN_ABOUT_RETURN_TYPE = NO;
+				GCC_WARN_UNINITIALIZED_AUTOS = NO;
+				GCC_WARN_UNUSED_VARIABLE = NO;
+				MACOSX_DEPLOYMENT_TARGET = 10.9;
 				ONLY_ACTIVE_ARCH = NO;
+				OTHER_LDFLAGS = "";
 				SDKROOT = macosx;
 				VALID_ARCHS = x86_64;
 			};
@@ -521,18 +522,19 @@
 				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
 				CLANG_ENABLE_OBJC_ARC = YES;
 				COPY_PHASE_STRIP = YES;
-				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				GCC_C_LANGUAGE_STANDARD = gnu99;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				GCC_C_LANGUAGE_STANDARD = "compiler-default";
 				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
 				GCC_OPTIMIZATION_LEVEL = 3;
 				GCC_PREPROCESSOR_DEFINITIONS_NOT_USED_IN_PRECOMPS = "OSX=1";
 				GCC_VERSION = "";
-				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
-				GCC_WARN_ABOUT_RETURN_TYPE = YES;
-				GCC_WARN_UNINITIALIZED_AUTOS = YES;
-				GCC_WARN_UNUSED_VARIABLE = YES;
-				MACOSX_DEPLOYMENT_TARGET = 10.8;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = NO;
+				GCC_WARN_ABOUT_RETURN_TYPE = NO;
+				GCC_WARN_UNINITIALIZED_AUTOS = NO;
+				GCC_WARN_UNUSED_VARIABLE = NO;
+				MACOSX_DEPLOYMENT_TARGET = 10.9;
 				ONLY_ACTIVE_ARCH = NO;
+				OTHER_LDFLAGS = "";
 				SDKROOT = macosx;
 				VALID_ARCHS = x86_64;
 			};
@@ -541,15 +543,11 @@
 		D93EEBFF1519CE3800CC77EF /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
-					"\"$(SRCROOT)\"",
-				);
+				FRAMEWORK_SEARCH_PATHS = "";
 				GCC_PREPROCESSOR_DEFINITIONS_NOT_USED_IN_PRECOMPS = "OSX=1";
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					"\"$(SYSTEM_LIBRARY_DIR)/Frameworks/Accelerate.framework\"",
-				);
+				LIBRARY_SEARCH_PATHS = "$(inherited)";
+				OTHER_CPLUSPLUSFLAGS = "$(OTHER_CFLAGS)";
+				OTHER_LDFLAGS = "";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Debug;
@@ -557,15 +555,11 @@
 		D93EEC001519CE3800CC77EF /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
-					"\"$(SRCROOT)\"",
-				);
+				FRAMEWORK_SEARCH_PATHS = "";
 				GCC_PREPROCESSOR_DEFINITIONS_NOT_USED_IN_PRECOMPS = "OSX=1";
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					"\"$(SYSTEM_LIBRARY_DIR)/Frameworks/Accelerate.framework\"",
-				);
+				LIBRARY_SEARCH_PATHS = "$(inherited)";
+				OTHER_CPLUSPLUSFLAGS = "";
+				OTHER_LDFLAGS = "";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Release;
